@@ -19,6 +19,7 @@ import { SWRConfig } from 'swr'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import axios from 'axios'
+import { LanguageProvider } from './context/Localization'
 
 
 export default function App() {
@@ -51,19 +52,21 @@ export default function App() {
                     <Provider store={store}>
                         <ToastContainer autoClose={3000} limit={3} pauseOnFocusLoss={false} />
                         <Updaters />
-                        <RefreshContextProvider>
-                            <ThemeProvider theme={theme}>
-                                <ViewBase>
-                                    <Routes>
-                                        <Route path={'/'} element={<Dashboard />} />
-                                        <Route path={'/app'} element={<Dashboard />} />
-                                        <Route path={'/freezer'} element={<Freezer />} />
-                                        <Route path={'/swap'} element={<Swap />} />
-                                        <Route path={'/referral'} element={<Referral />} />
-                                    </Routes>
-                                </ViewBase>
-                            </ThemeProvider>
-                        </RefreshContextProvider>
+                        <LanguageProvider>
+                            <RefreshContextProvider>
+                                <ThemeProvider theme={theme}>
+                                    <ViewBase>
+                                        <Routes>
+                                            <Route path={'/'} element={<Dashboard />} />
+                                            <Route path={'/app'} element={<Dashboard />} />
+                                            <Route path={'/freezer'} element={<Freezer />} />
+                                            <Route path={'/swap'} element={<Swap />} />
+                                            <Route path={'/referral'} element={<Referral />} />
+                                        </Routes>
+                                    </ViewBase>
+                                </ThemeProvider>
+                            </RefreshContextProvider>
+                        </LanguageProvider>
                     </Provider>
                 </WagmiProvider>
             </SWRConfig>

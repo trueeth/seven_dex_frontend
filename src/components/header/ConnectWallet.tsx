@@ -10,6 +10,7 @@ import { useAccount } from 'wagmi';
 import useAuth from 'src/hooks/useAuth';
 import { ConnectorNames } from 'src/config';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { useTranslation } from 'src/context/Localization';
 
 const modalStyle = {
     position: 'absolute',
@@ -49,8 +50,10 @@ function ConnectButton() {
     }
 
     const [connecting, setConnect] = useState('Metamask')
-    const { isConnected, address } = useAccount();
-    const { login, loading } = useAuth();
+    const { isConnected, address } = useAccount()
+    const { login, loading } = useAuth()
+
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (isConnected) {
@@ -89,7 +92,7 @@ function ConnectButton() {
                         if (isConnected)
                             return formart(address as string)
                         else
-                            return isXs ? 'Connect' : ' Connect Wallet'
+                            return isXs ? t('Connect') : t('Connect Wallet')
                     })()}
                 </Button>
             </Box>

@@ -76,7 +76,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }: IProps) => {
                 ModalProps={{ keepMounted: true }}
                 PaperProps={{
                     sx: {
-                        backgroundColor: '#0e1f2f'
+                        backgroundColor: '#fff'
                     }
                 }}
             >

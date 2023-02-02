@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import Menu from '@mui/material/Menu'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
-import { Button, Divider, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import { Button, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { IconAdjustmentsHorizontal, IconX, IconInfoCircle } from '@tabler/icons'
 import SwitchLarge from './styled_components/SwitchLarge'
+import { useTranslation } from 'src/context/Localization'
 
 function Settings() {
 
@@ -25,6 +26,8 @@ function Settings() {
         if (newSlip)
             setSlippage(newSlip)
     }
+
+    const { t } = useTranslation()
 
     return (
         <div>
@@ -47,7 +50,7 @@ function Settings() {
                     aria-expanded={open ? 'true' : undefined}
                 >
                     <IconAdjustmentsHorizontal size={18} style={{ marginRight: '5px', color: '#666' }} />
-                    Settings
+                    {t('Settings')}
                 </Button>
             </Box>
             <Menu
@@ -94,11 +97,11 @@ function Settings() {
                         display: 'flex',
                         justifyContent: 'space-between'
                     }}>
-                        <Typography>Settings</Typography>
+                        <Typography>{t('Settings')}</Typography>
                         <IconX onClick={closeModal} cursor='pointer' />
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography color='#666' fontSize={14}>Slippage tolerance</Typography>
+                        <Typography color='#666' fontSize={14}>{t('Slippage Tolerance')}</Typography>
                         <Tooltip title='Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%' disableInteractive>
                             <Button sx={{ display: 'flex' }}>
                                 <IconInfoCircle color='#666' />
@@ -137,10 +140,6 @@ function Settings() {
                             }}
                             type='number'
                             endAdornment={<InputAdornment position="end">%</InputAdornment>}
-                            inputProps={{
-
-                                'aria-label': 'percentage',
-                            }}
                         />
                     </Box>
                     <Box mt={1}>

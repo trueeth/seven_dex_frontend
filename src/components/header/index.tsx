@@ -7,6 +7,8 @@ import ConnectButton from './ConnectWallet'
 import SelectNetwork from './SelectNetwork'
 
 import { NavLink } from 'react-router-dom'
+import LanguageSelector from './LanguageSelector'
+import { useTranslation } from 'src/context/Localization'
 
 
 interface IHeader {
@@ -41,6 +43,8 @@ function Header({ handleDrawerToggle }: IHeader) {
     const isXs = useMediaQuery('(max-width:768px)')
     const classes = useStyles()
 
+    const { t } = useTranslation()
+
     return (
         <div className={classes.topBar}>
             <Box
@@ -63,26 +67,26 @@ function Header({ handleDrawerToggle }: IHeader) {
                         }
                     }}>
                         <NavLink to='/home'>
-                            <Typography >Home</Typography>
+                            <Typography >{t('Home')}</Typography>
                         </NavLink>
                         <NavLink to='/swap'>
-                            <Typography>Swap</Typography>
+                            <Typography>{t('Swap')}</Typography>
                         </NavLink>
                         <NavLink to='/liquidity'>
-                            <Typography>Liquidity</Typography>
+                            <Typography>{t('Liquidity')}</Typography>
                         </NavLink>
                         <NavLink to='/bridge'>
-                            <Typography>Bridge</Typography>
+                            <Typography>{t('Bridge')}</Typography>
                         </NavLink>
                         <NavLink to='/stake'>
-                            <Typography>Stake</Typography>
+                            <Typography>{t('Stake')}</Typography>
                         </NavLink>
                         <NavLink to='/farm'>
-                            <Typography>Farm</Typography>
+                            <Typography>{t('Farm')}</Typography>
                         </NavLink>
                         <NavLink to='/'>
                             <Box sx={{ display: 'flex' }}>
-                                <Typography>Docs</Typography>
+                                <Typography>{t('Docs')}</Typography>
                                 <IconExternalLink
                                     color='#888'
                                     style={{ marginLeft: '-14px', marginTop: '-3px' }}
@@ -95,6 +99,7 @@ function Header({ handleDrawerToggle }: IHeader) {
 
                 </Box>
                 <Box display='flex' alignItems='center'>
+                    <LanguageSelector />
                     <SelectNetwork />
                     <ConnectButton />
                     {

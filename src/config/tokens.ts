@@ -6,14 +6,14 @@ import BtcLogo from '../asset/images/crypto-btc.svg'
 import BusdLogo from '../asset/images/crypto-busd.svg'
 import BnbLogo from '../asset/images/crypto-bnb.svg'
 
-export interface IToken {
+export interface Token {
     name: string,
     symbol: string,
     decimal: number,
     logo: string
 }
 
-export const tokens: Record<string, IToken> = {
+export const tokens: Record<string, Token> = {
     'BNB': {
         name: 'BNB',
         symbol: 'BNB',

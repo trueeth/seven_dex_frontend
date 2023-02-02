@@ -1,5 +1,5 @@
 {
-    "name": "furfi",
+    "name": "svc-dex",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -30,6 +30,8 @@
         "ethereum-multicall": "^2.15.0",
         "ethers": "^5.7.2",
         "from-exponential": "^1.1.1",
+        "i18next": "^22.4.9",
+        "i18next-browser-languagedetector": "^7.0.1",
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
         "react": "^17.0.2",
@@ -37,6 +39,7 @@
         "react-copy-to-clipboard": "^5.1.0",
         "react-device-detect": "^2.2.2",
         "react-dom": "^17.0.2",
+        "react-i18next": "^12.1.4",
         "react-perfect-scrollbar": "^1.5.8",
         "react-qr-code": "^2.0.8",
         "react-redux": "^8.0.4",

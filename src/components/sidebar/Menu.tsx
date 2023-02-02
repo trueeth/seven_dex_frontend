@@ -3,8 +3,6 @@ import { Box, Link, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { NavLink } from 'react-router-dom'
 
-import Logo from '../../asset/images/furio-icon.svg'
-
 const useStyles = makeStyles(theme => ({
     menuList: {
         '& .MuiTypography-root': {
@@ -26,8 +24,6 @@ const menuList = [
         title: 'Dashboard'
     }, {
         title: 'Swap'
-    }, {
-        title: 'Referral'
     }
 ]
 
@@ -36,10 +32,6 @@ function MenuList() {
 
     return (
         <div className={classes.menuList}>
-            <Box sx={{ display: 'flex' }}>
-                <img src={Logo} alt='logo' style={{ width: '50px', height: '50px' }} />
-                <Typography className='title'>Furfi</Typography>
-            </Box>
             <Box sx={{ mt: 5 }}>
                 {
                     menuList?.map((item, index) => (
