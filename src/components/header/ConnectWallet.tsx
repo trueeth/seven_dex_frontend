@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react'
 // import { makeStyles } from '@mui/styles';
 import { Button, Box, Typography, Modal, useMediaQuery } from '@mui/material'
 import { IconX } from '@tabler/icons'
-import { formart } from '../../helper/formatAddress';
+import { formart } from '../../utils/formatAddress';
 import MetamaskIcon from '../../asset/images/metamask.svg'
 import WalletConnectIcon from '../../asset/images/walletconnect.svg'
 import CoinbaseWalletIcon from '../../asset/images/coinbasewallet.svg'

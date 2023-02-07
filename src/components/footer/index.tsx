@@ -17,8 +17,9 @@ const useStyles = makeStyles(() => ({
         padding: '20px 0',
         display: 'flex',
         justifyContent: 'center',
+        backgroundColor: 'rgb(245, 251, 255)',
         '& .MuiTypography-root': {
-            color: '#333'
+            color: '#555'
         },
         '& .MuiButton-root': {
             color: '#333',
@@ -33,21 +34,34 @@ function Footer() {
     const classes = useStyles()
     return (
         <div className={classes.footerView}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Box sx={{ width: '100vw', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
                 <Box sx={{
                     display: 'flex',
-                    alignItems: 'center',
                     flexDirection: 'column',
                     m: 3
                 }}>
-                    <Typography sx={{ fontSize: '20px', mt: 2 }}>Social Links</Typography>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        '& img': {
+                            width: '64px',
+                            height: '64px',
+                            marginBottom: '16px'
+                        }
+                    }}>
+                        <img src={SevenChainIcon} alt='svc_chain' />
+                        <Typography>Copyright © 2023. All rights reserved</Typography>
+                    </Box>
                     <Box sx={{
                         display: 'flex',
                         justifyContent: 'center',
                         '& img': {
                             width: 32,
                             height: 32,
-                            m: 1
+                            mx: 1,
+                            mt: 2
                         }
                     }}>
                         <img src={TwitterIcon} alt='twitter' />
@@ -58,41 +72,13 @@ function Footer() {
                         <img src={InstagramIcon} alt='instagram' />
                     </Box>
                 </Box>
-                <Box sx={{ my: 3, mx: 4 }}>
-                    <Typography sx={{ fontSize: '20px', mt: 2 }}>Useful Link</Typography>
-                    <Box sx={{ display: 'flex' }}>
-                        <Box sx={{ mr: 2, '& .MuiTypography-root': { pt: '7px', fontSize: '16px' } }}>
-                            <Typography>Seven Project</Typography>
-                            <Typography>Docs</Typography>
-                        </Box>
-                    </Box>
+                <Box sx={{ maxWidth: '840px', p: 2 }}>
+                    <Typography sx={{ fontSize: '24px', color: '#ffae5a !important' }}>Disclaimer</Typography>
+                    <Typography>
+                        All the information on this website or other official channels is published for information purposes only and is only intended for institutional investors and sophisticated individual investors. Any services to be provided in the future will be subject to the terms of the legal agreements relating thereto. Nothing on this Site should be interpreted as the investment endorsement by Seven Chain Network or any other person.
+                    </Typography>
                 </Box>
-                <Box sx={{ my: 2.7, mx: 4 }}>
-                    <Typography sx={{ fontSize: '20px', mt: 2 }}>Exchanges</Typography>
-                    <Box sx={{ display: 'flex' }}>
-                        <Box sx={{ mr: 2, '& .MuiTypography-root': { pt: '7px', fontSize: '16px' } }}>
-                            <Typography>Uniswap</Typography>
-                            <Typography>Quickswap</Typography>
-                            <Typography>Coinsbit</Typography>
-                        </Box>
-                    </Box>
-                </Box>
-                <Box sx={{
-                    my: 2.7,
-                    mx: 4,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    '& img': {
-                        width: '64px',
-                        height: '64px',
-                        marginBottom: '16px'
-                    }
-                }}>
-                    <img src={SevenChainIcon} alt='svc_chain' />
-                    <Typography>Copyright © 2023.<br />By Seven Project Team</Typography>
-                </Box>
+
             </Box>
         </div>
     )

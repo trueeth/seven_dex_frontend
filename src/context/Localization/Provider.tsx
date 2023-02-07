@@ -26,7 +26,7 @@ languageMap.set(EN.locale, translations)
 
 export const LanguageContext = createContext<ContextApi | undefined>(undefined)
 
-export const LanguageProvider: React.FC = ({ children }) => {
+export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [state, setState] = useState<ProviderState>(() => {
         const codeFromStorage = getLanguageCodeFromLS()
 
