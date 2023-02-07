@@ -25,7 +25,7 @@ const modalStyle = {
 }
 
 
-function TokenList({ open, onClose }) {
+function TokenSelectModal({ open, onClose, onTokenSelect }) {
 
     const [value, setValue] = React.useState('one')
 
@@ -122,4 +122,4 @@ function TokenList({ open, onClose }) {
     )
 }
 
-export default TokenList
+export default TokenSelectModal

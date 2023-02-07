@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from "react-dom/client";
 import { Theme } from '@mui/material/styles'
 
 import App from './App'
@@ -15,10 +15,10 @@ declare global {
 declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme { }
 }
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
     <React.StrictMode>
         <App />
-    </React.StrictMode>,
-    document.getElementById("root")
-)
+    </React.StrictMode>
+);
 

@@ -34,7 +34,7 @@ function Footer() {
     const classes = useStyles()
     return (
         <div className={classes.footerView}>
-            <Box sx={{ width: '100vw', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Box sx={{ width: '100vw', display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap' }}>
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -73,8 +73,8 @@ function Footer() {
                     </Box>
                 </Box>
                 <Box sx={{ maxWidth: '840px', p: 2 }}>
-                    <Typography sx={{ fontSize: '24px', color: '#ffae5a !important' }}>Disclaimer</Typography>
-                    <Typography>
+                    <Typography sx={{ fontSize: '24px', color: '#ffae5a !important', mb: 1.5 }}>Disclaimer</Typography>
+                    <Typography sx={{ textIndent: '20px' }}>
                         All the information on this website or other official channels is published for information purposes only and is only intended for institutional investors and sophisticated individual investors. Any services to be provided in the future will be subject to the terms of the legal agreements relating thereto. Nothing on this Site should be interpreted as the investment endorsement by Seven Chain Network or any other person.
                     </Typography>
                 </Box>

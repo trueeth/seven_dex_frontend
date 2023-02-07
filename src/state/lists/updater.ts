@@ -4,7 +4,8 @@ import { acceptListUpdate, updateListVersion } from './actions'
 import { EXCHANGE_PAGE_PATHS } from 'src/config/constants/exchange'
 import { UNSUPPORTED_LIST_URLS } from 'src/config/constants/lists'
 import useWeb3Provider from 'src/hooks/useActiveWeb3React'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
+import { useLocation } from 'react-router-dom'
 import { useEffect, useMemo } from 'react'
 import { useAllLists } from './hooks'
 import useSWRImmutable from 'swr/immutable'
@@ -14,7 +15,8 @@ import { useListState, useListStateReady, initialState } from './lists'
 export default function Updater(): null {
     const { provider } = useWeb3Provider()
     const [listState, dispatch] = useListState()
-    const router = useRouter()
+    // const router = useRouter()
+    const router = useLocation()
     const includeListUpdater = useMemo(() => {
         return EXCHANGE_PAGE_PATHS.some((item) => {
             return router.pathname.startsWith(item)

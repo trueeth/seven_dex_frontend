@@ -1,11 +1,21 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@mui/styles'
 import { Box } from '@mui/system'
-import { Button, TextField, Typography, Divider } from '@mui/material'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { Button, Divider } from '@mui/material'
 import { IconArrowsUpDown } from '@tabler/icons'
-import TokenList from 'src/components/TokenList'
 import { useTranslation } from 'src/context/Localization'
+import { useSwapState } from 'src/state/swap/hooks'
+import { Field } from 'src/state/swap/actions'
+import { useCurrency } from 'src/hooks/Tokens'
+import { Currency } from 'src/utils/token'
+import { useSwapActionHandlers } from 'src/state/swap/useSwapActionHandlers'
+import useActiveWeb3React from 'src/hooks/useActiveWeb3React'
+import { useAtomValue } from 'jotai'
+import { combinedTokenMapFromOfficialsUrlsAtom } from 'src/state/lists/hooks'
+import useRefreshBlockNumberID from 'src/hooks/useRefreshBlockNumber'
+import CurrencyInputPanel from './CurrencyInputPanel'
+import CurrencyOutputPanel from './CurrencyOutputPanel'
+import SubmitSwap from './SubmitSwap'
 
 const useStyles = makeStyles((theme) => ({
     cardView: {
@@ -32,59 +42,51 @@ const useStyles = makeStyles((theme) => ({
 function SwapContainer() {
 
     const classes = useStyles()
-    const [openTl, setOpenTl] = useState(false) // token list modal
 
     const { t } = useTranslation()
 
+    const { refreshBlockNumber, isLoading } = useRefreshBlockNumberID()
+    const { account, chainId } = useActiveWeb3React()
+    const tokenMap = useAtomValue(combinedTokenMapFromOfficialsUrlsAtom)
+
+    const {
+        independentField,
+        typedValue,
+        recipient,
+        [Field.INPUT]: { currencyId: inputCurrencyId },
+        [Field.OUTPUT]: { currencyId: outputCurrencyId },
+    } = useSwapState()
+
+    const inputCurrency = useCurrency(inputCurrencyId)
+    const outputCurrency = useCurrency(outputCurrencyId)
+
+    const currencies: { [field in Field]?: Currency } = useMemo(
+        () => ({
+            [Field.INPUT]: inputCurrency ?? undefined,
+            [Field.OUTPUT]: outputCurrency ?? undefined,
+        }),
+        [inputCurrency, outputCurrency],
+    )
+
+    const { onSwitchTokens, onCurrencySelection, onUserInput } = useSwapActionHandlers()
+    const handleTypeInput = useCallback(
+        (value: string) => {
+            onUserInput(Field.INPUT, value)
+        },
+        [onUserInput],
+    )
+    const handleTypeOutput = useCallback(
+        (value: string) => {
+            onUserInput(Field.OUTPUT, value)
+        },
+        [onUserInput],
+    )
+
+
     return (
         <div className={classes.cardView}>
-            <Box>
-                <Box sx={{
-                    mb: 1,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
-                    '& .MuiTypography-root': {
-                        color: '#aeafc2'
-                    }
-                }}>
-                    <Typography>{t('Swap')}</Typography>
-                    <Typography fontSize={12}>Balance: 0</Typography>
-                </Box>
-                <Box sx={{ display: 'flex' }}>
-                    <TextField
-                        variant="standard"
-                        autoComplete='off'
-                        InputProps={{
-                            disableUnderline: true,
-                            placeholder: '0.0',
-                            type: 'number',
-                            inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' },
-
-                        }}
-                        sx={{ input: { fontSize: '28px', fontWeight: 'bold' } }}
-                    />
-                    <Box sx={{
-                        display: 'flex',
-                        '& .MuiButton-root': {
-                            ml: 1,
-                            color: '#333',
-                            borderRadius: '16px',
-                            bgcolor: 'rgb(255, 231, 172)'
-                        }
-                    }}>
-                        <Button >{t('Max')}</Button>
-                        <Button
-                            onClick={() => setOpenTl(true)}
-                            endIcon={<KeyboardArrowDownIcon />}
-                            sx={{ whiteSpace: 'nowrap' }}
-                        >
-                            {t('Select token')}
-                        </Button>
-                    </Box>
-                </Box>
-            </Box>
-            <Divider sx={{ my: 2 }}>
+            <CurrencyInputPanel />
+            <Divider sx={{ mt: 4, mb: 2 }}>
                 <Box sx={{
                     p: 1,
                     display: 'flex',
@@ -99,70 +101,8 @@ function SwapContainer() {
                     <IconArrowsUpDown color='#333' size={18} />
                 </Box>
             </Divider>
-            <Box>
-                <Box sx={{
-                    mb: 1,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
-                    '& .MuiTypography-root': {
-                        color: '#aeafc2'
-                    }
-                }}>
-                    <Typography>{t('To')}</Typography>
-                    <Typography fontSize={12}>Balance: 0</Typography>
-                </Box>
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                }}>
-                    <TextField
-                        variant="standard"
-                        autoComplete='off'
-                        InputProps={{
-                            disableUnderline: true,
-                            placeholder: '0.0',
-                            type: 'number',
-                            inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' },
-
-                        }}
-                        sx={{ input: { fontSize: '28px', fontWeight: 'bold' } }}
-                    />
-                    <Box sx={{
-                        display: 'flex',
-                        '& .MuiButton-root': {
-                            ml: 1,
-                            color: '#333',
-                            borderRadius: '16px',
-                            bgcolor: 'rgb(255, 231, 172)'
-                        }
-                    }}>
-                        <Button
-                            onClick={() => setOpenTl(true)}
-                            endIcon={<KeyboardArrowDownIcon />}
-                            sx={{ whiteSpace: 'nowrap' }}
-                        >
-                            {t('Select token')}
-                        </Button>
-                    </Box>
-                </Box>
-            </Box>
-            <Box sx={{ display: 'flex', mt: 3 }}>
-                <Button sx={{
-                    p: 1,
-                    width: '100%',
-                    borderRadius: '20px',
-                    fontSize: '1.2rem',
-                    color: '#fff',
-                    bgcolor: '#ffae5a',
-                    '&:hover': {
-                        bgcolor: '#ffae5a'
-                    }
-                }}>
-                    {t('Swap')}
-                </Button>
-            </Box>
-            <TokenList open={openTl} onClose={() => setOpenTl(false)} />
+            <CurrencyOutputPanel />
+            <SubmitSwap />
         </div >
     )
 }

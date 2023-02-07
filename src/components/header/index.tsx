@@ -100,7 +100,7 @@ function Header({ handleDrawerToggle }: IHeader) {
                 </Box>
                 <Box display='flex' alignItems='center'>
                     <LanguageSelector />
-                    <SelectNetwork />
+                    {/* <SelectNetwork /> */}
                     <ConnectButton />
                     {
                         is960 && (

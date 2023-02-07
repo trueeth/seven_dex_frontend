@@ -83,17 +83,16 @@ function LanguageSelector() {
         <div>
             <Button
                 sx={{
-                    bgcolor: '#fff',
+                    bgcolor: '#e57a3b',
                     borderRadius: '9999px',
                     color: '#333',
-                    mx: 1,
                     py: 1.3,
                     fontSize: '18px',
                     '&:hover': {
-                        bgcolor: '#fff'
+                        bgcolor: '#e57a3b'
                     },
                     '& svg': {
-                        fill: '#555'
+                        fill: '#fff'
                     }
                 }}
                 aria-controls={open ? 'demo-customized-menu' : undefined}
