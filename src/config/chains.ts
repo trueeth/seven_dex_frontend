@@ -25,45 +25,45 @@ export const getChainId = memoize((chainName: string) => {
     return CHAIN_QUERY_NAME_TO_ID[chainName] ? +CHAIN_QUERY_NAME_TO_ID[chainName] : undefined
 })
 
-export const DEFAULT_CHAIN_ID = 97
-export const DEFAULT_PROVIDER = 'https://data-seed-prebsc-1-s3.binance.org:8545'
+export const DEFAULT_CHAIN_ID = 80001
+export const DEFAULT_PROVIDER = 'https://matic-mumbai.chainstacklabs.com'
 
-const bscExplorer = { name: 'BscScan', url: 'https://bscscan.com' }
+const explorer = { name: 'PolygonScan', url: 'https://polygonscan.com/' }
 
-export const bsc: Chain = {
-    id: 56,
+export const polygon: Chain = {
+    id: 137,
     name: 'BNB Smart Chain',
     network: 'bsc',
     rpcUrls: {
-        public: 'https://bsc-dataseed1.binance.org',
-        default: 'https://bsc-dataseed1.binance.org',
+        public: 'https://matic-mumbai.chainstacklabs.com',
+        default: 'https://matic-mumbai.chainstacklabs.com',
     },
     blockExplorers: {
-        default: bscExplorer,
-        etherscan: bscExplorer,
+        default: explorer,
+        etherscan: explorer,
     },
     nativeCurrency: {
-        name: 'Binance Chain Native Token',
-        symbol: 'BNB',
+        name: 'Polygon Chain Native Token',
+        symbol: 'MATIC',
         decimals: 18,
     }
 }
 
-export const bscTest: Chain = {
-    id: 97,
-    name: 'BNB Smart Chain Testnet',
-    network: 'bsc-testnet',
+export const mumbai: Chain = {
+    id: 80001,
+    name: 'Polygon Chain Testnet',
+    network: 'mumbai',
     nativeCurrency: {
         decimals: 18,
-        name: 'Binance Chain Native Token',
-        symbol: 'tBNB',
+        name: 'Polygon Chain Native Token',
+        symbol: 'MATIC',
     },
     rpcUrls: {
-        public: 'https://data-seed-prebsc-1-s2.binance.org:8545/',
-        default: 'https://data-seed-prebsc-1-s2.binance.org:8545/',
+        public: 'https://matic-mumbai.chainstacklabs.com',
+        default: 'https://matic-mumbai.chainstacklabs.com',
     },
     blockExplorers: {
-        default: { name: 'BscScan', url: 'https://testnet.bscscan.com' },
+        default: { name: 'PolygonScan', url: 'https://mumbai.polygonscan.com/' },
     },
     testnet: true,
 }

@@ -184,6 +184,8 @@ export class Token extends BaseCurrency {
 
     public readonly projectLink?: string
 
+    public readonly logoURI?: string
+
     public constructor(
         chainId: number,
         address: string,
@@ -337,7 +339,8 @@ export const NATIVE: Record<
     {
         name: string
         symbol: string
-        decimals: number
+        decimals: number,
+        logoURI?: string
     }
 > = {
     [ChainId.ETHEREUM]: {
@@ -351,14 +354,16 @@ export const NATIVE: Record<
         decimals: 18
     },
     [ChainId.POLYGON]: {
-        name: 'Matic Token',
+        name: 'Native Token',
         symbol: 'MATIC',
         decimals: 18,
+        logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png'
     },
     [ChainId.MUMBAI]: {
-        name: 'Matic Token',
+        name: 'Native Token',
         symbol: 'MATIC',
         decimals: 18,
+        logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png'
     },
     [ChainId.SVC]: {
         name: 'SVC Token',

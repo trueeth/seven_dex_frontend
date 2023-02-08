@@ -1,6 +1,5 @@
 import { Button } from '@mui/material'
 import { Box } from '@mui/system'
-import React from 'react'
 import { useTranslation } from 'src/context/Localization'
 
 function SubmitSwap() {

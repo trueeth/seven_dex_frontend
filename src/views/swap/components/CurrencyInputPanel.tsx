@@ -1,17 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'src/context/Localization'
+import TokenSelectModal from 'src/components/TokenSelectModal'
 
-
-
-
-
-function CurrencyInputPanel() {
-
+function CurrencyInputPanel({ otherCurrency }) {
 
     const { t } = useTranslation()
+    const [open, setOpen] = useState(false)
 
     return (
         <div>
@@ -52,6 +49,7 @@ function CurrencyInputPanel() {
                     }}>
                         <Button >{t('Max')}</Button>
                         <Button
+                            onClick={() => setOpen(true)}
                             endIcon={<KeyboardArrowDownIcon />}
                             sx={{ whiteSpace: 'nowrap' }}
                         >
@@ -60,6 +58,12 @@ function CurrencyInputPanel() {
                     </Box>
                 </Box>
             </Box>
+            <TokenSelectModal
+                open={open}
+                onClose={() => setOpen(false)}
+                onTokenSelect={() => { }}
+                otherCurrency={otherCurrency}
+            />
         </div>
     )
 }

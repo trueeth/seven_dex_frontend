@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 
 import { Box, Modal, Tabs, Tab, Typography, OutlinedInput, InputAdornment } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
-import { useTranslation } from 'src/context/Localization';
+import { useTranslation } from 'src/context/Localization'
+import { useAllTokens } from 'src/hooks/Tokens'
+import { isAddress } from '@ethersproject/address'
+import { FixedSizeList } from 'react-window'
+import useDebounce from 'src/hooks/useDebounce'
+import { createFilterToken } from 'src/utils/filtering'
+import { Currency, NATIVE, Token } from 'src/utils/token'
+import { useActiveChainId } from 'src/hooks/useActiveChainId'
+
 
 const modalStyle = {
     position: 'absolute',
@@ -25,15 +33,72 @@ const modalStyle = {
 }
 
 
-function TokenSelectModal({ open, onClose, onTokenSelect }) {
+function CurrencyRow({ token, onSelect, otherSelected }) {
+
+    return (
+
+        <Box
+            onClick={onSelect}
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                p: 2,
+                cursor: 'pointer',
+                '&:hover': {
+                    bgcolor: '#eee'
+                }
+            }}
+        >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <img src={token.logoURI} style={{ width: '28px', height: '28px' }} />
+                <Box px={1}>
+                    <Typography sx={{ fontSize: '16px' }}>{token.symbol}</Typography>
+                    <Typography sx={{ fontSize: '12px' }}>{token.name}</Typography>
+                </Box>
+            </Box>
+            <Box>
+                <Typography sx={{ fontSize: '20px', mr: 3 }}>0</Typography>
+            </Box>
+        </Box>
+    )
+}
+
+function TokenSelectModal({ open, onClose, onTokenSelect, otherCurrency }) {
 
     const [value, setValue] = React.useState('one')
+
+    const allTokens = useAllTokens()
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     }
 
     const { t } = useTranslation()
+    const { chainId } = useActiveChainId()
+
+    // refs for fixed size lists
+    const fixedList = useRef<FixedSizeList>()
+
+    const [searchQuery, setSearchQuery] = useState<string>('')
+    const debouncedQuery = useDebounce(searchQuery, 200)
+
+    const handleInput = useCallback((event) => {
+        const input = event.target.value
+        const checksummedInput = isAddress(input)
+        setSearchQuery(checksummedInput || input)
+        fixedList.current?.scrollTo(0)
+    }, [])
+
+    const filteredTokens: Token[] = useMemo(() => {
+        const filterToken = createFilterToken(debouncedQuery)
+        return Object.values(allTokens).filter(filterToken)
+    }, [allTokens, debouncedQuery])
+
+    const handleCurrencySelect = useCallback(
+        (currency: Currency) => {
+            onTokenSelect(currency)
+        }, [onTokenSelect])
 
     return (
         <Modal
@@ -68,6 +133,7 @@ function TokenSelectModal({ open, onClose, onTokenSelect }) {
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <OutlinedInput
+                        onChange={(e) => handleInput(e)}
                         placeholder='Search by a name, symbol or address'
                         startAdornment={<InputAdornment position='start'>
                             <SearchIcon />
@@ -103,7 +169,7 @@ function TokenSelectModal({ open, onClose, onTokenSelect }) {
                         }}
                     >
                         <Tab value="one" label="Wallet Tokens" disableRipple />
-                        <Tab value="two" label="Ethereum" disableRipple />
+                        <Tab value="two" label="Polygon" disableRipple />
                         <Tab value="three" label="Large Cap" disableRipple />
                         <Tab value="four" label="Stable Coins" disableRipple />
                     </Tabs>
@@ -114,9 +180,22 @@ function TokenSelectModal({ open, onClose, onTokenSelect }) {
                     borderBottomLeftRadius: '20px',
                     borderBottomRightRadius: '20px'
                 }}>
-
+                    <CurrencyRow
+                        token={NATIVE[chainId]}
+                        onSelect={handleCurrencySelect}
+                        otherSelected={otherCurrency}
+                    />
+                    {
+                        filteredTokens.map((token, index) => (
+                            <CurrencyRow
+                                key={index}
+                                token={token}
+                                onSelect={handleCurrencySelect}
+                                otherSelected={otherCurrency}
+                            />
+                        ))
+                    }
                 </Box>
-
             </Box>
         </Modal>
     )

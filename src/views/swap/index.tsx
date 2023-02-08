@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles'
 import Settings from 'src/components/Settings'
 import { Box } from '@mui/system'
 import SwapContainer from './components/SwapContainer'
-import { Typography } from '@mui/material'
 import { Field } from 'src/state/swap/actions'
 import { useSwapState } from 'src/state/swap/hooks'
 import { useCurrency } from 'src/hooks/Tokens'
@@ -11,6 +10,7 @@ import { Currency } from 'src/utils/token'
 import { useSwapActionHandlers } from 'src/state/swap/useSwapActionHandlers'
 import replaceBrowserHistory from 'src/utils/replaceBrowserHistory'
 import currencyId from 'src/utils/currencyId'
+import AddTokenToWallet from './components/AddTokenToWallet'
 
 const useStyles = makeStyles(() => ({
     swapView: {
@@ -54,9 +54,6 @@ function Swap() {
 
     return (
         <div className={classes.swapView}>
-            {/* <Box sx={{ mt: 10 }}>
-                <Typography>No currencies selected</Typography>
-            </Box> */}
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -65,13 +62,7 @@ function Swap() {
             }}>
                 <Settings />
                 <SwapContainer />
-                <Typography sx={{
-                    width: '100%',
-                    textAlign: 'center',
-                    color: '#ffae5a'
-                }}>
-                    Add SVC to wallet
-                </Typography>
+                <AddTokenToWallet />
             </Box>
         </div>
     )

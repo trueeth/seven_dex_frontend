@@ -51,6 +51,7 @@
         "react-scripts": "^4.0.3",
         "react-slick": "^0.29.0",
         "react-toastify": "^9.0.3",
+        "react-window": "^1.8.8",
         "redux-localstorage-simple": "^2.5.1",
         "redux-persist": "^6.0.0",
         "slick-carousel": "^1.8.1",

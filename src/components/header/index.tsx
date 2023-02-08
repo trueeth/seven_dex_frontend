@@ -9,6 +9,7 @@ import SelectNetwork from './SelectNetwork'
 import { NavLink } from 'react-router-dom'
 import LanguageSelector from './LanguageSelector'
 import { useTranslation } from 'src/context/Localization'
+import { Link } from 'react-router-dom'
 
 
 interface IHeader {
@@ -78,9 +79,9 @@ function Header({ handleDrawerToggle }: IHeader) {
                         <NavLink to='/bridge'>
                             <Typography>{t('Bridge')}</Typography>
                         </NavLink>
-                        <NavLink to='/stake'>
+                        <Link to={{ pathname: "//staking-svc-matic.ceewen.xyz/" }} target="_blank">
                             <Typography>{t('Stake')}</Typography>
-                        </NavLink>
+                        </Link>
                         <NavLink to='/farm'>
                             <Typography>{t('Farm')}</Typography>
                         </NavLink>
@@ -111,7 +112,6 @@ function Header({ handleDrawerToggle }: IHeader) {
                                         boxShadow: '0px 1px 4px #ccc',
                                         mt: '3px'
                                     }}
-
                                 >
                                     <IconMenu2 color='#FFF' />
                                 </Avatar>

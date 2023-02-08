@@ -18,9 +18,9 @@ import { EMPTY_LIST } from 'src/utils/token'
 import uniqBy from 'lodash/uniqBy'
 import { useMemo } from 'react'
 import { useActiveChainId } from 'src/hooks/useActiveChainId'
-import DEFAULT_TOKEN_LIST from 'src/config/constants/tokenLists/pancake-default.tokenlist.json'
-import UNSUPPORTED_TOKEN_LIST from 'src/config/constants/tokenLists/pancake-unsupported.tokenlist.json'
-import WARNING_TOKEN_LIST from 'src/config/constants/tokenLists/pancake-warning.tokenlist.json'
+import DEFAULT_TOKEN_LIST from 'src/config/constants/tokenLists/svc-default.tokenlist.json'
+import UNSUPPORTED_TOKEN_LIST from 'src/config/constants/tokenLists/svc-unsupported.tokenlist.json'
+import WARNING_TOKEN_LIST from 'src/config/constants/tokenLists/svc-warning.tokenlist.json'
 import { listsAtom } from './lists'
 
 
@@ -55,10 +55,11 @@ const activeListUrlsAtom = atom((get) => {
 
 const combineTokenMapsWithDefault = (lists: ListsState['byUrl'], urls: string[]) => {
     const defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST)
+    //  if (!urls) return defaultTokenMap
 
-    if (!urls) return defaultTokenMap
+    return defaultTokenMap
 
-    return combineMaps(combineTokenMaps(lists, urls), defaultTokenMap)
+    //  return combineMaps(combineTokenMaps(lists, urls), defaultTokenMap)
 }
 
 const combineTokenMaps = (lists: ListsState['byUrl'], urls: string[]) => {

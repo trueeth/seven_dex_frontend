@@ -1,8 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@mui/styles'
 import { Box, Typography } from '@mui/material'
-
-
 import TwitterIcon from '../../asset/images/twitter.svg'
 import TelegramIcon from '../../asset/images/telegram.svg'
 import DiscordIcon from '../../asset/images/discord.svg'
@@ -10,6 +8,7 @@ import MediumIcon from '../../asset/images/medium.svg'
 import FacebookIcon from '../../asset/images/facebook.svg'
 import InstagramIcon from '../../asset/images/instagram.svg'
 import SevenChainIcon from '../../asset/images/seven_chain_logo.png'
+import { useTranslation } from 'src/context/Localization'
 
 
 const useStyles = makeStyles(() => ({
@@ -32,6 +31,7 @@ const useStyles = makeStyles(() => ({
 
 function Footer() {
     const classes = useStyles()
+    const { t } = useTranslation()
     return (
         <div className={classes.footerView}>
             <Box sx={{ width: '100vw', display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -52,7 +52,7 @@ function Footer() {
                         }
                     }}>
                         <img src={SevenChainIcon} alt='svc_chain' />
-                        <Typography>Copyright © 2023. All rights reserved</Typography>
+                        <Typography>{t('Copyright')}</Typography>
                     </Box>
                     <Box sx={{
                         display: 'flex',
@@ -73,9 +73,9 @@ function Footer() {
                     </Box>
                 </Box>
                 <Box sx={{ maxWidth: '840px', p: 2 }}>
-                    <Typography sx={{ fontSize: '24px', color: '#ffae5a !important', mb: 1.5 }}>Disclaimer</Typography>
+                    <Typography sx={{ fontSize: '24px', color: '#ffae5a !important', mb: 1.5 }}>{t('Disclaimer')}</Typography>
                     <Typography sx={{ textIndent: '20px' }}>
-                        All the information on this website or other official channels is published for information purposes only and is only intended for institutional investors and sophisticated individual investors. Any services to be provided in the future will be subject to the terms of the legal agreements relating thereto. Nothing on this Site should be interpreted as the investment endorsement by Seven Chain Network or any other person.
+                        {t('Disclaimer Content')}
                     </Typography>
                 </Box>
 

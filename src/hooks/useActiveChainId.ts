@@ -49,7 +49,7 @@ export const useActiveChainId = () => {
     const queryChainId = useAtomValue(queryChainIdAtom)
 
     const { chain } = useNetwork()
-    const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.ETHEREUM : undefined)
+    const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.MUMBAI : undefined)
 
     const isNotMatched = useDeferredValue(chain && localChainId && chain.id !== localChainId)
 

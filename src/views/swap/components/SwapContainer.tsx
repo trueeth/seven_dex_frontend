@@ -1,8 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@mui/styles'
-import { Box } from '@mui/system'
-import { Button, Divider } from '@mui/material'
-import { IconArrowsUpDown } from '@tabler/icons'
 import { useTranslation } from 'src/context/Localization'
 import { useSwapState } from 'src/state/swap/hooks'
 import { Field } from 'src/state/swap/actions'
@@ -16,6 +13,7 @@ import useRefreshBlockNumberID from 'src/hooks/useRefreshBlockNumber'
 import CurrencyInputPanel from './CurrencyInputPanel'
 import CurrencyOutputPanel from './CurrencyOutputPanel'
 import SubmitSwap from './SubmitSwap'
+import SwitchIOCurrency from './SwitchIOCurrency'
 
 const useStyles = makeStyles((theme) => ({
     cardView: {
@@ -85,23 +83,9 @@ function SwapContainer() {
 
     return (
         <div className={classes.cardView}>
-            <CurrencyInputPanel />
-            <Divider sx={{ mt: 4, mb: 2 }}>
-                <Box sx={{
-                    p: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '40px',
-                    height: '40px',
-                    bgcolor: 'rgb(255, 231, 172)',
-                    borderRadius: '9999px',
-                    cursor: 'pointer'
-                }}>
-                    <IconArrowsUpDown color='#333' size={18} />
-                </Box>
-            </Divider>
-            <CurrencyOutputPanel />
+            <CurrencyInputPanel otherCurrency={currencies[Field.OUTPUT]} />
+            <SwitchIOCurrency />
+            <CurrencyOutputPanel otherCurrency={currencies[Field.INPUT]} />
             <SubmitSwap />
         </div >
     )
