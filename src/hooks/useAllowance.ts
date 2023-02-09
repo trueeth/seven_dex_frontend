@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from 'ethers'
 import { useAccount } from 'wagmi'
-import ERC20 from 'src/config/erc20';
 import useRefresh from './useRefresh';
 import { useAllTransactions } from 'src/state/transactions/hooks';
+import { Erc20 } from 'src/config/abi/types';
 
 
-const useAllowance = (token: ERC20, spender: string, pendingApproval?: boolean) => {
+const useAllowance = (token: Erc20, spender: string, pendingApproval?: boolean) => {
     const [allowance, setAllowance] = useState<BigNumber | null>(null);
     const { address: account } = useAccount();
     const { fastRefresh } = useRefresh()

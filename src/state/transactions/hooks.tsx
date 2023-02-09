@@ -1,7 +1,7 @@
 import { TransactionResponse } from '@ethersproject/providers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DEFAULT_CHAIN_ID } from 'src/config/chains';
+import { DEFAULT_CHAIN_ID } from 'src/config/constants/chains';
 import { useNetwork, useAccount } from 'wagmi';
 
 import { AppDispatch, AppState } from '../index';

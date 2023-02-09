@@ -7,6 +7,7 @@ import transactions from './transactions/reducer'
 import swap from './swap/reducer'
 import user from './user/reducer'
 import global from './global/reducer'
+import multicall from './multicall/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions']
 
@@ -24,7 +25,8 @@ const persistedReducer = persistReducer(
         transactions,
         swap,
         user,
-        global
+        global,
+        multicall
     }),
 )
 

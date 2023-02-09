@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { ConnectorNames } from 'src/config'
-import { DEFAULT_CHAIN_ID } from 'src/config/chains'
+import { DEFAULT_CHAIN_ID } from 'src/config/constants/chains'
 import {
     ConnectorNotFoundError,
     SwitchChainError,

@@ -1,5 +1,5 @@
 import { Currency, ERC20Token } from "src/utils/token"
-import { ChainId } from "src/config/chains"
+import { ChainId } from "src/config/constants/chains"
 import { useActiveChainId } from "./useActiveChainId"
 import { useAtomValue } from "jotai"
 import { useMemo } from "react"

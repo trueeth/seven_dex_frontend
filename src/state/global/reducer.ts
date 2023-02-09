@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createReducer } from '@reduxjs/toolkit'
-import { ChainId } from 'src/config/chains'
+import { ChainId } from 'src/config/constants/chains'
 import { toggleFarmTransactionModal, pickFarmTransactionTx } from './actions'
 
 export interface GlobalState {

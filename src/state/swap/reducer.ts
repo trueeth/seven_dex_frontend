@@ -30,10 +30,10 @@ const initialState: SwapState = {
     independentField: Field.INPUT,
     typedValue: '',
     [Field.INPUT]: {
-        currencyId: '',
+        currencyId: 'matic',
     },
     [Field.OUTPUT]: {
-        currencyId: '',
+        currencyId: '0x762729F36206Bc985ed462E625e0200cF51ACc46',
     },
     pairDataById: {},
     derivedPairDataById: {},

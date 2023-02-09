@@ -2,7 +2,7 @@ import { CallOverrides, Contract } from '@ethersproject/contracts'
 import { provider } from './wagmi'
 import { Interface, Fragment } from '@ethersproject/abi'
 import { Provider } from '@ethersproject/providers'
-import { ChainId } from 'src/config/chains'
+import { ChainId } from 'src/config/constants/chains'
 import multicallAbi from 'src/config/abi/multicall.json'
 
 export const multicallAddresses = {
@@ -147,4 +147,3 @@ const { multicall, multicallv2, multicallv3 } = createMulticall(provider)
 export default multicall
 
 export { multicallv2, multicallv3 }
-

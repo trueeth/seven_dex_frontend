@@ -1,6 +1,7 @@
 import { ethers } from "ethers"
 import { useCallback, useMemo } from "react"
-import ERC20 from "src/config/erc20"
+import { Erc20 } from "src/config/abi/types"
+
 import { useHasPendingApproval, useTransactionAdder } from "src/state/transactions/hooks"
 import useAllowance from "./useAllowance"
 
@@ -15,7 +16,7 @@ export enum ApprovalState {
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-function useApprove(token: ERC20, spender: string): [ApprovalState, () => Promise<void>] {
+function useApprove(token: Erc20, spender: string): [ApprovalState, () => Promise<void>] {
 
     const pendingApproval = useHasPendingApproval(token.address, spender);
     const currentAllowance = useAllowance(token, spender, pendingApproval);

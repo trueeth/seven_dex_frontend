@@ -11,6 +11,8 @@ import useDebounce from 'src/hooks/useDebounce'
 import { createFilterToken } from 'src/utils/filtering'
 import { Currency, NATIVE, Token } from 'src/utils/token'
 import { useActiveChainId } from 'src/hooks/useActiveChainId'
+import { DEFAULT_CHAIN_ID } from 'src/config/constants/chains'
+import useNativeCurrency from 'src/hooks/useNativeCurrency'
 
 
 const modalStyle = {
@@ -33,7 +35,7 @@ const modalStyle = {
 }
 
 
-function CurrencyRow({ token, onSelect, otherSelected }) {
+function CurrencyRow({ token, onSelect }) {
 
     return (
 
@@ -50,7 +52,7 @@ function CurrencyRow({ token, onSelect, otherSelected }) {
                 }
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
                 <img src={token.logoURI} style={{ width: '28px', height: '28px' }} />
                 <Box px={1}>
                     <Typography sx={{ fontSize: '16px' }}>{token.symbol}</Typography>
@@ -64,18 +66,18 @@ function CurrencyRow({ token, onSelect, otherSelected }) {
     )
 }
 
-function TokenSelectModal({ open, onClose, onTokenSelect, otherCurrency }) {
+function TokenSelectModal({ open, onClose, onCurrencySelect }) {
 
     const [value, setValue] = React.useState('one')
 
     const allTokens = useAllTokens()
+    const nativeCurrency = useNativeCurrency()
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
     }
 
     const { t } = useTranslation()
-    const { chainId } = useActiveChainId()
 
     // refs for fixed size lists
     const fixedList = useRef<FixedSizeList>()
@@ -97,8 +99,8 @@ function TokenSelectModal({ open, onClose, onTokenSelect, otherCurrency }) {
 
     const handleCurrencySelect = useCallback(
         (currency: Currency) => {
-            onTokenSelect(currency)
-        }, [onTokenSelect])
+            onCurrencySelect(currency)
+        }, [onCurrencySelect])
 
     return (
         <Modal
@@ -181,17 +183,21 @@ function TokenSelectModal({ open, onClose, onTokenSelect, otherCurrency }) {
                     borderBottomRightRadius: '20px'
                 }}>
                     <CurrencyRow
-                        token={NATIVE[chainId]}
-                        onSelect={handleCurrencySelect}
-                        otherSelected={otherCurrency}
+                        token={NATIVE[DEFAULT_CHAIN_ID]}
+                        onSelect={() => {
+                            handleCurrencySelect(nativeCurrency)
+                            onClose()
+                        }}
                     />
                     {
                         filteredTokens.map((token, index) => (
                             <CurrencyRow
                                 key={index}
                                 token={token}
-                                onSelect={handleCurrencySelect}
-                                otherSelected={otherCurrency}
+                                onSelect={() => {
+                                    handleCurrencySelect(token)
+                                    onClose()
+                                }}
                             />
                         ))
                     }

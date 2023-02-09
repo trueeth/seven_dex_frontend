@@ -1,4 +1,4 @@
-import { ChainId } from 'src/config/chains'
+import { ChainId } from 'src/config/constants/chains'
 import { TokenList, TokenInfo } from 'src/utils/token'
 import { WrappedTokenInfo, TokenAddressMap as TTokenAddressMap } from 'src/utils/wrappedTokenInfo'
 import { ListsState } from './reducer'

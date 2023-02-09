@@ -1,19 +1,16 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { makeStyles } from '@mui/styles'
-import { useTranslation } from 'src/context/Localization'
 import { useSwapState } from 'src/state/swap/hooks'
 import { Field } from 'src/state/swap/actions'
 import { useCurrency } from 'src/hooks/Tokens'
 import { Currency } from 'src/utils/token'
 import { useSwapActionHandlers } from 'src/state/swap/useSwapActionHandlers'
-import useActiveWeb3React from 'src/hooks/useActiveWeb3React'
-import { useAtomValue } from 'jotai'
-import { combinedTokenMapFromOfficialsUrlsAtom } from 'src/state/lists/hooks'
-import useRefreshBlockNumberID from 'src/hooks/useRefreshBlockNumber'
 import CurrencyInputPanel from './CurrencyInputPanel'
 import CurrencyOutputPanel from './CurrencyOutputPanel'
 import SubmitSwap from './SubmitSwap'
 import SwitchIOCurrency from './SwitchIOCurrency'
+import replaceBrowserHistory from 'src/utils/replaceBrowserHistory'
+import currencyId from 'src/utils/currencyId'
 
 const useStyles = makeStyles((theme) => ({
     cardView: {
@@ -41,16 +38,7 @@ function SwapContainer() {
 
     const classes = useStyles()
 
-    const { t } = useTranslation()
-
-    const { refreshBlockNumber, isLoading } = useRefreshBlockNumberID()
-    const { account, chainId } = useActiveWeb3React()
-    const tokenMap = useAtomValue(combinedTokenMapFromOfficialsUrlsAtom)
-
     const {
-        independentField,
-        typedValue,
-        recipient,
         [Field.INPUT]: { currencyId: inputCurrencyId },
         [Field.OUTPUT]: { currencyId: outputCurrencyId },
     } = useSwapState()
@@ -65,6 +53,7 @@ function SwapContainer() {
         }),
         [inputCurrency, outputCurrency],
     )
+
 
     const { onSwitchTokens, onCurrencySelection, onUserInput } = useSwapActionHandlers()
     const handleTypeInput = useCallback(
@@ -81,11 +70,46 @@ function SwapContainer() {
     )
 
 
+    const handleInputSelect = useCallback(
+        (newCurrencyInput) => {
+            //   setApprovalSubmitted(false) // reset 2 step UI for approvals
+            onCurrencySelection(Field.INPUT, newCurrencyInput)
+
+            const newCurrencyInputId = currencyId(newCurrencyInput)
+            if (newCurrencyInputId === outputCurrencyId) {
+                replaceBrowserHistory('outputCurrency', inputCurrencyId)
+            }
+            replaceBrowserHistory('inputCurrency', newCurrencyInputId)
+        },
+        [inputCurrencyId, outputCurrencyId, onCurrencySelection],
+    )
+
+
+    const handleOutputSelect = useCallback(
+        (newCurrencyOutput) => {
+            onCurrencySelection(Field.OUTPUT, newCurrencyOutput)
+
+            const newCurrencyOutputId = currencyId(newCurrencyOutput)
+            if (newCurrencyOutputId === inputCurrencyId) {
+                replaceBrowserHistory('inputCurrency', outputCurrencyId)
+            }
+            replaceBrowserHistory('outputCurrency', newCurrencyOutputId)
+        },
+
+        [inputCurrencyId, outputCurrencyId, onCurrencySelection],
+    )
+
     return (
         <div className={classes.cardView}>
-            <CurrencyInputPanel otherCurrency={currencies[Field.OUTPUT]} />
+            <CurrencyInputPanel
+                currency={currencies[Field.INPUT]}
+                onCurrencySelect={handleInputSelect}
+            />
             <SwitchIOCurrency />
-            <CurrencyOutputPanel otherCurrency={currencies[Field.INPUT]} />
+            <CurrencyOutputPanel
+                currency={currencies[Field.OUTPUT]}
+                onCurrencySelect={handleOutputSelect}
+            />
             <SubmitSwap />
         </div >
     )

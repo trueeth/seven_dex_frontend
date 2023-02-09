@@ -5,7 +5,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'src/context/Localization'
 import TokenSelectModal from 'src/components/TokenSelectModal'
 
-function CurrencyInputPanel({ otherCurrency }) {
+function CurrencyInputPanel({ currency, onCurrencySelect }) {
 
     const { t } = useTranslation()
     const [open, setOpen] = useState(false)
@@ -51,9 +51,12 @@ function CurrencyInputPanel({ otherCurrency }) {
                         <Button
                             onClick={() => setOpen(true)}
                             endIcon={<KeyboardArrowDownIcon />}
-                            sx={{ whiteSpace: 'nowrap' }}
+                            sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
                         >
-                            {t('Select token')}
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <img src={currency?.logoURI} style={{ width: '24px', height: '24px' }} />
+                                <Typography px={1}>{currency?.symbol}</Typography>
+                            </Box>
                         </Button>
                     </Box>
                 </Box>
@@ -61,8 +64,7 @@ function CurrencyInputPanel({ otherCurrency }) {
             <TokenSelectModal
                 open={open}
                 onClose={() => setOpen(false)}
-                onTokenSelect={() => { }}
-                otherCurrency={otherCurrency}
+                onCurrencySelect={onCurrencySelect}
             />
         </div>
     )
