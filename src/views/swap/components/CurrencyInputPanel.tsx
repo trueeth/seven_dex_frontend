@@ -4,11 +4,16 @@ import { Box } from '@mui/system'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'src/context/Localization'
 import TokenSelectModal from 'src/components/TokenSelectModal'
+import { useAccount } from 'wagmi'
+import { useCurrencyBalance } from 'src/state/wallet/hooks'
 
-function CurrencyInputPanel({ currency, onCurrencySelect }) {
+function CurrencyInputPanel({ currency, onCurrencySelect, onUserInput }) {
 
     const { t } = useTranslation()
     const [open, setOpen] = useState(false)
+
+    const { address: account } = useAccount()
+    const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
 
     return (
         <div>
@@ -23,12 +28,13 @@ function CurrencyInputPanel({ currency, onCurrencySelect }) {
                     }
                 }}>
                     <Typography>{t('Swap')}</Typography>
-                    <Typography fontSize={12}>Balance: 0</Typography>
+                    <Typography fontSize={12}>Balance: {selectedCurrencyBalance?.toSignificant(6) ?? 0}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex' }}>
                     <TextField
                         variant="standard"
                         autoComplete='off'
+                        onChange={(e) => onUserInput(e.target.value)}
                         InputProps={{
                             disableUnderline: true,
                             placeholder: '0.0',
@@ -36,7 +42,7 @@ function CurrencyInputPanel({ currency, onCurrencySelect }) {
                             inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' },
 
                         }}
-                        sx={{ input: { fontSize: '28px', fontWeight: 'bold' } }}
+                        sx={{ input: { fontSize: '28px', fontWeight: 'bold', color: '#555' } }}
                     />
                     <Box sx={{
                         display: 'flex',

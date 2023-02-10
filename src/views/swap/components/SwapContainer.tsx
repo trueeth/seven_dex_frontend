@@ -55,7 +55,7 @@ function SwapContainer() {
     )
 
 
-    const { onSwitchTokens, onCurrencySelection, onUserInput } = useSwapActionHandlers()
+    const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
     const handleTypeInput = useCallback(
         (value: string) => {
             onUserInput(Field.INPUT, value)
@@ -104,11 +104,13 @@ function SwapContainer() {
             <CurrencyInputPanel
                 currency={currencies[Field.INPUT]}
                 onCurrencySelect={handleInputSelect}
+                onUserInput={handleTypeInput}
             />
             <SwitchIOCurrency />
             <CurrencyOutputPanel
                 currency={currencies[Field.OUTPUT]}
                 onCurrencySelect={handleOutputSelect}
+                onUserInput={handleTypeOutput}
             />
             <SubmitSwap />
         </div >

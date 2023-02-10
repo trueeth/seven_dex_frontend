@@ -6,7 +6,7 @@ import { useTranslation } from 'src/context/Localization'
 import TokenSelectModal from 'src/components/TokenSelectModal'
 
 
-function CurrencyOutputPanel({ currency, onCurrencySelect }) {
+function CurrencyOutputPanel({ currency, onCurrencySelect, onUserInput }) {
 
 
     const { t } = useTranslation()
@@ -34,6 +34,7 @@ function CurrencyOutputPanel({ currency, onCurrencySelect }) {
                     <TextField
                         variant="standard"
                         autoComplete='off'
+                        onChange={(e) => onUserInput(e.target.value)}
                         InputProps={{
                             disableUnderline: true,
                             placeholder: '0.0',
@@ -41,7 +42,7 @@ function CurrencyOutputPanel({ currency, onCurrencySelect }) {
                             inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' },
 
                         }}
-                        sx={{ input: { fontSize: '28px', fontWeight: 'bold' } }}
+                        sx={{ input: { fontSize: '28px', fontWeight: 'bold', color: '#555' } }}
                     />
                     <Box sx={{
                         display: 'flex',

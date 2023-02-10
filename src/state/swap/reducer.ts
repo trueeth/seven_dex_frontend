@@ -33,7 +33,7 @@ const initialState: SwapState = {
         currencyId: 'matic',
     },
     [Field.OUTPUT]: {
-        currencyId: '0x762729F36206Bc985ed462E625e0200cF51ACc46',
+        currencyId: '0x8160510aAa29256E34d26D770171C05867d5252F',
     },
     pairDataById: {},
     derivedPairDataById: {},

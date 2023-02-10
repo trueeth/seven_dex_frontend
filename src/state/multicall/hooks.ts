@@ -100,7 +100,6 @@ function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): C
         () =>
             calls.map<CallResult>((call) => {
                 if (!chainId || !call) return INVALID_RESULT
-
                 const result = callResults[chainId]?.[toCallKey(call)]
                 let data
                 if (result?.data && result?.data !== '0x') {
@@ -189,7 +188,6 @@ export function useSingleContractMultipleData(
     )
 
     const results = useCallsData(calls, options)
-
     const { cache } = useSWRConfig()
 
     return useMemo(() => {

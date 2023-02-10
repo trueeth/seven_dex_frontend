@@ -11,11 +11,8 @@ import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 
 import { SWRConfig } from 'swr'
-
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import axios from 'axios'
 import { LanguageProvider } from './context/Localization'
+import { fetchStatusMiddleware } from './hooks/useSWRContract'
 
 
 
@@ -35,14 +32,11 @@ export default function App() {
         }
     })
 
-    const fetcher = url => axios.get(url).then(res => res.data)
-
     return (
         <BrowserRouter>
             <SWRConfig
                 value={{
-                    refreshInterval: 10000,
-                    fetcher
+                    use: [fetchStatusMiddleware]
                 }}
             >
                 <WagmiProvider client={client}>
