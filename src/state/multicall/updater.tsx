@@ -41,10 +41,7 @@ async function fetchChunk(
             chunk.map((obj) => ({
                 callData: obj.callData,
                 target: obj.address,
-            })),
-            {
-                blockTag: minBlockNumber,
-            }
+            }))
         )
     } catch (err) {
         const error = err as any
@@ -145,6 +142,7 @@ export function outdatedListeningKeys(
 }
 
 export default function Updater(): null {
+
     const dispatch = useAppDispatch()
     const state = useSelector<AppState, AppState['multicall']>((s) => s.multicall)
     // wait for listeners to settle before triggering updates
@@ -157,7 +155,6 @@ export default function Updater(): null {
     const listeningKeys: { [callKey: string]: number } = useMemo(() => {
         return activeListeningKeys(debouncedListeners, chainId)
     }, [debouncedListeners, chainId])
-
     const unserializedOutdatedCallKeys = useMemo(() => {
         return outdatedListeningKeys(state.callResults, listeningKeys, chainId, currentBlock)
     }, [chainId, state.callResults, listeningKeys, currentBlock])
@@ -172,6 +169,7 @@ export default function Updater(): null {
 
         const outdatedCallKeys: string[] = JSON.parse(serializedOutdatedCallKeys)
         if (outdatedCallKeys.length === 0) return
+
         const calls = outdatedCallKeys.map((key) => parseCallKey(key))
 
         const chunkedCalls = chunkArray(calls, CALL_CHUNK_SIZE)
@@ -190,7 +188,9 @@ export default function Updater(): null {
 
         cancellations.current = {
             blockNumber: currentBlock,
+
             cancellations: chunkedCalls.map((chunk, index) => {
+
                 const { cancel, promise } = retry(() => fetchChunk(multicallContract, chunk, currentBlock), {
                     n: Infinity,
                     minWait: 2500,

@@ -1,4 +1,3 @@
-
 import JSBI from 'jsbi'
 import { Currency, Native, Token, CurrencyAmount } from 'src/utils/token'
 import { useMemo } from 'react'
@@ -27,12 +26,12 @@ export function useNativeBalances(uncheckedAddresses?: (string | undefined)[]): 
         [uncheckedAddresses],
     )
 
-
     const results = useSingleContractMultipleData(
         multicallContract,
         'getEthBalance',
         useMemo(() => addresses.map((address) => [address]), [addresses]),
     )
+
 
     return useMemo(
         () =>
@@ -112,6 +111,7 @@ export function useCurrencyBalances(
         () => currencies?.filter((currency): currency is Token => currency?.isToken) ?? [],
         [currencies],
     )
+
 
     const tokenBalances = useTokenBalances(account, tokens)
 

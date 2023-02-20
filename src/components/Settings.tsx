@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Menu from '@mui/material/Menu'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
@@ -6,6 +6,9 @@ import { Button, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup,
 import { IconAdjustmentsHorizontal, IconX, IconInfoCircle } from '@tabler/icons'
 import SwitchLarge from './styled_components/SwitchLarge'
 import { useTranslation } from 'src/context/Localization'
+import { useSwapSetting } from 'src/state/global/hooks'
+import { useDispatch } from 'react-redux'
+import { setSwapSlippage, setTxSafeMode } from 'src/state/global/actions'
 
 function Settings() {
 
@@ -18,14 +21,20 @@ function Settings() {
         setAnchorEl(null);
     };
 
-    const [slippage, setSlippage] = useState(0.5)
+    const dispatch = useDispatch()
+    const { slippage, safemode, deadline } = useSwapSetting()
+
     const onSlippageChange = (
         event: any,
         newSlip: number,
     ) => {
         if (newSlip)
-            setSlippage(newSlip)
+            dispatch(setSwapSlippage({ slippage: newSlip }))
     }
+
+    const onSetMode = useCallback(() => {
+        dispatch(setTxSafeMode({ mode: !safemode }))
+    }, [dispatch, safemode])
 
     const { t } = useTranslation()
 
@@ -139,6 +148,7 @@ function Settings() {
                                 }
                             }}
                             type='number'
+                            value={slippage}
                             endAdornment={<InputAdornment position="end">%</InputAdornment>}
                         />
                     </Box>
@@ -175,7 +185,11 @@ function Settings() {
                     <Box mt={1}>
                         <Typography color='#666' fontSize={14}>Safe Mode</Typography>
                         <Box sx={{ display: 'flex' }}>
-                            <SwitchLarge sx={{ mt: 1 }} />
+                            <SwitchLarge
+                                sx={{ mt: 1 }}
+                                checked={safemode}
+                                onChange={onSetMode}
+                            />
                             <Typography color='#666' fontSize={14} px={2}>
                                 Prevent high price impact trades. Disable at your own risk.
                             </Typography>

@@ -4,6 +4,8 @@ import { Box } from '@mui/system'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'src/context/Localization'
 import TokenSelectModal from 'src/components/TokenSelectModal'
+import { useAccount } from 'wagmi'
+import { useCurrencyBalance } from 'src/state/wallet/hooks'
 
 
 function CurrencyOutputPanel({ currency, onCurrencySelect, onUserInput }) {
@@ -11,6 +13,9 @@ function CurrencyOutputPanel({ currency, onCurrencySelect, onUserInput }) {
 
     const { t } = useTranslation()
     const [open, setOpen] = useState(false)
+
+    const { address: account } = useAccount()
+    const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
 
     return (
         <div>
@@ -25,7 +30,7 @@ function CurrencyOutputPanel({ currency, onCurrencySelect, onUserInput }) {
                     }
                 }}>
                     <Typography>{t('To')}</Typography>
-                    <Typography fontSize={12}>Balance: 0</Typography>
+                    <Typography fontSize={12}>Balance: {selectedCurrencyBalance?.toSignificant(6) ?? 0}</Typography>
                 </Box>
                 <Box sx={{
                     display: 'flex',

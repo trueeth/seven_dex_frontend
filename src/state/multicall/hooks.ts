@@ -58,6 +58,8 @@ function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): C
     const callResults = useSelector<AppState, AppState['multicall']['callResults']>(
         (state) => state.multicall.callResults,
     )
+
+
     const dispatch = useAppDispatch()
 
     const serializedCallKeys: string = useMemo(
@@ -75,6 +77,7 @@ function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): C
     useEffect(() => {
         const callKeys: string[] = JSON.parse(serializedCallKeys)
         if (!chainId || callKeys.length === 0) return undefined
+
         // eslint-disable-next-line @typescript-eslint/no-shadow
         const calls = callKeys.map((key) => parseCallKey(key))
         dispatch(
@@ -134,6 +137,7 @@ function toCallState(
     fragment: FunctionFragment | undefined,
     latestBlockNumber: number | undefined,
 ): CallState {
+
     if (!callResult) return INVALID_CALL_STATE
     const { valid, data, blockNumber } = callResult
     if (!valid) return INVALID_CALL_STATE
@@ -173,7 +177,6 @@ export function useSingleContractMultipleData(
 ): CallState[] {
     const { chainId } = useActiveChainId()
     const fragment = useMemo(() => contract?.interface?.getFunction(methodName), [contract, methodName])
-
     const calls = useMemo(
         () =>
             contract && fragment && callInputs && callInputs.length > 0
@@ -192,7 +195,7 @@ export function useSingleContractMultipleData(
 
     return useMemo(() => {
         const currentBlockNumber = cache.get(unstable_serialize(['blockNumber', chainId]))
-        return results.map((result) => toCallState(result, contract?.interface, fragment, currentBlockNumber))
+        return results.map((result) => toCallState(result, contract?.interface, fragment, currentBlockNumber.data))
     }, [cache, chainId, results, contract?.interface, fragment])
 }
 
@@ -234,7 +237,7 @@ export function useMultipleContractSingleData(
 
     return useMemo(() => {
         const currentBlockNumber = cache.get(unstable_serialize(['blockNumber', chainId]))
-        return results.map((result) => toCallState(result, contractInterface, fragment, currentBlockNumber))
+        return results.map((result) => toCallState(result, contractInterface, fragment, currentBlockNumber.data))
     }, [cache, chainId, results, contractInterface, fragment])
 }
 
@@ -263,6 +266,6 @@ export function useSingleCallResult(
 
     return useMemo(() => {
         const currentBlockNumber = cache.get(unstable_serialize(['blockNumber', chainId]))
-        return toCallState(result, contract?.interface, fragment, currentBlockNumber)
+        return toCallState(result, contract?.interface, fragment, currentBlockNumber.data)
     }, [cache, chainId, result, contract?.interface, fragment])
 }

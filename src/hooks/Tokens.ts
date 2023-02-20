@@ -16,6 +16,8 @@ import useSWRImmutable from 'swr/immutable'
 import { FetchStatus } from "src/config/constants/types"
 import { ERC20_BYTES32_ABI } from "src/config/abi/erc20"
 import multicall from "src/utils/multiCall"
+import merge from 'lodash/merge'
+import { AddressZero } from "@ethersproject/constants"
 
 
 const mapWithoutUrls = (tokenMap: TokenAddressMap<ChainId>, chainId: number) =>
@@ -198,4 +200,10 @@ export function useCurrency(currencyId: string | undefined): Currency | ERC20Tok
         currencyId?.toUpperCase() === native.symbol?.toUpperCase() || currencyId?.toLowerCase() === GELATO_NATIVE
     const token = useToken(isNative ? undefined : currencyId)
     return isNative ? native : token
+}
+
+export function useAllCurrencies() {
+    const allTokens = useAllTokens()
+    const nativeToken = useNativeCurrency()
+    return merge({ [AddressZero]: nativeToken }, allTokens)
 }

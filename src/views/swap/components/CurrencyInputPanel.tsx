@@ -14,7 +14,6 @@ function CurrencyInputPanel({ currency, onCurrencySelect, onUserInput }) {
 
     const { address: account } = useAccount()
     const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-
     return (
         <div>
             <Box>

@@ -2,6 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
     addTransaction,
     checkedTransaction,
+    clearAllChainTransactions,
     clearAllTransactions,
     finalizeTransaction,
     SerializableTransactionReceipt,
@@ -38,7 +39,7 @@ export default createReducer(initialState, (builder) =>
             txs[hash] = { hash, approval, summary, from, addedTime: now() };
             transactions[chainId] = txs;
         })
-        .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {
+        .addCase(clearAllChainTransactions, (transactions, { payload: { chainId } }) => {
             if (!transactions[chainId]) return;
             transactions[chainId] = {};
         })

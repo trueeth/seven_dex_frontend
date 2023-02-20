@@ -10,9 +10,10 @@ import { FixedSizeList } from 'react-window'
 import useDebounce from 'src/hooks/useDebounce'
 import { createFilterToken } from 'src/utils/filtering'
 import { Currency, NATIVE, Token } from 'src/utils/token'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
 import { DEFAULT_CHAIN_ID } from 'src/config/constants/chains'
 import useNativeCurrency from 'src/hooks/useNativeCurrency'
+import { useAllTokenBalances, useCurrencyBalance, useNativeBalances } from 'src/state/wallet/hooks'
+import { useAccount } from 'wagmi'
 
 
 const modalStyle = {
@@ -35,7 +36,7 @@ const modalStyle = {
 }
 
 
-function CurrencyRow({ token, onSelect }) {
+function CurrencyRow({ token, onSelect, balance }) {
 
     return (
 
@@ -60,7 +61,7 @@ function CurrencyRow({ token, onSelect }) {
                 </Box>
             </Box>
             <Box>
-                <Typography sx={{ fontSize: '20px', mr: 3 }}>0</Typography>
+                <Typography sx={{ fontSize: '16px', mr: 3 }}>{balance}</Typography>
             </Box>
         </Box>
     )
@@ -70,8 +71,11 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
 
     const [value, setValue] = React.useState('one')
 
-    const allTokens = useAllTokens()
+    const { address } = useAccount()
     const nativeCurrency = useNativeCurrency()
+    const allTokens = useAllTokens()
+    const allTokenBalances = useAllTokenBalances()
+    const nativeBalance = useCurrencyBalance(address ?? undefined, nativeCurrency)
 
     const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
@@ -188,6 +192,7 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
                             handleCurrencySelect(nativeCurrency)
                             onClose()
                         }}
+                        balance={nativeBalance?.toSignificant() ?? 0}
                     />
                     {
                         filteredTokens.map((token, index) => (
@@ -198,6 +203,7 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
                                     handleCurrencySelect(token)
                                     onClose()
                                 }}
+                                balance={allTokenBalances?.[token.address]?.toSignificant() ?? 0}
                             />
                         ))
                     }

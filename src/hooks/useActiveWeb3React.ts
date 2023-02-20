@@ -11,9 +11,9 @@ import { useActiveChainId } from './useActiveChainId'
 import { useSwitchNetworkLoading } from './useSwitchNetworkLoading'
 
 
-// const getHashFromRouter = (router) => {
-//     return router.match(/#([a-z0-9]+)/gi)
-// }
+const getHashFromRouter = (router) => {
+    return router.match(/#([a-z0-9]+)/gi)
+}
 
 // export function useNetworkConnectorUpdater() {
 //     const { chainId } = useActiveChainId()

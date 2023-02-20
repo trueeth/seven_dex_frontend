@@ -9,3 +9,12 @@ export function useFarmHarvestTransaction() {
         pickedTx: state.pickedFarmTransactionModalTx,
     }
 }
+
+export function useSwapSetting() {
+    const state = useSelector<AppState, AppState['global']>((s) => s.global)
+    return {
+        slippage: state.swapSlippage,
+        deadline: state.txDeadline,
+        safemode: state.safeMode
+    }
+}

@@ -13,16 +13,6 @@ import useSWR, {
 import { multicallv2, MulticallOptions, Call } from 'src/utils/multiCall'
 import { MaybeContract, ContractMethodName, ContractMethodParams } from 'src/utils/types'
 
-declare module 'swr' {
-    interface SWRResponse<Data = any, Error = any> {
-        data?: Data
-        error?: Error
-        mutate: KeyedMutator<Data>
-        isValidating: boolean
-        // Add global fetchStatus to SWRResponse
-        status: FetchStatus
-    }
-}
 
 export const fetchStatusMiddleware: Middleware = (useSWRNext) => {
     return (key, fetcher, config) => {

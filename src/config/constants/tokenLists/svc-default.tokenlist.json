@@ -14,6 +14,22 @@
     ],
     "tokens": [
         {
+            "name": "Seven Chain Token",
+            "symbol": "SVC",
+            "address": "0x762729F36206Bc985ed462E625e0200cF51ACc46",
+            "decimals": 18,
+            "chainId": 137,
+            "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png"
+        },
+        {
+            "name": "Seven Chain Token",
+            "symbol": "SVC",
+            "address": "0x8160510aAa29256E34d26D770171C05867d5252F",
+            "decimals": 18,
+            "chainId": 80001,
+            "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png"
+        },
+        {
             "name": "Wrapped Ether",
             "address": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
             "symbol": "WETH",
@@ -42,24 +58,8 @@
             "symbol": "WBTC",
             "address": "0x20dA123CB9748109d5Cb83C1cF80483BcA2cD817",
             "chainId": 80001,
-            "decimals": 8,
+            "decimals": 18,
             "logoURI": "https://tokens.pancakeswap.finance/images/symbol/wbtc.png"
-        },
-        {
-            "name": "Seven Chain Token",
-            "symbol": "SVC",
-            "address": "0x762729F36206Bc985ed462E625e0200cF51ACc46",
-            "decimals": 18,
-            "chainId": 137,
-            "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png"
-        },
-        {
-            "name": "Seven Chain Token",
-            "symbol": "SVC",
-            "address": "0x8160510aAa29256E34d26D770171C05867d5252F",
-            "decimals": 18,
-            "chainId": 80001,
-            "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png"
         }
     ]
 }

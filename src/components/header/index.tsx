@@ -85,7 +85,7 @@ function Header({ handleDrawerToggle }: IHeader) {
                         <NavLink to='/farm'>
                             <Typography>{t('Farm')}</Typography>
                         </NavLink>
-                        <NavLink to='/'>
+                        <NavLink to='/docs'>
                             <Box sx={{ display: 'flex' }}>
                                 <Typography>{t('Docs')}</Typography>
                                 <IconExternalLink
