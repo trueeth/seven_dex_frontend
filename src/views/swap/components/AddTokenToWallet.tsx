@@ -20,7 +20,7 @@ function AddTokenToWallet() {
             <Button
                 onClick={() =>
                     onRegisterToken(
-                        tokens['0x8160510aAa29256E34d26D770171C05867d5252F']
+                        tokens['0x40ae465CC90c636Ea0Ff123f91924d222F513a6E']
                     )
                 }
             >

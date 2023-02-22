@@ -1,7 +1,7 @@
 import { Divider } from "@mui/material"
 import { Box } from "@mui/system"
 import { IconArrowsUpDown } from "@tabler/icons"
-import { useSwapActionHandlers } from "src/state/swap/useSwapActionHandlers"
+import { useSwapActionHandlers } from "src/state/swap/useSwapActionHandler"
 
 function SwitchIOCurrency() {
 

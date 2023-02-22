@@ -60,6 +60,7 @@ export default function App() {
                             <ThemeProvider theme={theme}>
                                 <ViewBase>
                                     <Routes>
+                                        <Route path={'/'} element={<Home />} />
                                         <Route path={'/home'} element={<Home />} />
                                         <Route path={'/swap'} element={<Swap />} />
                                         <Route path={'/docs'} element={<Docs />} />

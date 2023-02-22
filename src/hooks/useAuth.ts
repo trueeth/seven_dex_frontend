@@ -10,7 +10,6 @@ import {
     useNetwork,
 } from 'wagmi'
 
-
 const useAuth = () => {
 
     const { connectAsync, connectors, isLoading } = useConnect()

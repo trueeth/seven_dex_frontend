@@ -3,18 +3,11 @@ import invariant from 'tiny-invariant'
 import _Decimal from 'decimal.js-light'
 import _Big from 'big.js'
 import toFormat from 'toformat'
-
+import { BigintIsh, Rounding } from 'src/config/constants'
 
 const Decimal = toFormat(_Decimal)
 const Big = toFormat(_Big)
-export type BigintIsh = JSBI | number | string
 
-
-export enum Rounding {
-    ROUND_DOWN,
-    ROUND_HALF_UP,
-    ROUND_UP,
-}
 
 const toSignificantRounding = {
     [Rounding.ROUND_DOWN]: Decimal.ROUND_DOWN,

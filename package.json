@@ -30,6 +30,7 @@
         "axios": "^1.2.1",
         "big.js": "^6.2.1",
         "clsx": "^1.2.1",
+        "date-fns": "^2.29.3",
         "decimal.js-light": "^2.5.1",
         "ethereum-multicall": "^2.15.0",
         "ethers": "^5.7.2",

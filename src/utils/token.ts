@@ -5,7 +5,8 @@ import { TokenAddressMap } from "./wrappedTokenInfo"
 import JSBI from 'jsbi'
 import _Big from 'big.js'
 import toFormat from 'toformat'
-import { BigintIsh, Fraction, Rounding } from "./fraction"
+import { Fraction } from "./fraction"
+import { BigintIsh, Rounding } from "src/config/constants"
 
 type ExtensionValue = string | number | boolean | null | undefined
 
