@@ -7,7 +7,7 @@ import AnalyticsIcon from 'src/asset/images/analytics.png'
 import LiquidityIcon from 'src/asset/images/liquidity.png'
 import EarningIcon from 'src/asset/images/earning.png'
 
-const ImageWrapper = styled.img`
+const ImageWrapper = styled.img` 
     width : 100px;
     height: 100px;
     margin: 20px;
@@ -45,30 +45,30 @@ function FeatureList() {
                     spacing={5}
                 >
                     <Grid item xs={12} md={6}>
-                        <ImageWrapper src={SwapIcon}/>
+                        <ImageWrapper src={SwapIcon} />
                         <Typography >
-                            <h2 style={{ color: '#e57a3b' }}>Swap Tokens</h2>
+                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Swap Tokens</Typography>
                             Trade any combination of ERC-20 tokens permissionless, with ease.
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <ImageWrapper src={LiquidityIcon}/>
+                        <ImageWrapper src={LiquidityIcon} />
                         <Typography>
-                            <h2 style={{ color: '#e57a3b' }}>Supply Liquidity</h2>
+                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Supply Liquidity</Typography>
                             Earn 0.25% fee on trades proportional to your share of the pool
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <ImageWrapper src={EarningIcon}/>
+                        <ImageWrapper src={EarningIcon} />
                         <Typography>
-                            <h2 style={{ color: '#e57a3b' }}>Earn SVC</h2>
+                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Earn SVC</Typography>
                             Deposit your LP tokens to earn additional rewards in SVC
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <ImageWrapper src={AnalyticsIcon}/>
+                        <ImageWrapper src={AnalyticsIcon} />
                         <Typography>
-                            <h2 style={{ color: '#e57a3b' }}>Analytics</h2>
+                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Analytics</Typography>
                             Scan through SevenSwap analytics & Historical Data
                         </Typography>
                     </Grid>

@@ -3,13 +3,16 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typog
 import { makeStyles } from '@mui/styles'
 import { useAllCurrencies } from 'src/hooks/Tokens'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     priceTable: {
         marginTop: '50px',
         width: '60%',
         backgroundColor: '#fff',
         padding: '30px',
-        borderRadius: '30px'
+        borderRadius: '30px',
+        [theme.breakpoints.down('sm')]: {
+            width: '95%',
+        }
     }
 }))
 
@@ -68,7 +71,7 @@ function PriceTable() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <img src={allCurrency[key].logoURI} alt='logo' style={{ width: '24px', height: '24px' }} />
-                                        <Typography ml={1}>
+                                        <Typography sx={{ ml: 1, minWidth: '60px' }}>
                                             {allCurrency[key].symbol}
                                         </Typography>
                                     </TableCell>

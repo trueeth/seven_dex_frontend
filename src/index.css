@@ -3,6 +3,7 @@
     margin: 0px;
     padding: 0px;
     text-transform: none !important;
+    font-family: 'Square';
 }
 
 *::-webkit-scrollbar {

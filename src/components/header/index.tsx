@@ -67,25 +67,25 @@ function Header({ handleDrawerToggle }: IHeader) {
                             px: 2
                         }
                     }}>
-                        <NavLink to='/home'>
+                        <Link to='/home'>
                             <Typography >{t('Home')}</Typography>
-                        </NavLink>
-                        <NavLink to='/swap'>
+                        </Link>
+                        <Link to='/swap'>
                             <Typography>{t('Swap')}</Typography>
-                        </NavLink>
-                        <NavLink to='/liquidity'>
+                        </Link>
+                        <Link to='/liquidity'>
                             <Typography>{t('Liquidity')}</Typography>
-                        </NavLink>
-                        <NavLink to='/bridge'>
+                        </Link>
+                        <Link to='/bridge'>
                             <Typography>{t('Bridge')}</Typography>
-                        </NavLink>
+                        </Link>
                         <Link to={{ pathname: "//staking-svc-matic.ceewen.xyz/" }} target="_blank">
                             <Typography>{t('Stake')}</Typography>
                         </Link>
-                        <NavLink to='/farm'>
+                        <Link to='/farm'>
                             <Typography>{t('Farm')}</Typography>
-                        </NavLink>
-                        <NavLink to='/docs'>
+                        </Link>
+                        <Link to='/docs'>
                             <Box sx={{ display: 'flex' }}>
                                 <Typography>{t('Docs')}</Typography>
                                 <IconExternalLink
@@ -93,7 +93,7 @@ function Header({ handleDrawerToggle }: IHeader) {
                                     style={{ marginLeft: '-14px', marginTop: '-3px' }}
                                 />
                             </Box>
-                        </NavLink>
+                        </Link>
                     </Box>
                 }
                 <Box display='flex' alignItems='center'>

@@ -152,3 +152,4 @@ export function getTokenComparator(balances: {
         return tokenA.symbol ? -1 : tokenB.symbol ? -1 : 0
     }
 }
+

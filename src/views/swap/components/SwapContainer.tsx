@@ -56,12 +56,14 @@ function SwapContainer() {
 
 
     const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
+    
     const handleTypeInput = useCallback(
         (value: string) => {
             onUserInput(Field.INPUT, value)
         },
         [onUserInput],
     )
+
     const handleTypeOutput = useCallback(
         (value: string) => {
             onUserInput(Field.OUTPUT, value)

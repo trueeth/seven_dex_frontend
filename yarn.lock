@@ -2545,22 +2545,27 @@
   "resolved" "https://registry.npmjs.org/@tabler/icons/-/icons-1.105.0.tgz"
   "version" "1.105.0"
 
-"@tanstack/query-core@4.15.1", "@tanstack/query-core@4.24.4":
+"@tanstack/query-core@4.15.1":
   "integrity" "sha512-9dqjv9eeB6VHN7lD3cLo16ZAjfjCsdXetSAD5+VyKqLUvcKTL0CklGQRJu+bWzdrS69R6Ea4UZo8obHYZnG6aA=="
   "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.24.4.tgz"
   "version" "4.24.4"
+
+"@tanstack/query-core@4.26.1":
+  "integrity" "sha512-Zrx2pVQUP4ndnsu6+K/m8zerXSVY8QM+YSbxA1/jbBY21GeCd5oKfYl92oXPK0hPEUtoNuunIdiq0ZMqLos+Zg=="
+  "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.26.1.tgz"
+  "version" "4.26.1"
 
 "@tanstack/query-persist-client-core@4.15.1":
   "integrity" "sha512-ldoGHNJ4Du83CT1CvJQqaJtQXEz4CdGcDmexVoyRG2q8DV9PAfYi+zls462ZbIWxlni93pkEgG1/q4mZVk2nqQ=="
   "resolved" "https://registry.npmjs.org/@tanstack/query-persist-client-core/-/query-persist-client-core-4.15.1.tgz"
   "version" "4.15.1"
 
-"@tanstack/query-persist-client-core@4.24.4":
-  "integrity" "sha512-t4BR/th3tu2tkfF0Tcl5z+MbglDjTdIbsLZYlly7l2M6EhGXRjOLbvVUA5Kcx7E2a81Vup0zx0z0wlx+RPGfmg=="
-  "resolved" "https://registry.npmjs.org/@tanstack/query-persist-client-core/-/query-persist-client-core-4.24.4.tgz"
-  "version" "4.24.4"
+"@tanstack/query-persist-client-core@4.26.1":
+  "integrity" "sha512-gKO5VQuvNlMMTNSxRtB4tm3zGSx3/U9YluFkdumsHana9YMh3ngc76gUCbQZsnf5DDCwdI673F7A7oSphp/vgA=="
+  "resolved" "https://registry.npmjs.org/@tanstack/query-persist-client-core/-/query-persist-client-core-4.26.1.tgz"
+  "version" "4.26.1"
   dependencies:
-    "@tanstack/query-core" "4.24.4"
+    "@tanstack/query-core" "4.26.1"
 
 "@tanstack/query-sync-storage-persister@^4.0.10":
   "integrity" "sha512-uMk8VCTkxTS9F99nSjbJRIsNalv6cwAtBJ6HgX41dYW2BCQR4ZQrM52oohIMbZo8DqlE/gGRtplbCbQ3NDfx4g=="
@@ -2570,18 +2575,18 @@
     "@tanstack/query-persist-client-core" "4.15.1"
 
 "@tanstack/react-query-persist-client@^4.0.10":
-  "integrity" "sha512-vQ10ghQrmk+VMrv8BtD1WgvdcGlL7z8QLC9oGryYPORLueOmVvW8nB3GL7aWp84pkLLXPLR32WopXMfseHWukw=="
-  "resolved" "https://registry.npmjs.org/@tanstack/react-query-persist-client/-/react-query-persist-client-4.24.4.tgz"
-  "version" "4.24.4"
+  "integrity" "sha512-efS2hPz8z+ySCTIy1DJ4uuT7LSi8F0E4bMXwP/aj2dDuMRFn6AV3z7LItInpp0Em3JKhi90GP2vxDyvQTOhO2A=="
+  "resolved" "https://registry.npmjs.org/@tanstack/react-query-persist-client/-/react-query-persist-client-4.26.1.tgz"
+  "version" "4.26.1"
   dependencies:
-    "@tanstack/query-persist-client-core" "4.24.4"
+    "@tanstack/query-persist-client-core" "4.26.1"
 
-"@tanstack/react-query@^4.0.10", "@tanstack/react-query@4.24.4":
-  "integrity" "sha512-RpaS/3T/a3pHuZJbIAzAYRu+1nkp+/enr9hfRXDS/mojwx567UiMksoqW4wUFWlwIvWTXyhot2nbIipTKEg55Q=="
-  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.24.4.tgz"
-  "version" "4.24.4"
+"@tanstack/react-query@^4.0.10", "@tanstack/react-query@4.26.1":
+  "integrity" "sha512-i3dnz4TOARGIXrXQ5P7S25Zfi4noii/bxhcwPurh2nrf5EUCcAt/95TB2HSmMweUBx206yIMWUMEQ7ptd6zwDg=="
+  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.26.1.tgz"
+  "version" "4.26.1"
   dependencies:
-    "@tanstack/query-core" "4.24.4"
+    "@tanstack/query-core" "4.26.1"
     "use-sync-external-store" "^1.2.0"
 
 "@tootallnate/once@1":

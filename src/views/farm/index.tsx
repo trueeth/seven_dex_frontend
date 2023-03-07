@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-function Bridge() {
+function Farm() {
 
     const classes = useStyles()
 
@@ -33,4 +33,4 @@ function Bridge() {
     )
 }
 
-export default Bridge
+export default Farm

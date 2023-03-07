@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import {  useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import useActiveWeb3React from 'src/hooks/useActiveWeb3React'
@@ -7,7 +7,7 @@ import { isAddress } from 'src/utils'
 import { Currency, CurrencyAmount } from 'src/utils/token'
 import { AppDispatch, AppState } from '../index'
 import { useUserSlippageTolerance } from '../user/hooks'
-import { Field, replaceSwapState} from './actions'
+import { Field, replaceSwapState } from './actions'
 import { SwapState } from './reducer'
 import JSBI from 'jsbi'
 import { useCurrencyBalances } from '../wallet/hooks'
@@ -21,47 +21,47 @@ import { useTradeExactIn, useTradeExactOut } from 'src/hooks/Trades'
 import { computeSlippageAdjustedAmounts } from 'src/utils/exchange'
 
 export function useSwapState(): AppState['swap'] {
-    return useSelector<AppState, AppState['swap']>((state) => state.swap)
+  return useSelector<AppState, AppState['swap']>((state) => state.swap)
 }
 
 // try to parse a user entered amount for a given token
-function tryParseAmount<T extends Currency>(value?: string, currency?: T): CurrencyAmount<T> | undefined {
-    if (!value || !currency) {
-      return undefined
-    }
-    try {
-      const typedValueParsed = parseUnits(value, currency.decimals).toString()
-  
-      if (typedValueParsed !== '0') {
-        return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed))
-      }
-    } catch (error) {
-      // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
-      console.debug(`Failed to parse input amount: "${value}"`, error)
-    }
-    // necessary for all paths to return a value
+export function tryParseAmount<T extends Currency>(value?: string, currency?: T): CurrencyAmount<T> | undefined {
+  if (!value || !currency) {
     return undefined
   }
-  
-  const BAD_RECIPIENT_ADDRESSES: string[] = [
-    process.env.REACT_APP_FACTORY, // v2 factory
-    process.env.REACT_APP_ROUTER, // v2 router 01
-    process.env.REACT_APP_ROUTER, // v2 router 02
-  ]
-  
+  try {
+    const typedValueParsed = parseUnits(value, currency.decimals).toString()
+
+    if (typedValueParsed !== '0') {
+      return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed))
+    }
+  } catch (error) {
+    // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
+    console.debug(`Failed to parse input amount: "${value}"`, error)
+  }
+  // necessary for all paths to return a value
+  return undefined
+}
+
+const BAD_RECIPIENT_ADDRESSES: string[] = [
+  process.env.REACT_APP_FACTORY, // v2 factory
+  process.env.REACT_APP_ROUTER, // v2 router 01
+  process.env.REACT_APP_ROUTER, // v2 router 02
+]
+
 /**
  * Returns true if any of the pairs or tokens in a trade have the given checksummed address
  * @param trade to check for the given address
  * @param checksummedAddress address to check in the pairs and tokens
  */
 function involvesAddress(trade: Trade<Currency, Currency, TradeType>, checksummedAddress: string): boolean {
-    return (
-      trade.route.path.some((token) => token.address === checksummedAddress) ||
-      trade.route.pairs.some((pair) => pair.liquidityToken.address === checksummedAddress)
-    )
-  }
+  return (
+    trade.route.path.some((token) => token.address === checksummedAddress) ||
+    trade.route.pairs.some((pair) => pair.liquidityToken.address === checksummedAddress)
+  )
+}
 
-  // from the current swap inputs, compute the best trade and return it.
+// from the current swap inputs, compute the best trade and return it.
 // from the current swap inputs, compute the best trade and return it.
 export function useDerivedSwapInfo(
   independentField: Field,
@@ -151,94 +151,93 @@ export function useDerivedSwapInfo(
   }
 }
 
-  
-  function parseCurrencyFromURLParameter(urlParam: any): string {
-    if (typeof urlParam === 'string') {
-      const valid = isAddress(urlParam)
-      if (valid) return valid
-      if (urlParam.toUpperCase() === 'NEON') return 'NEON'
-      if (valid === false) return 'NEON'
-    }
-    return 'NEON' ?? ''
+
+function parseCurrencyFromURLParameter(urlParam: any): string {
+  if (typeof urlParam === 'string') {
+    const valid = isAddress(urlParam)
+    if (valid) return valid
+    if (urlParam.toUpperCase() === 'NEON') return 'NEON'
+    if (valid === false) return 'NEON'
   }
-  
-  function parseTokenAmountURLParameter(urlParam: any): string {
-    // eslint-disable-next-line no-restricted-globals
-    return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : ''
-  }
-  
-  function parseIndependentFieldURLParameter(urlParam: any): Field {
-    return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field.OUTPUT : Field.INPUT
-  }
-  
-  const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
-  const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
-  function validatedRecipient(recipient: any): string | null {
-    if (typeof recipient !== 'string') return null
-    const address = isAddress(recipient)
-    if (address) return address
-    if (ENS_NAME_REGEX.test(recipient)) return recipient
-    if (ADDRESS_REGEX.test(recipient)) return recipient
-    return null
-  }
-  
-  export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
-    let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
-    let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
-    if (inputCurrency === outputCurrency) {
-      if (typeof parsedQs.outputCurrency === 'string') {
-        inputCurrency = ''
-      } else {
-        outputCurrency = ''
-      }
-    }
-  
-    const recipient = validatedRecipient(parsedQs.recipient)
-  
-    return {
-      [Field.INPUT]: {
-        currencyId: inputCurrency,
-      },
-      [Field.OUTPUT]: {
-        currencyId: outputCurrency,
-      },
-      typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
-      independentField: parseIndependentFieldURLParameter(parsedQs.exactField),
-      recipient,
-      pairDataById: {},
-      derivedPairDataById: {},
+  return 'NEON' ?? ''
+}
+
+function parseTokenAmountURLParameter(urlParam: any): string {
+  // eslint-disable-next-line no-restricted-globals
+  return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : ''
+}
+
+function parseIndependentFieldURLParameter(urlParam: any): Field {
+  return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field.OUTPUT : Field.INPUT
+}
+
+const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
+const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
+function validatedRecipient(recipient: any): string | null {
+  if (typeof recipient !== 'string') return null
+  const address = isAddress(recipient)
+  if (address) return address
+  if (ENS_NAME_REGEX.test(recipient)) return recipient
+  if (ADDRESS_REGEX.test(recipient)) return recipient
+  return null
+}
+
+export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
+  let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
+  let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+  if (inputCurrency === outputCurrency) {
+    if (typeof parsedQs.outputCurrency === 'string') {
+      inputCurrency = ''
+    } else {
+      outputCurrency = ''
     }
   }
-  
-  // updates the swap state to use the defaults for a given network
-  export function useDefaultsFromURLSearch():
-    | { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined }
-    | undefined {
-    const { chainId } = useActiveWeb3React()
-    const dispatch = useDispatch<AppDispatch>()
-    const parsedQs = useParsedQueryString()
-    const [result, setResult] = useState<
-      { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
-    >()
-  
-    useEffect(() => {
-      if (!chainId) return
-      const parsed = queryParametersToSwapState(parsedQs)
-  
-      dispatch(
-        replaceSwapState({
-          typedValue: parsed.typedValue,
-          field: parsed.independentField,
-          inputCurrencyId: parsed[Field.INPUT].currencyId,
-          outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-          recipient: null,
-        }),
-      )
-  
-      setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
-    
-    }, [dispatch, chainId])
-  
-    return result
+
+  const recipient = validatedRecipient(parsedQs.recipient)
+
+  return {
+    [Field.INPUT]: {
+      currencyId: inputCurrency,
+    },
+    [Field.OUTPUT]: {
+      currencyId: outputCurrency,
+    },
+    typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
+    independentField: parseIndependentFieldURLParameter(parsedQs.exactField),
+    recipient,
+    pairDataById: {},
+    derivedPairDataById: {},
   }
-  
+}
+
+// updates the swap state to use the defaults for a given network
+export function useDefaultsFromURLSearch():
+  | { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined }
+  | undefined {
+  const { chainId } = useActiveWeb3React()
+  const dispatch = useDispatch<AppDispatch>()
+  const parsedQs = useParsedQueryString()
+  const [result, setResult] = useState<
+    { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
+  >()
+
+  useEffect(() => {
+    if (!chainId) return
+    const parsed = queryParametersToSwapState(parsedQs)
+
+    dispatch(
+      replaceSwapState({
+        typedValue: parsed.typedValue,
+        field: parsed.independentField,
+        inputCurrencyId: parsed[Field.INPUT].currencyId,
+        outputCurrencyId: parsed[Field.OUTPUT].currencyId,
+        recipient: null,
+      }),
+    )
+
+    setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
+
+  }, [dispatch, chainId])
+
+  return result
+}
