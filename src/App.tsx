@@ -64,6 +64,7 @@ export default function App() {
                                         <Route path='/docs' element={<Docs />} />
                                         <Route path='/farm' element={<Farm />} />
                                         <Route path='/liquidity' element={<AddLiquidity />} />
+                                        <Route path='/add' element={<AddLiquidity />} />
                                         <Route path='/bridge' element={<Bridge />} />
                                     </Routes>
                                 </ViewBase>

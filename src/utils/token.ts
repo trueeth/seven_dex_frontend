@@ -474,3 +474,14 @@ export const EMPTY_LIST: TokenAddressMap<ChainId> = {
     [ChainId.MUMBAI]: {},
     [ChainId.SVC]: {}
 }
+
+export const SVC_TESTNET = new ERC20Token(
+    ChainId.MUMBAI,
+    '0x40ae465CC90c636Ea0Ff123f91924d222F513a6E',
+    18,
+    'SVC',
+    'Seven Chain Token',
+    ''
+)
+
+

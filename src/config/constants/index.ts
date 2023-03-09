@@ -1,7 +1,7 @@
 
-
-
 import JSBI from 'jsbi'
+import { ERC20Token } from 'src/utils/token'
+import { ChainId } from './chains'
 
 // default allowed slippage, in bips
 

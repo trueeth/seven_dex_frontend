@@ -3,7 +3,6 @@ import { makeStyles } from "@mui/styles"
 const useStyles = makeStyles((theme) => ({
     cardView: {
         minWidth: '500px',
-        padding: '32px',
         display: 'flex',
         flexGrow: 1,
         margin: '20px',

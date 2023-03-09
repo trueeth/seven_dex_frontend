@@ -46,31 +46,31 @@ function FeatureList() {
                 >
                     <Grid item xs={12} md={6}>
                         <ImageWrapper src={SwapIcon} />
-                        <Typography >
-                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Swap Tokens</Typography>
-                            Trade any combination of ERC-20 tokens permissionless, with ease.
-                        </Typography>
+                        <Box >
+                            <Typography sx={{ color: '#e57a3b !important', fontSize: '24px' }}>Swap Tokens</Typography>
+                            <Typography>Trade any combination of ERC-20 tokens permissionless, with ease.</Typography>
+                        </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <ImageWrapper src={LiquidityIcon} />
-                        <Typography>
-                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Supply Liquidity</Typography>
-                            Earn 0.25% fee on trades proportional to your share of the pool
-                        </Typography>
+                        <Box>
+                            <Typography sx={{ color: '#e57a3b !important', fontSize: '24px' }}>Supply Liquidity</Typography>
+                            <Typography>  Earn 0.25% fee on trades proportional to your share of the pool</Typography>
+                        </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <ImageWrapper src={EarningIcon} />
-                        <Typography>
-                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Earn SVC</Typography>
-                            Deposit your LP tokens to earn additional rewards in SVC
-                        </Typography>
+                        <Box>
+                            <Typography sx={{ color: '#e57a3b !important', fontSize: '24px' }}>Earn SVC</Typography>
+                            <Typography> Deposit your LP tokens to earn additional rewards in SVC</Typography>
+                        </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <ImageWrapper src={AnalyticsIcon} />
-                        <Typography>
-                            <Typography sx={{ color: '#e57a3b', fontSize: '24px' }}>Analytics</Typography>
-                            Scan through SevenSwap analytics & Historical Data
-                        </Typography>
+                        <Box>
+                            <Typography sx={{ color: '#e57a3b !important', fontSize: '24px' }}>Analytics</Typography>
+                            <Typography>Scan through SevenSwap analytics & Historical Data</Typography>
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>
