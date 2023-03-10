@@ -6,15 +6,15 @@ import Container from './components/Container'
 import { useActiveChainId } from 'src/hooks/useActiveChainId'
 import { useAccount } from 'wagmi'
 import NoPosition from './components/UserPosition'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import useNativeCurrency from 'src/hooks/useNativeCurrency'
 import TokenSelectView from './components/TokenSelectView'
 import { SVC_TESTNET } from 'src/utils/token'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { useCurrency } from 'src/hooks/Tokens'
 import SupplyTokens from './components/SupplyTokens'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     liquidityView: {
         width: '100vw',
         display: 'flex',
@@ -28,10 +28,14 @@ function AddLiquidity() {
     const { chainId } = useActiveChainId()
     const { isConnected } = useAccount()
     const [userPosition, setUserPosition] = useState(null)
+    const location = useLocation()
+
+    const isUserLiquidity = useMemo(() => {
+        return location.pathname === '/liquidity'
+    }, [location])
+    const [step, setStep] = useState(1)
 
     const native = useNativeCurrency()
-
-    const onNext = () => { }
     const onSupply = () => { }
 
 
@@ -53,17 +57,26 @@ function AddLiquidity() {
             }}>
                 <Settings />
                 <Container>
-                    {/* {!userPosition && <NoPosition />} */}
-                    {/* <TokenSelectView
-                        currencyA={currencyA}
-                        currencyB={currencyB}
-                        onNext={onNext}
-                    /> */}
-                    <SupplyTokens
-                        currencyA={currencyA}
-                        currencyB={currencyB}
-                        onSupply={onSupply}
-                    />
+                    {!userPosition && isUserLiquidity ?
+                        <NoPosition /> :
+                        <>
+                            {
+                                step === 1 ?
+                                    <TokenSelectView
+                                        currencyA={currencyA}
+                                        currencyB={currencyB}
+                                        onNext={() => setStep(2)}
+                                    /> :
+                                    < SupplyTokens
+                                        currencyA={currencyA}
+                                        currencyB={currencyB}
+                                        onSupply={onSupply}
+                                        onBack={() => setStep(1)}
+                                    />
+                            }
+                        </>
+                    }
+
                 </Container>
             </Box>
         </div>

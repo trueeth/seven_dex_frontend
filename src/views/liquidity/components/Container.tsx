@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles"
 
 const useStyles = makeStyles((theme) => ({
     cardView: {
-        minWidth: '500px',
+        width: '500px',
         display: 'flex',
         flexGrow: 1,
         margin: '20px',
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
             color: '#333'
         },
         [theme.breakpoints.down('sm')]: {
-            minWidth: '95%',
+            width: '95%',
             marginLeft: 'auto',
             marginRight: 'auto'
         }

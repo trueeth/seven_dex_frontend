@@ -1,12 +1,11 @@
 import { Box, Divider, Typography } from "@mui/material"
 import CurrencyInputPanel from "src/components/CurrencyInputPanel"
-import { useCurrency } from "src/hooks/Tokens"
-import useActiveWeb3React from "src/hooks/useActiveWeb3React"
-import { Currency, WMATIC } from "src/utils/token"
+import { Currency } from "src/utils/token"
 import { useCurrencySelectRoute } from "../useCurrencySelectRoute"
 import AddIcon from '@mui/icons-material/Add'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { StyledButton } from "./Styled"
+import { useNavigate } from "react-router-dom"
 
 
 function TokenSelectView({
@@ -22,13 +21,16 @@ function TokenSelectView({
 }) {
 
 
+    const navigate = useNavigate()
     const { handleCurrencyASelect, handleCurrencyBSelect } = useCurrencySelectRoute()
 
 
     return (
         <Box sx={{ width: '100%' }}>
             <Box p={4} pb={3} sx={{ display: 'flex', alignItems: 'center' }}>
-                <KeyboardBackspaceIcon />
+                <Box sx={{ cursor: 'pointer' }} onClick={() => navigate('/liquidity')}>
+                    <KeyboardBackspaceIcon />
+                </Box>
                 <Box ml={3}>
                     <Typography sx={{
                         fontSize: '24px',

@@ -10,11 +10,13 @@ import { useCurrencyBalance } from "src/state/wallet/hooks"
 function SupplyTokens({
     currencyA,
     currencyB,
-    onSupply
+    onSupply,
+    onBack
 }: {
     currencyA: Currency,
     currencyB: Currency,
-    onSupply: () => void
+    onSupply: () => void,
+    onBack: () => void
 }) {
 
 
@@ -25,7 +27,9 @@ function SupplyTokens({
     return (
         <Box sx={{ width: '100%' }}>
             <Box p={3} sx={{ display: 'flex', alignItems: 'center' }}>
-                <KeyboardBackspaceIcon />
+                <Box onClick={onBack} sx={{ cursor: 'pointer' }}>
+                    <KeyboardBackspaceIcon />
+                </Box>
                 <Box ml={3}>
                     <Box sx={{ display: 'flex' }}>
                         <Typography sx={{
@@ -159,7 +163,8 @@ function SupplyTokens({
                             alignItems: 'center',
                             gap: 0.5,
                             '& .MuiTypography-root': {
-                                fontSize: '14px !important'
+                                fontSize: '14px !important',
+                                textAlign: 'center'
                             }
                         },
                     }}>

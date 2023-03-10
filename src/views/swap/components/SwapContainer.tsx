@@ -14,7 +14,7 @@ import currencyId from 'src/utils/currencyId'
 
 const useStyles = makeStyles((theme) => ({
     cardView: {
-        maxWidth: '500px',
+        width: '500px',
         padding: '32px',
         display: 'flex',
         flexGrow: 1,
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
             color: '#333'
         },
         [theme.breakpoints.down('sm')]: {
-            minWidth: '95%',
+            width: '95%',
             marginLeft: 'auto',
             marginRight: 'auto'
         }
@@ -56,7 +56,7 @@ function SwapContainer() {
 
 
     const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
-    
+
     const handleTypeInput = useCallback(
         (value: string) => {
             onUserInput(Field.INPUT, value)
