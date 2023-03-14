@@ -3,8 +3,6 @@ import { makeStyles } from '@mui/styles'
 import Settings from 'src/components/Settings'
 import { Box } from '@mui/system'
 import Container from './components/Container'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
-import { useAccount } from 'wagmi'
 import NoPosition from './components/UserPosition'
 import { useMemo, useState } from 'react'
 import useNativeCurrency from 'src/hooks/useNativeCurrency'
@@ -13,6 +11,7 @@ import { SVC_TESTNET } from 'src/utils/token'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { useCurrency } from 'src/hooks/Tokens'
 import SupplyTokens from './components/SupplyTokens'
+
 
 const useStyles = makeStyles((theme) => ({
     liquidityView: {
@@ -25,8 +24,6 @@ const useStyles = makeStyles((theme) => ({
 function AddLiquidity() {
 
     const classes = useStyles()
-    const { chainId } = useActiveChainId()
-    const { isConnected } = useAccount()
     const [userPosition, setUserPosition] = useState(null)
     const location = useLocation()
 
@@ -36,8 +33,6 @@ function AddLiquidity() {
     const [step, setStep] = useState(1)
 
     const native = useNativeCurrency()
-    const onSupply = () => { }
-
 
     const [searchParams,] = useSearchParams()
     const currencyIdA = searchParams.get('currencyA') ?? native.symbol
@@ -70,7 +65,6 @@ function AddLiquidity() {
                                     < SupplyTokens
                                         currencyA={currencyA}
                                         currencyB={currencyB}
-                                        onSupply={onSupply}
                                         onBack={() => setStep(1)}
                                     />
                             }

@@ -124,7 +124,7 @@ export function usePairAdder(): (pair: Pair) => void {
  * @param tokenB the other token
  */
 export function toLiquidityToken([tokenA, tokenB]: [ERC20Token, ERC20Token]): ERC20Token {
-    return new ERC20Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'Cake-LP', 'Pancake LPs')
+    return new ERC20Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'SVCD-LP', 'SvcDex LPs')
 }
 
 
@@ -160,18 +160,18 @@ export function useUserSlippageTolerance(): [number, (slippage: number) => void]
 
 export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) => void] {
     const dispatch = useAppDispatch()
-  
+
     const singleHopOnly = useSelector<AppState, AppState['user']['userSingleHopOnly']>(
-      (state) => state.user.userSingleHopOnly,
+        (state) => state.user.userSingleHopOnly,
     )
-  
+
     const setSingleHopOnly = useCallback(
-      (newSingleHopOnly: boolean) => {
-        dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }))
-      },
-      [dispatch],
+        (newSingleHopOnly: boolean) => {
+            dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }))
+        },
+        [dispatch],
     )
-  
+
     return [singleHopOnly, setSingleHopOnly]
-  }
+}
 

@@ -77,7 +77,7 @@ export const FACTORY_ADDRESS_MAP: Record<number, string> = {
     [ChainId.ETHEREUM]: '',
     [ChainId.GOERLI]: '',
     [ChainId.POLYGON]: '',
-    [ChainId.MUMBAI]: '0x6725f303b657a9451d8ba641348b6761a6cc7a17',
+    [ChainId.MUMBAI]: '0xE857086AF5889e9A59d7Bed75A3082548386a842',
     [ChainId.POLYGON]: ''
 }
 

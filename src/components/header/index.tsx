@@ -6,7 +6,6 @@ import { IconMenu2, IconExternalLink } from '@tabler/icons'
 import ConnectButton from './ConnectWallet'
 import SelectNetwork from './SelectNetwork'
 
-import { NavLink } from 'react-router-dom'
 import LanguageSelector from './LanguageSelector'
 import { useTranslation } from 'src/context/Localization'
 import { Link } from 'react-router-dom'
@@ -40,8 +39,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Header({ handleDrawerToggle }: IHeader) {
-    const is960 = useMediaQuery('(max-width:960px)')
-    const isXs = useMediaQuery('(max-width:768px)')
+    const is960 = useMediaQuery('(max-width:1024px)')
+    const isXs = useMediaQuery('(max-width:1024px)')
     const classes = useStyles()
 
     const { t } = useTranslation()

@@ -6,23 +6,111 @@ import AddIcon from '@mui/icons-material/Add'
 import { IconInfoCircle } from '@tabler/icons'
 import { useAccount } from "wagmi"
 import { useCurrencyBalance } from "src/state/wallet/hooks"
+import { Field } from "src/state/mint/actions"
+import { ONE_BIPS, ROUTER_ADDRESS } from "src/config/constants/exchange"
+import { ApprovalState, useApproveCallback } from "src/hooks/useApproveCallback"
+import { usePairAdder } from 'src/state/user/hooks'
+import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'src/state/mint/hooks'
+import { maxAmountSpend } from 'src/utils/maxAmountSpend'
+import { useTransactionAdder } from 'src/state/transactions/hooks'
+import { useRouterContract } from 'src/utils/exchange'
+
+import { CurrencyAmount, Token } from 'src/utils/token'
+import { useMemo, useState } from "react"
+import { useActiveChainId } from "src/hooks/useActiveChainId"
+import { ST } from "next/dist/shared/lib/utils"
 
 function SupplyTokens({
     currencyA,
     currencyB,
-    onSupply,
     onBack
 }: {
     currencyA: Currency,
     currencyB: Currency,
-    onSupply: () => void,
     onBack: () => void
 }) {
 
 
     const { address: account } = useAccount()
+    const { chainId } = useActiveChainId()
     const currencyABalance = useCurrencyBalance(account ?? undefined, currencyA ?? undefined)
     const currencyBBalance = useCurrencyBalance(account ?? undefined, currencyB ?? undefined)
+
+    const addPair = usePairAdder()
+
+    const { independentField, typedValue, otherTypedValue } = useMintState()
+    const {
+        dependentField,
+        currencies,
+        pair,
+        pairState,
+        currencyBalances,
+        parsedAmounts: mintParsedAmounts,
+        price,
+        noLiquidity,
+        liquidityMinted,
+        poolTokenPercentage,
+        error,
+        //  addError,
+    } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
+
+    const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
+
+
+
+    const [{ attemptingTxn, liquidityErrorMessage, txHash }, setLiquidityState] = useState<{
+        attemptingTxn: boolean
+        liquidityErrorMessage: string | undefined
+        txHash: string | undefined
+    }>({
+        attemptingTxn: false,
+        liquidityErrorMessage: undefined,
+        txHash: undefined,
+    })
+
+    const maxAmounts: { [field in Field]?: CurrencyAmount<Token> } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
+        (accumulator, field) => {
+            return {
+                ...accumulator,
+                [field]: maxAmountSpend(currencyBalances[field]),
+            }
+        },
+        {},
+    )
+
+    const formattedAmounts = useMemo(
+        () => ({
+            [independentField]: typedValue,
+            [dependentField]: noLiquidity ? otherTypedValue : mintParsedAmounts[dependentField]?.toSignificant(6) ?? '',
+        }),
+        [
+            dependentField,
+            independentField,
+            noLiquidity,
+            otherTypedValue,
+            mintParsedAmounts,
+            typedValue
+        ],
+    )
+
+
+    // check whether the user has approved the router on the tokens
+    const [approvalA, approveACallback] = useApproveCallback(
+        mintParsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[chainId],
+    )
+    const [approvalB, approveBCallback] = useApproveCallback(
+        mintParsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[chainId],
+    )
+    const showFieldAApproval =
+        (approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING)
+    const showFieldBApproval =
+        (approvalB === ApprovalState.NOT_APPROVED || approvalB === ApprovalState.PENDING)
+
+    const shouldShowApprovalGroup = (showFieldAApproval || showFieldBApproval)
+
+    const addTransaction = useTransactionAdder()
+
+    const routerContract = useRouterContract()
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -85,6 +173,8 @@ function SupplyTokens({
                         <TextField
                             variant="standard"
                             autoComplete='off'
+                            onChange={(e) => onFieldAInput(e.target.value)}
+                            value={formattedAmounts[Field.CURRENCY_A]}
                             InputProps={{
                                 disableUnderline: true,
                                 placeholder: '0.0',
@@ -123,6 +213,8 @@ function SupplyTokens({
                         <TextField
                             variant="standard"
                             autoComplete='off'
+                            onChange={(e) => onFieldBInput(e.target.value)}
+                            value={formattedAmounts[Field.CURRENCY_B]}
                             InputProps={{
                                 disableUnderline: true,
                                 placeholder: '0.0',
@@ -169,15 +261,19 @@ function SupplyTokens({
                         },
                     }}>
                         <Box>
-                            <Typography>0.021</Typography>
+                            <Typography>{price?.toSignificant(6) ?? '-'}</Typography>
                             <Typography>{currencyA?.symbol} per {currencyB?.symbol}</Typography>
                         </Box>
                         <Box>
-                            <Typography>52.32</Typography>
+                            <Typography>{price?.invert()?.toSignificant(6) ?? '-'}</Typography>
                             <Typography>{currencyB?.symbol} per {currencyA?.symbol}</Typography>
                         </Box>
                         <Box>
-                            <Typography>0.32%</Typography>
+                            <Typography> {noLiquidity && price
+                                ? '100'
+                                : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
+                                %
+                            </Typography>
                             <Typography>Share in Trading Pair</Typography>
                         </Box>
                     </Box>
@@ -185,7 +281,36 @@ function SupplyTokens({
             </Box>
             <Divider />
             <Box p={3}>
-                <StyledButton onClick={onSupply}>Supply</StyledButton>
+                {
+                    shouldShowApprovalGroup ?
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            {showFieldAApproval && (
+                                <StyledButton
+                                    onClick={approveACallback}
+                                    disabled={approvalA === ApprovalState.PENDING}
+                                >
+                                    {approvalA === ApprovalState.PENDING ? (
+                                        `Enabling  ${currencies[Field.CURRENCY_A]?.symbol}`
+                                    ) : (
+                                        `Enable  ${currencies[Field.CURRENCY_A]?.symbol}`
+                                    )}
+                                </StyledButton>
+                            )}
+                            {showFieldBApproval && (
+                                <StyledButton
+                                    onClick={approveBCallback}
+                                    disabled={approvalB === ApprovalState.PENDING}
+                                >
+                                    {approvalB === ApprovalState.PENDING ? (
+                                        `Enabling  ${currencies[Field.CURRENCY_B]?.symbol}`
+                                    ) : (
+                                        `Enable  ${currencies[Field.CURRENCY_B]?.symbol}`
+                                    )}
+                                </StyledButton>
+                            )}
+                        </Box> :
+                        <StyledButton onClick={() => { }}>Supply</StyledButton>
+                }
             </Box>
         </Box >
     )

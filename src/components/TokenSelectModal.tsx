@@ -32,6 +32,9 @@ const modalStyle = {
     },
     '& .subText': {
         color: '#bbb'
+    },
+    '@media(max-width:450px)': {
+        width: '95%'
     }
 }
 
@@ -182,7 +185,7 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
                 </Box>
                 <Box sx={{
                     bgcolor: '#fff',
-                    height: '500px',
+                    height: '400px',
                     borderBottomLeftRadius: '20px',
                     borderBottomRightRadius: '20px'
                 }}>

@@ -194,8 +194,9 @@ export function useSingleContractMultipleData(
     const { cache } = useSWRConfig()
 
     return useMemo(() => {
+
         const currentBlockNumber = cache.get(unstable_serialize(['blockNumber', chainId]))
-        return results.map((result) => toCallState(result, contract?.interface, fragment, currentBlockNumber.data))
+        return results.map((result) => toCallState(result, contract?.interface, fragment, currentBlockNumber?.data))
     }, [cache, chainId, results, contract?.interface, fragment])
 }
 
@@ -237,7 +238,7 @@ export function useMultipleContractSingleData(
 
     return useMemo(() => {
         const currentBlockNumber = cache.get(unstable_serialize(['blockNumber', chainId]))
-        return results.map((result) => toCallState(result, contractInterface, fragment, currentBlockNumber.data))
+        return results.map((result) => toCallState(result, contractInterface, fragment, currentBlockNumber?.data))
     }, [cache, chainId, results, contractInterface, fragment])
 }
 
@@ -266,6 +267,6 @@ export function useSingleCallResult(
 
     return useMemo(() => {
         const currentBlockNumber = cache.get(unstable_serialize(['blockNumber', chainId]))
-        return toCallState(result, contract?.interface, fragment, currentBlockNumber.data)
+        return toCallState(result, contract?.interface, fragment, currentBlockNumber?.data)
     }, [cache, chainId, result, contract?.interface, fragment])
 }

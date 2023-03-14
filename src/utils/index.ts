@@ -11,6 +11,7 @@ import { Percent } from './percent'
 import { ONE, THREE, TWO, VMType, VM_TYPE_MAXIMA, ZERO } from 'src/config/constants'
 import JSBI from 'jsbi'
 import { Price } from './price'
+import { BigNumber } from 'ethers'
 
 // warns if addresses are not checksummed
 // eslint-disable-next-line consistent-return
@@ -152,4 +153,10 @@ export function getTokenComparator(balances: {
         return tokenA.symbol ? -1 : tokenB.symbol ? -1 : 0
     }
 }
+
+// add 10%
+export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {
+    return value.mul(BigNumber.from(10000).add(BigNumber.from(margin))).div(BigNumber.from(10000))
+}
+
 

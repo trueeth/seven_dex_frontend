@@ -3,7 +3,6 @@ import { StyledButton } from "./Styled"
 import { Link } from "react-router-dom"
 
 
-
 function NoPosition() {
 
     return (

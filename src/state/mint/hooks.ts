@@ -6,7 +6,6 @@ import { Price } from 'src/utils/price'
 import { Percent } from 'src/utils/percent'
 import JSBI from 'jsbi'
 import { useDispatch, useSelector } from 'react-redux'
-import { useWeb3React } from '@web3-react/core'
 import { PairState, usePair } from 'src/hooks/usePairs'
 import useTotalSupply from 'src/hooks/useTotalSupply'
 
@@ -16,6 +15,8 @@ import { tryParseAmount } from '../swap/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
 import { BIG_INT_ZERO } from 'src/config/constants/exchange'
+import { useAccount } from 'wagmi'
+import { useActiveChainId } from 'src/hooks/useActiveChainId'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -64,7 +65,8 @@ export function useDerivedMintInfo(
   poolTokenPercentage?: Percent
   error?: string
 } {
-  const { account, chainId } = useWeb3React()
+  const { chainId } = useActiveChainId()
+  const { address: account } = useAccount()
 
   const { independentField, typedValue, otherTypedValue } = useMintState()
 
@@ -78,11 +80,10 @@ export function useDerivedMintInfo(
     }),
     [currencyA, currencyB],
   )
-
   // pair
   const [pairState, pair] = usePair(currencies[Field.CURRENCY_A], currencies[Field.CURRENCY_B])
-
   const totalSupply = useTotalSupply(pair?.liquidityToken)
+
 
   const noLiquidity: boolean =
     pairState === PairState.NOT_EXISTS ||
@@ -141,6 +142,7 @@ export function useDerivedMintInfo(
     [dependentAmount, independentAmount, independentField],
   )
 
+
   const price = useMemo(() => {
     if (noLiquidity) {
       const { [Field.CURRENCY_A]: currencyAAmount, [Field.CURRENCY_B]: currencyBAmount } = parsedAmounts
@@ -158,6 +160,7 @@ export function useDerivedMintInfo(
     return pair && wrappedCurrencyA ? pair.priceOf(wrappedCurrencyA) : undefined
   }, [currencyA, noLiquidity, pair, parsedAmounts])
 
+
   // liquidity minted
   const liquidityMinted = useMemo(() => {
     const { [Field.CURRENCY_A]: currencyAAmount, [Field.CURRENCY_B]: currencyBAmount } = parsedAmounts
@@ -170,6 +173,7 @@ export function useDerivedMintInfo(
     }
     return undefined
   }, [parsedAmounts, chainId, pair, totalSupply])
+
 
   const poolTokenPercentage = useMemo(() => {
     if (liquidityMinted && totalSupply) {
