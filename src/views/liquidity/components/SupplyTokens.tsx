@@ -13,12 +13,16 @@ import { usePairAdder } from 'src/state/user/hooks'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'src/state/mint/hooks'
 import { maxAmountSpend } from 'src/utils/maxAmountSpend'
 import { useTransactionAdder } from 'src/state/transactions/hooks'
-import { useRouterContract } from 'src/utils/exchange'
+import { calculateSlippageAmount, useRouterContract } from 'src/utils/exchange'
 
 import { CurrencyAmount, Token } from 'src/utils/token'
 import { useMemo, useState } from "react"
 import { useActiveChainId } from "src/hooks/useActiveChainId"
 import { ST } from "next/dist/shared/lib/utils"
+import { calculateGasMargin } from "src/utils"
+import { BigNumber } from "ethers"
+import { TransactionResponse } from "@ethersproject/providers"
+import { GAS_PRICE_GWEI } from "src/state/types"
 
 function SupplyTokens({
     currencyA,
@@ -111,6 +115,95 @@ function SupplyTokens({
     const addTransaction = useTransactionAdder()
 
     const routerContract = useRouterContract()
+
+    async function onAdd() {
+        if (!chainId || !account || !routerContract) return
+
+        const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = mintParsedAmounts
+        if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB) {
+            return
+        }
+
+        const amountsMin = {
+            [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : 100)[0],
+            [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : 100)[0],
+        }
+
+        let estimate
+        let method: (...args: any) => Promise<TransactionResponse>
+        let args: Array<string | string[] | number>
+        let value: BigNumber | null
+        if (currencyA?.isNative || currencyB?.isNative) {
+            const tokenBIsNative = currencyB?.isNative
+            estimate = routerContract.estimateGas.addLiquidityETH
+            method = routerContract.addLiquidityETH
+            args = [
+                (tokenBIsNative ? currencyA : currencyB)?.wrapped?.address ?? '', // token
+                (tokenBIsNative ? parsedAmountA : parsedAmountB).quotient.toString(), // token desired
+                amountsMin[tokenBIsNative ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
+                amountsMin[tokenBIsNative ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
+                account,
+                '99999999999999999',
+            ]
+            value = BigNumber.from((tokenBIsNative ? parsedAmountB : parsedAmountA).quotient.toString())
+        } else {
+            estimate = routerContract.estimateGas.addLiquidity
+            method = routerContract.addLiquidity
+            args = [
+                currencyA?.wrapped?.address ?? '',
+                currencyB?.wrapped?.address ?? '',
+                parsedAmountA.quotient.toString(),
+                parsedAmountB.quotient.toString(),
+                amountsMin[Field.CURRENCY_A].toString(),
+                amountsMin[Field.CURRENCY_B].toString(),
+                account,
+                '999999999999999999',
+            ]
+            value = null
+        }
+
+        setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: undefined })
+        await estimate(...args, value ? { value } : {})
+            .then((estimatedGasLimit) =>
+                method(...args, {
+                    ...(value ? { value } : {}),
+                    gasLimit: calculateGasMargin(estimatedGasLimit),
+                    gasPrice: GAS_PRICE_GWEI.fast,
+                }).then((response) => {
+                    setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response.hash })
+
+                    const symbolA = currencies[Field.CURRENCY_A]?.symbol
+                    const amountA = mintParsedAmounts[Field.CURRENCY_A]?.toSignificant(3)
+                    const symbolB = currencies[Field.CURRENCY_B]?.symbol
+                    const amountB = mintParsedAmounts[Field.CURRENCY_B]?.toSignificant(3)
+                    addTransaction(response, {
+                        summary: `Add ${amountA} ${symbolA} and ${amountB} ${symbolB}`,
+                        translatableSummary: {
+                            text: 'Add %amountA% %symbolA% and %amountB% %symbolB%',
+                            data: { amountA, symbolA, amountB, symbolB },
+                        },
+                        type: 'add-liquidity',
+                    })
+
+                    if (pair) {
+                        addPair(pair)
+                    }
+                }),
+            )
+            .catch((err) => {
+                if (err && err.code !== 4001) {
+                    console.error(`Add Liquidity failed`, err, args, value)
+                }
+                setLiquidityState({
+                    attemptingTxn: false,
+                    liquidityErrorMessage:
+                        err && err.code !== 4001
+                            ? 'Add liquidity failed'
+                            : undefined,
+                    txHash: undefined,
+                })
+            })
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -309,7 +402,7 @@ function SupplyTokens({
                                 </StyledButton>
                             )}
                         </Box> :
-                        <StyledButton onClick={() => { }}>Supply</StyledButton>
+                        <StyledButton onClick={onAdd}>Supply</StyledButton>
                 }
             </Box>
         </Box >
