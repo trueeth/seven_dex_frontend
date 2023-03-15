@@ -1,8 +1,9 @@
 import JSBI from 'jsbi'
 import { Percent } from 'src/utils/percent'
-import { Token } from 'src/utils/token'
+import { Token, WNATIVE } from 'src/utils/token'
 import { ChainId } from './chains'
 import { ChainMap, ChainTokenList } from './types'
+import { PINNED_TOKENS_MUMBAI } from './tokens'
 
 
 export const EXCHANGE_PAGE_PATHS = ['/swap', '/limit-orders', 'liquidity', '/add', '/find', '/remove']
@@ -42,11 +43,11 @@ export const ROUTER_ADDRESS: ChainMap<string> = {
     [ChainId.SVC]: '',
 }
 
-export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
+export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     [ChainId.ETHEREUM]: [],
     [ChainId.GOERLI]: [],
     [ChainId.POLYGON]: [],
-    [ChainId.MUMBAI]: [],
+    [ChainId.MUMBAI]: [PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc, PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.weth],
     [ChainId.SVC]: [],
 }
 
@@ -78,8 +79,18 @@ export const FACTORY_ADDRESS_MAP: Record<number, string> = {
     [ChainId.GOERLI]: '',
     [ChainId.POLYGON]: '',
     [ChainId.MUMBAI]: '0xE857086AF5889e9A59d7Bed75A3082548386a842',
-    [ChainId.POLYGON]: ''
+    [ChainId.SVC]: ''
 }
+
+
+export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
+    [ChainId.ETHEREUM]: [],
+    [ChainId.POLYGON]: [],
+    [ChainId.GOERLI]: [],
+    [ChainId.MUMBAI]: [[PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc], [PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.svc], [PINNED_TOKENS_MUMBAI.weth, PINNED_TOKENS_MUMBAI.svc]],
+    [ChainId.SVC]: []
+}
+
 
 
 

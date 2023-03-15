@@ -32,8 +32,8 @@ const explorer = { name: 'PolygonScan', url: 'https://polygonscan.com/' }
 
 export const polygon: Chain = {
     id: 137,
-    name: 'BNB Smart Chain',
-    network: 'bsc',
+    name: 'Polygon Chain',
+    network: 'polygon',
     rpcUrls: {
         public: 'https://matic-mumbai.chainstacklabs.com',
         default: 'https://matic-mumbai.chainstacklabs.com',

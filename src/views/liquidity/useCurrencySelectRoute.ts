@@ -9,7 +9,7 @@ export const useCurrencySelectRoute = () => {
     const native = useNativeCurrency()
     const navigate = useNavigate()
 
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams,] = useSearchParams()
     const currencyIdA = searchParams.get('currencyA') ?? native.symbol
     const currencyIdB = searchParams.get('currencyB') ?? SVC_TESTNET.address
 

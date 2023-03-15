@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles'
 import Settings from 'src/components/Settings'
 import { Box } from '@mui/system'
 import Container from './components/Container'
-import NoPosition from './components/UserPosition'
+import { UserPosition } from './components/UserPosition'
 import { useMemo, useState } from 'react'
 import useNativeCurrency from 'src/hooks/useNativeCurrency'
 import TokenSelectView from './components/TokenSelectView'
@@ -24,10 +24,9 @@ const useStyles = makeStyles((theme) => ({
 function AddLiquidity() {
 
     const classes = useStyles()
-    const [userPosition, setUserPosition] = useState(null)
     const location = useLocation()
 
-    const isUserLiquidity = useMemo(() => {
+    const positionView = useMemo(() => {
         return location.pathname === '/liquidity'
     }, [location])
     const [step, setStep] = useState(1)
@@ -52,8 +51,8 @@ function AddLiquidity() {
             }}>
                 <Settings />
                 <Container>
-                    {!userPosition && isUserLiquidity ?
-                        <NoPosition /> :
+                    {positionView ?
+                        <UserPosition /> :
                         <>
                             {
                                 step === 1 ?

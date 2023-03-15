@@ -43,6 +43,7 @@
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
         "next": "^13.0.7",
+        "numeral": "^2.0.6",
         "react": "^18.2.0",
         "react-circular-progressbar": "^2.1.0",
         "react-copy-to-clipboard": "^5.1.0",

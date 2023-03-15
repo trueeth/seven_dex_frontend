@@ -19,9 +19,11 @@ import Docs from 'src/views/docs'
 import Farm from 'src/views/farm'
 import AddLiquidity from './views/liquidity'
 import Swap from './views/swap'
+import useEagerConnect from './hooks/useEagerConnect'
 
 function GlobalHooks() {
     usePollBlockNumber()
+    useEagerConnect()
     return null
 }
 
@@ -41,6 +43,7 @@ export default function App() {
             }
         }
     })
+
 
     return (
         <BrowserRouter>

@@ -18,11 +18,11 @@ import { calculateSlippageAmount, useRouterContract } from 'src/utils/exchange'
 import { CurrencyAmount, Token } from 'src/utils/token'
 import { useMemo, useState } from "react"
 import { useActiveChainId } from "src/hooks/useActiveChainId"
-import { ST } from "next/dist/shared/lib/utils"
 import { calculateGasMargin } from "src/utils"
 import { BigNumber } from "ethers"
 import { TransactionResponse } from "@ethersproject/providers"
 import { GAS_PRICE_GWEI } from "src/state/types"
+import { DEFAULT_TRANSACTION_DEADLINE } from "src/config/constants"
 
 function SupplyTokens({
     currencyA,
@@ -81,7 +81,6 @@ function SupplyTokens({
         },
         {},
     )
-
     const formattedAmounts = useMemo(
         () => ({
             [independentField]: typedValue,
@@ -143,7 +142,7 @@ function SupplyTokens({
                 amountsMin[tokenBIsNative ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
                 amountsMin[tokenBIsNative ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
                 account,
-                '99999999999999999',
+                DEFAULT_TRANSACTION_DEADLINE,
             ]
             value = BigNumber.from((tokenBIsNative ? parsedAmountB : parsedAmountA).quotient.toString())
         } else {
@@ -157,7 +156,7 @@ function SupplyTokens({
                 amountsMin[Field.CURRENCY_A].toString(),
                 amountsMin[Field.CURRENCY_B].toString(),
                 account,
-                '999999999999999999',
+                DEFAULT_TRANSACTION_DEADLINE,
             ]
             value = null
         }
@@ -205,6 +204,20 @@ function SupplyTokens({
             })
     }
 
+    const supplyText = maxAmounts[Field.CURRENCY_A]?.toExact() < formattedAmounts[Field.CURRENCY_A] ||
+        maxAmounts[Field.CURRENCY_B]?.toExact() < formattedAmounts[Field.CURRENCY_B] ?
+        'Insufficient Balance' :
+        formattedAmounts[Field.CURRENCY_A] === '' || formattedAmounts[Field.CURRENCY_B] === '' ?
+            'Input Amounts' :
+            attemptingTxn ? 'Suppling Assets' : 'Supply'
+
+    const supplyDisable = !chainId || !account || !routerContract ||
+        (maxAmounts[Field.CURRENCY_A]?.toExact() < formattedAmounts[Field.CURRENCY_A]) ||
+        (maxAmounts[Field.CURRENCY_B]?.toExact() < formattedAmounts[Field.CURRENCY_B]) ||
+        formattedAmounts[Field.CURRENCY_A] === '' ||
+        formattedAmounts[Field.CURRENCY_B] === '' ||
+        attemptingTxn
+
     return (
         <Box sx={{ width: '100%' }}>
             <Box p={3} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -236,6 +249,13 @@ function SupplyTokens({
                 </Box>
             </Box>
             <Divider />
+            {
+                noLiquidity &&
+                <Box sx={{ p: 3, pb: 0 }}>
+                    <Typography>You are the first liquidity provider.</Typography>
+                    <Typography>The ratio of tokens you add will set the price of this pair.</Typography>
+                </Box>
+            }
             <Box
                 //  supply amount fields
                 sx={{
@@ -266,7 +286,9 @@ function SupplyTokens({
                         <TextField
                             variant="standard"
                             autoComplete='off'
-                            onChange={(e) => onFieldAInput(e.target.value)}
+                            onChange={(e) => {
+                                onFieldAInput(e.target.value)
+                            }}
                             value={formattedAmounts[Field.CURRENCY_A]}
                             InputProps={{
                                 disableUnderline: true,
@@ -306,7 +328,9 @@ function SupplyTokens({
                         <TextField
                             variant="standard"
                             autoComplete='off'
-                            onChange={(e) => onFieldBInput(e.target.value)}
+                            onChange={(e) => {
+                                onFieldBInput(e.target.value)
+                            }}
                             value={formattedAmounts[Field.CURRENCY_B]}
                             InputProps={{
                                 disableUnderline: true,
@@ -373,7 +397,7 @@ function SupplyTokens({
                 </Box>
             </Box>
             <Divider />
-            <Box p={3}>
+            <Box p={3} display='flex' alignItems='center' flexDirection='column'>
                 {
                     shouldShowApprovalGroup ?
                         <Box sx={{ display: 'flex', gap: 2 }}>
@@ -402,7 +426,19 @@ function SupplyTokens({
                                 </StyledButton>
                             )}
                         </Box> :
-                        <StyledButton onClick={onAdd}>Supply</StyledButton>
+                        <StyledButton
+                            disabled={supplyDisable}
+                            onClick={() => {
+                                setLiquidityState({
+                                    attemptingTxn: false,
+                                    liquidityErrorMessage: undefined,
+                                    txHash: undefined,
+                                })
+                                onAdd()
+                            }}
+                        >
+                            {supplyText}
+                        </StyledButton>
                 }
             </Box>
         </Box >

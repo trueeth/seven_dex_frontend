@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Currency,CurrencyAmount, Token } from 'src/utils/token'
+import { Currency, CurrencyAmount, Token } from 'src/utils/token'
 import { Pair } from 'src/utils/pair'
 import { Trade } from 'src/utils/trade'
 
@@ -7,9 +7,9 @@ import { TradeType } from 'src/config/constants'
 import flatMap from 'lodash/flatMap'
 import { useMemo } from 'react'
 
-import { useUserSingleHopOnly } from 'src/state/user/hooks' 
+import { useUserSingleHopOnly } from 'src/state/user/hooks'
 import {
-  BASES_TO_CHECK_TRADES_AGAINST,
+  BASES_TO_TRACK_LIQUIDITY_FOR,
   CUSTOM_BASES,
   BETTER_TRADE_LESS_HOPS_THRESHOLD,
   ZERO_PERCENT,
@@ -24,30 +24,30 @@ import { Percent } from 'src/utils/percent'
 
 
 export function isTradeBetter(
-    tradeA: Trade<Currency, Currency, TradeType> | undefined | null,
-    tradeB: Trade<Currency, Currency, TradeType> | undefined | null,
-    minimumDelta: Percent = ZERO_PERCENT
-  ): boolean | undefined {
-    if (tradeA && !tradeB) return false
-    if (tradeB && !tradeA) return true
-    if (!tradeA || !tradeB) return undefined
-  
-    if (
-      tradeA.tradeType !== tradeB.tradeType ||
-      !tradeA.inputAmount.currency.equals(tradeB.inputAmount.currency) ||
-      !tradeA.outputAmount.currency.equals(tradeB.outputAmount.currency)
-    ) {
-      throw new Error('Trades are not comparable')
-    }
-  
-    if (minimumDelta.equalTo(ZERO_PERCENT)) {
-      return tradeA.executionPrice.lessThan(tradeB.executionPrice)
-    }
-    return tradeA.executionPrice.asFraction
-      .multiply(minimumDelta.add(ONE_HUNDRED_PERCENT))
-      .lessThan(tradeB.executionPrice)
+  tradeA: Trade<Currency, Currency, TradeType> | undefined | null,
+  tradeB: Trade<Currency, Currency, TradeType> | undefined | null,
+  minimumDelta: Percent = ZERO_PERCENT
+): boolean | undefined {
+  if (tradeA && !tradeB) return false
+  if (tradeB && !tradeA) return true
+  if (!tradeA || !tradeB) return undefined
+
+  if (
+    tradeA.tradeType !== tradeB.tradeType ||
+    !tradeA.inputAmount.currency.equals(tradeB.inputAmount.currency) ||
+    !tradeA.outputAmount.currency.equals(tradeB.outputAmount.currency)
+  ) {
+    throw new Error('Trades are not comparable')
   }
-  
+
+  if (minimumDelta.equalTo(ZERO_PERCENT)) {
+    return tradeA.executionPrice.lessThan(tradeB.executionPrice)
+  }
+  return tradeA.executionPrice.asFraction
+    .multiply(minimumDelta.add(ONE_HUNDRED_PERCENT))
+    .lessThan(tradeB.executionPrice)
+}
+
 
 export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
   const { chainId } = useActiveChainId()
@@ -59,7 +59,7 @@ export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): P
   const bases: Token[] = useMemo(() => {
     if (!chainId) return []
 
-    const common = BASES_TO_CHECK_TRADES_AGAINST[chainId] ?? []
+    const common = BASES_TO_TRACK_LIQUIDITY_FOR[chainId] ?? []
 
 
     return [...common]
@@ -74,31 +74,31 @@ export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): P
     () =>
       tokenA && tokenB
         ? [
-            // the direct pair
-            [tokenA, tokenB],
-            // token A against all bases
-            ...bases.map((base): [Token, Token] => [tokenA, base]),
-            // token B against all bases
-            ...bases.map((base): [Token, Token] => [tokenB, base]),
-            // each base against all bases
-            ...basePairs,
-          ]
-            .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
-            .filter(([t0, t1]) => t0.address !== t1.address)
-            .filter(([tokenA_, tokenB_]) => {
-              if (!chainId) return true
-              const customBases = CUSTOM_BASES[chainId]
+          // the direct pair
+          [tokenA, tokenB],
+          // token A against all bases
+          ...bases.map((base): [Token, Token] => [tokenA, base]),
+          // token B against all bases
+          ...bases.map((base): [Token, Token] => [tokenB, base]),
+          // each base against all bases
+          ...basePairs,
+        ]
+          .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
+          .filter(([t0, t1]) => t0.address !== t1.address)
+          .filter(([tokenA_, tokenB_]) => {
+            if (!chainId) return true
+            const customBases = CUSTOM_BASES[chainId]
 
-              const customBasesA: Token[] | undefined = customBases?.[tokenA_.address]
-              const customBasesB: Token[] | undefined = customBases?.[tokenB_.address]
+            const customBasesA: Token[] | undefined = customBases?.[tokenA_.address]
+            const customBasesB: Token[] | undefined = customBases?.[tokenB_.address]
 
-              if (!customBasesA && !customBasesB) return true
+            if (!customBasesA && !customBasesB) return true
 
-              if (customBasesA && !customBasesA.find((base) => tokenB_.equals(base))) return false
-              if (customBasesB && !customBasesB.find((base) => tokenA_.equals(base))) return false
+            if (customBasesA && !customBasesA.find((base) => tokenB_.equals(base))) return false
+            if (customBasesB && !customBasesB.find((base) => tokenA_.equals(base))) return false
 
-              return true
-            })
+            return true
+          })
         : [],
     [tokenA, tokenB, bases, basePairs, chainId],
   )

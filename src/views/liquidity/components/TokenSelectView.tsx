@@ -66,7 +66,7 @@ function TokenSelectView({
                 </Box>
             </Box>
             <Divider />
-            <Box p={3}>
+            <Box p={3} sx={{ display: 'flex', justifyContent: 'center' }}>
                 <StyledButton onClick={onNext}>Next</StyledButton>
             </Box>
         </Box>

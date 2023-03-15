@@ -92,3 +92,17 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
         return this.adjustedForDecimals.toFixed(decimalPlaces, format, rounding)
     }
 }
+
+
+export const multiplyPriceByAmount = (price: Price<Currency, Currency>, amount: number, significantDigits = 18) => {
+    if (!price) {
+        return 0
+    }
+
+    try {
+        return parseFloat(price.toSignificant(significantDigits)) * amount
+    } catch (error) {
+        return 0
+    }
+}
+

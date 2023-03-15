@@ -1,10 +1,9 @@
 
 import JSBI from 'jsbi'
-import { ERC20Token } from 'src/utils/token'
-import { ChainId } from './chains'
 
 // default allowed slippage, in bips
 
+export const DEFAULT_TRANSACTION_DEADLINE = '99999999999999999999999'
 
 export const INITIAL_ALLOWED_SLIPPAGE = 50
 // 20 minutes, denominated in seconds

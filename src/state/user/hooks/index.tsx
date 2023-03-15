@@ -1,7 +1,7 @@
 import { ChainId } from "src/config/constants/chains"
 import { ERC20Token } from "src/utils/token"
 
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { AppState, useAppDispatch } from "src/state"
 import { addSerializedPair, addSerializedToken, removeSerializedToken, SerializedPair, updateGasPrice, updateUserDeadline, updateUserSlippageTolerance, addWatchlistToken, updateUserSingleHopOnly } from "../actions"
@@ -11,7 +11,12 @@ import { GAS_PRICE_GWEI } from "src/state/types"
 import useSWR from 'swr'
 import { useFeeData } from "wagmi"
 import { Pair } from "src/utils/pair"
-
+import { useActiveChainId } from "src/hooks/useActiveChainId"
+import { deserializeToken } from "src/utils/wrappedTokenInfo"
+import { isAddress } from "src/utils"
+import { useOfficialsAndUserAddedTokens } from "src/hooks/Tokens"
+import flatMap from 'lodash/flatMap'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from "src/config/constants/exchange"
 
 
 export function useUserTransactionTTL(): [number, (slippage: number) => void] {
@@ -127,7 +132,75 @@ export function toLiquidityToken([tokenA, tokenB]: [ERC20Token, ERC20Token]): ER
     return new ERC20Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'SVCD-LP', 'SvcDex LPs')
 }
 
+/**
+ * Returns all the pairs of tokens that are tracked by the user for the current chain ID.
+ */
+export function useTrackedTokenPairs(): [ERC20Token, ERC20Token][] {
+    const { chainId } = useActiveChainId()
+    const tokens = useOfficialsAndUserAddedTokens()
 
+    // pinned pairs
+    const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])
+
+    // pairs for every token against every base
+    const generatedPairs: [ERC20Token, ERC20Token][] = useMemo(
+        () =>
+            chainId
+                ? flatMap(Object.keys(tokens), (tokenAddress) => {
+                    const token = tokens[tokenAddress]
+                    // for each token on the current chain,
+                    return (
+                        // loop through all bases on the current chain
+                        (BASES_TO_TRACK_LIQUIDITY_FOR[chainId] ?? [])
+                            // to construct pairs of the given token with each base
+                            .map((base) => {
+                                const baseAddress = isAddress(base.address)
+
+                                if (baseAddress && baseAddress === tokenAddress) {
+                                    return null
+                                }
+                                return [base, token]
+                            })
+                            .filter((p): p is [ERC20Token, ERC20Token] => p !== null)
+                    )
+                })
+                : [],
+        [tokens, chainId],
+    )
+
+    // pairs saved by users
+    const savedSerializedPairs = useSelector<AppState, AppState['user']['pairs']>(({ user: { pairs } }) => pairs)
+
+    const userPairs: [ERC20Token, ERC20Token][] = useMemo(() => {
+        if (!chainId || !savedSerializedPairs) return []
+        const forChain = savedSerializedPairs[chainId]
+        if (!forChain) return []
+
+        return Object.keys(forChain).map((pairId) => {
+            return [deserializeToken(forChain[pairId].token0), deserializeToken(forChain[pairId].token1)]
+        })
+    }, [savedSerializedPairs, chainId])
+
+    const combinedList = useMemo(
+        () => userPairs.concat(generatedPairs).concat(pinnedPairs),
+        [generatedPairs, pinnedPairs, userPairs],
+    )
+
+    return useMemo(() => {
+        // dedupes pairs of tokens in the combined list
+        const keyed = combinedList.reduce<{ [key: string]: [ERC20Token, ERC20Token] }>((memo, [tokenA, tokenB]) => {
+            const sorted = tokenA.sortsBefore(tokenB)
+            const key = sorted
+                ? `${isAddress(tokenA.address)}:${isAddress(tokenB.address)}`
+                : `${isAddress(tokenB.address)}:${isAddress(tokenA.address)}`
+            if (memo[key]) return memo
+            memo[key] = sorted ? [tokenA, tokenB] : [tokenB, tokenA]
+            return memo
+        }, {})
+
+        return Object.keys(keyed).map((key) => keyed[key])
+    }, [combinedList])
+}
 
 export const useWatchlistTokens = (): [string[], (address: string) => void] => {
     const dispatch = useAppDispatch()

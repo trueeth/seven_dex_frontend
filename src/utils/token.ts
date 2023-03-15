@@ -205,11 +205,13 @@ export class Token extends BaseCurrency {
         decimals: number,
         symbol: string,
         name?: string,
+        logo?: string,
         projectLink?: string
     ) {
-        super(chainId, decimals, symbol, name)
+        super(chainId, decimals, symbol, name, logo)
         this.address = address
         this.projectLink = projectLink
+        this.logoURI = logo
     }
 
     /**
@@ -265,9 +267,10 @@ export class ERC20Token extends Token {
         decimals: number,
         symbol: string,
         name?: string,
+        logoURI?: string,
         projectLink?: string
     ) {
-        super(chainId, validateAndParseAddress(address), decimals, symbol, name, projectLink)
+        super(chainId, validateAndParseAddress(address), decimals, symbol, name, logoURI, projectLink)
     }
 }
 
@@ -481,7 +484,7 @@ export const SVC_TESTNET = new ERC20Token(
     18,
     'SVC',
     'Seven Chain Token',
-    ''
+    'https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png'
 )
 
 
