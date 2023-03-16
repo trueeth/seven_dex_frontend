@@ -11,6 +11,7 @@ import { SVC_TESTNET } from 'src/utils/token'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { useCurrency } from 'src/hooks/Tokens'
 import SupplyTokens from './components/SupplyTokens'
+import RemoveLiquity from './components/RemoveLiquidity'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,15 +22,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function AddLiquidity() {
+function Liquidity() {
 
     const classes = useStyles()
     const location = useLocation()
 
     const positionView = useMemo(() => {
-        return location.pathname === '/liquidity'
+        return location.pathname === '/liquidity' || location.pathname.includes('remove')
     }, [location])
-    const [step, setStep] = useState(1)
+    const removeView = useMemo(() => {
+        return location.pathname.includes('remove')
+    }, [location])
+
+    const [step, setStep] = useState('position')
 
     const native = useNativeCurrency()
 
@@ -52,24 +57,29 @@ function AddLiquidity() {
                 <Settings />
                 <Container>
                     {positionView ?
-                        <UserPosition /> :
                         <>
                             {
-                                step === 1 ?
+                                removeView ?
+                                    <RemoveLiquity /> :
+                                    <UserPosition setStep={setStep} />
+                            }
+                        </> :
+                        <>
+                            {
+                                step === 'select_token' ?
                                     <TokenSelectView
                                         currencyA={currencyA}
                                         currencyB={currencyB}
-                                        onNext={() => setStep(2)}
+                                        onNext={() => setStep('supply_assets')}
                                     /> :
                                     < SupplyTokens
                                         currencyA={currencyA}
                                         currencyB={currencyB}
-                                        onBack={() => setStep(1)}
+                                        onBack={() => setStep('select_token')}
                                     />
                             }
                         </>
                     }
-
                 </Container>
             </Box>
         </div>
@@ -77,4 +87,4 @@ function AddLiquidity() {
 }
 
 
-export default AddLiquidity
+export default Liquidity

@@ -409,7 +409,7 @@ function SupplyTokens({
                                     {approvalA === ApprovalState.PENDING ? (
                                         `Enabling  ${currencies[Field.CURRENCY_A]?.symbol}`
                                     ) : (
-                                        `Enable  ${currencies[Field.CURRENCY_A]?.symbol}`
+                                        `Approve  ${currencies[Field.CURRENCY_A]?.symbol}`
                                     )}
                                 </StyledButton>
                             )}
@@ -421,7 +421,7 @@ function SupplyTokens({
                                     {approvalB === ApprovalState.PENDING ? (
                                         `Enabling  ${currencies[Field.CURRENCY_B]?.symbol}`
                                     ) : (
-                                        `Enable  ${currencies[Field.CURRENCY_B]?.symbol}`
+                                        `Approve  ${currencies[Field.CURRENCY_B]?.symbol}`
                                     )}
                                 </StyledButton>
                             )}

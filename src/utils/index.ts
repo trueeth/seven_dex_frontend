@@ -159,4 +159,8 @@ export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {
     return value.mul(BigNumber.from(10000).add(BigNumber.from(margin))).div(BigNumber.from(10000))
 }
 
+export function escapeRegExp(string: string): string {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
+
 

@@ -17,7 +17,7 @@ function TokenSelectView({
     currencyA?: Currency
     currencyB?: Currency
     // error?: string
-    onNext?: () => void
+    onNext: () => void
 }) {
 
 

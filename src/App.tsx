@@ -17,7 +17,7 @@ import Home from 'src/views/home'
 import Bridge from 'src/views/bridge'
 import Docs from 'src/views/docs'
 import Farm from 'src/views/farm'
-import AddLiquidity from './views/liquidity'
+import Liquidity from './views/liquidity'
 import Swap from './views/swap'
 import useEagerConnect from './hooks/useEagerConnect'
 
@@ -66,8 +66,9 @@ export default function App() {
                                         <Route path='/swap' element={<Swap />} />
                                         <Route path='/docs' element={<Docs />} />
                                         <Route path='/farm' element={<Farm />} />
-                                        <Route path='/liquidity' element={<AddLiquidity />} />
-                                        <Route path='/add' element={<AddLiquidity />} />
+                                        <Route path='/liquidity' element={<Liquidity />} />
+                                        <Route path='/add' element={<Liquidity />} />
+                                        <Route path='/remove' element={<Liquidity />} />
                                         <Route path='/bridge' element={<Bridge />} />
                                     </Routes>
                                 </ViewBase>

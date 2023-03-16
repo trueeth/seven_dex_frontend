@@ -8,6 +8,7 @@ import swap from './swap/reducer'
 import user from './user/reducer'
 import global from './global/reducer'
 import mint from './mint/reducer'
+import burn from './burn/reducer'
 import multicall from './multicall/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions']
@@ -28,6 +29,7 @@ const persistedReducer = persistReducer(
         user,
         global,
         mint,
+        burn,
         multicall
     }),
 )

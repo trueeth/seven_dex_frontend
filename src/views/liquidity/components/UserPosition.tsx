@@ -10,7 +10,7 @@ import FullPositionCard from './PositionCard'
 import { IconInfoCircle } from "@tabler/icons"
 
 
-export function UserPosition() {
+export function UserPosition({ setStep }) {
 
     const { address: account } = useAccount()
 
@@ -74,6 +74,7 @@ export function UserPosition() {
                 <FullPositionCard
                     key={pair.liquidityToken.address}
                     pair={pair}
+                    setStep={setStep}
                 />
             ))
         }
@@ -129,7 +130,7 @@ export function UserPosition() {
             </Box>
             <Link to='/add'>
                 <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }} >
-                    <StyledButton >+ Add Liquidity</StyledButton>
+                    <StyledButton onClick={() => setStep('select_token')}>+ Add Liquidity</StyledButton>
                 </Box>
             </Link>
         </Box>

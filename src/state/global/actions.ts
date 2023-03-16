@@ -16,14 +16,4 @@ export const pickFarmTransactionTx = createAction<{
     chainId: ChainId
 }>('transactions/pickFarmTransactionTx')
 
-export const setSwapSlippage = createAction<{
-    slippage: number
-}>('global/setSwapSlippage')
 
-export const setTxDeadline = createAction<{
-    deadline: number
-}>('global/setTxDeadline')
-
-export const setTxSafeMode = createAction<{
-    mode: boolean
-}>('global/setTxSafeMode')

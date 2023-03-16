@@ -6,9 +6,24 @@ import { Button, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup,
 import { IconAdjustmentsHorizontal, IconX, IconInfoCircle } from '@tabler/icons'
 import SwitchLarge from './styled_components/SwitchLarge'
 import { useTranslation } from 'src/context/Localization'
-import { useSwapSetting } from 'src/state/global/hooks'
 import { useDispatch } from 'react-redux'
-import { setSwapSlippage, setTxSafeMode } from 'src/state/global/actions'
+import { useUserSlippageTolerance, useUserTransactionTTL } from 'src/state/user/hooks'
+import { escapeRegExp } from 'src/utils'
+
+enum SlippageError {
+    InvalidInput = 'InvalidInput',
+    RiskyLow = 'RiskyLow',
+    RiskyHigh = 'RiskyHigh',
+}
+
+enum DeadlineError {
+    InvalidInput = 'InvalidInput',
+}
+
+
+const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
+const THREE_DAYS_IN_SECONDS = 60 * 60 * 24 * 3
+
 
 function Settings() {
 
@@ -22,19 +37,76 @@ function Settings() {
     };
 
     const dispatch = useDispatch()
-    const { slippage, safemode, deadline } = useSwapSetting()
+    const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippageTolerance()
+    const [ttl, setTtl] = useUserTransactionTTL()
+
+    const [slippageInput, setSlippageInput] = useState('')
+    const [deadlineInput, setDeadlineInput] = useState('')
+
+    const slippageInputIsValid =
+        slippageInput === '' || (userSlippageTolerance / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
+    const deadlineInputIsValid = deadlineInput === '' || (ttl / 60).toString() === deadlineInput
+
+    let slippageError: SlippageError | undefined
+    if (slippageInput !== '' && !slippageInputIsValid) {
+        slippageError = SlippageError.InvalidInput
+    } else if (slippageInputIsValid && userSlippageTolerance < 50) {
+        slippageError = SlippageError.RiskyLow
+    } else if (slippageInputIsValid && userSlippageTolerance > 500) {
+        slippageError = SlippageError.RiskyHigh
+    } else {
+        slippageError = undefined
+    }
+
+    let deadlineError: DeadlineError | undefined
+    if (deadlineInput !== '' && !deadlineInputIsValid) {
+        deadlineError = DeadlineError.InvalidInput
+    } else {
+        deadlineError = undefined
+    }
+
+    const parseCustomSlippage = (value: string) => {
+        if (value === '' || inputRegex.test(escapeRegExp(value))) {
+            setSlippageInput(value)
+
+            try {
+                const valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(value) * 100).toString())
+                if (!Number.isNaN(valueAsIntFromRoundedFloat) && valueAsIntFromRoundedFloat < 5000) {
+                    setUserSlippageTolerance(valueAsIntFromRoundedFloat)
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    }
+
+    const parseCustomDeadline = (value: string) => {
+        setDeadlineInput(value)
+
+        try {
+            const valueAsInt: number = Number.parseInt(value) * 60
+            if (!Number.isNaN(valueAsInt) && valueAsInt > 60 && valueAsInt < THREE_DAYS_IN_SECONDS) {
+                setTtl(valueAsInt)
+            } else {
+                deadlineError = DeadlineError.InvalidInput
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 
     const onSlippageChange = (
         event: any,
         newSlip: number,
     ) => {
-        if (newSlip)
-            dispatch(setSwapSlippage({ slippage: newSlip }))
+        if (newSlip) {
+            setSlippageInput('')
+            setUserSlippageTolerance(newSlip)
+        }
     }
 
-    const onSetMode = useCallback(() => {
-        dispatch(setTxSafeMode({ mode: !safemode }))
-    }, [dispatch, safemode])
+
 
     const { t } = useTranslation()
 
@@ -119,7 +191,7 @@ function Settings() {
                     </Box>
                     <Box sx={{ display: 'flex' }}>
                         <ToggleButtonGroup
-                            value={slippage}
+                            value={userSlippageTolerance}
                             exclusive
                             onChange={onSlippageChange}
                             sx={{
@@ -131,9 +203,9 @@ function Settings() {
                                 }
                             }}
                         >
-                            <ToggleButton value={0.1}>0.1%</ToggleButton>
-                            <ToggleButton value={0.5}>0.5%</ToggleButton>
-                            <ToggleButton value={1}>1%</ToggleButton>
+                            <ToggleButton value={10}>0.1%</ToggleButton>
+                            <ToggleButton value={50}>0.5%</ToggleButton>
+                            <ToggleButton value={100}>1%</ToggleButton>
                         </ToggleButtonGroup>
                         <OutlinedInput
                             sx={{
@@ -148,7 +220,13 @@ function Settings() {
                                 }
                             }}
                             type='number'
-                            value={slippage}
+                            placeholder={(userSlippageTolerance / 100).toFixed(2)}
+                            value={slippageInput}
+                            onChange={(event) => {
+                                if (event.currentTarget.validity.valid) {
+                                    parseCustomSlippage(event.target.value.replace(/,/g, '.'))
+                                }
+                            }}
                             endAdornment={<InputAdornment position="end">%</InputAdornment>}
                         />
                     </Box>
@@ -174,7 +252,16 @@ function Settings() {
                                 }
                             }}
                             type='number'
-                            value={30}
+                            value={deadlineInput}
+                            placeholder={(ttl / 60).toString()}
+                            onBlur={() => {
+                                parseCustomDeadline((ttl / 60).toString())
+                            }}
+                            onChange={(event) => {
+                                if (event.currentTarget.validity.valid) {
+                                    parseCustomDeadline(event.target.value)
+                                }
+                            }}
                             endAdornment={<InputAdornment position="end">minutes</InputAdornment>}
                             inputProps={{
 
@@ -187,8 +274,7 @@ function Settings() {
                         <Box sx={{ display: 'flex' }}>
                             <SwitchLarge
                                 sx={{ mt: 1 }}
-                                checked={safemode}
-                                onChange={onSetMode}
+                                checked={true}
                             />
                             <Typography color='#666' fontSize={14} px={2}>
                                 Prevent high price impact trades. Disable at your own risk.

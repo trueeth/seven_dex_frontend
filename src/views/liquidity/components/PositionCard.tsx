@@ -23,6 +23,7 @@ import currencyId from 'src/utils/currencyId'
 
 interface PositionCardProps {
     pair: Pair
+    setStep: (step: string) => void
     showUnwrapped?: boolean
     currency0: Currency
     currency1: Currency
@@ -130,6 +131,7 @@ const withLPValues = withLPValuesFactory({
 
 function FullPositionCard({
     pair,
+    setStep,
     currency0,
     currency1,
     token0Deposited,
@@ -246,10 +248,14 @@ function FullPositionCard({
 
                         {userPoolBalance && JSBI.greaterThan(userPoolBalance.quotient, BIG_INT_ZERO) && (
                             <Box flexDirection="column" gap={1} alignItems='center' mt={1}>
-                                <StyledButton>
+                                <StyledButton onClick={() => navigate(`/remove?currencyA=${currencyIdA}&currencyB=${currencyIdB}`)}>
                                     {t('Remove')}
                                 </StyledButton>
-                                <OutlinedButton onClick={() => navigate(`/add?currencyA=${currencyIdA}&currencyB=${currencyIdB}`)}>
+                                <OutlinedButton onClick={() => {
+                                    setStep('supply_assets')
+                                    navigate(`/add?currencyA=${currencyIdA}&currencyB=${currencyIdB}`)
+                                }}>
+
                                     {t('+ Add liquidity instead')}
                                 </OutlinedButton>
                             </Box>
