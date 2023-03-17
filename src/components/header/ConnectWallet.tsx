@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 // import { makeStyles } from '@mui/styles';
-import { Button, Box, Typography, Modal, useMediaQuery } from '@mui/material'
+import { Button, Box, Typography, Modal, useMediaQuery, MenuList, MenuItem } from '@mui/material'
 import { IconX } from '@tabler/icons'
 import { formart } from '../../utils/formatAddress';
 import MetamaskIcon from '../../asset/images/metamask.svg'
@@ -11,6 +11,8 @@ import useAuth from 'src/hooks/useAuth';
 import { ConnectorNames } from 'src/config';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useTranslation } from 'src/context/Localization';
+import { StyledMenu } from './Styled';
+import { Link } from 'react-router-dom';
 
 const modalStyle = {
     position: 'absolute',
@@ -51,7 +53,7 @@ function ConnectButton() {
 
     const [connecting, setConnect] = useState('Metamask')
     const { isConnected, address } = useAccount()
-    const { login, loading } = useAuth()
+    const { login, loading, logout } = useAuth()
 
     const { t } = useTranslation()
 
@@ -60,6 +62,16 @@ function ConnectButton() {
             setOpen(false);
         }
     }, [isConnected])
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const isDrop = Boolean(anchorEl)
+
+    const openDrop = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const closeDrop = () => {
+        setAnchorEl(null)
+    }
 
     return (
         <div>
@@ -83,10 +95,13 @@ function ConnectButton() {
                             bgcolor: '#e57a3b'
                         }
                     }}
-                    onClick={() => {
+                    onClick={(evt) => {
                         if (!isConnected)
-                            setOpen(!open)
+                            setOpen(true)
+                        else
+                            openDrop(evt)
                     }}
+                    aria-controls={isDrop ? 'customized-menu' : undefined}
                 >
                     {(() => {
                         if (isConnected)
@@ -149,6 +164,27 @@ function ConnectButton() {
                     }
                 </Box>
             </Modal>
+            <StyledMenu
+                id="customized-menu"
+                anchorEl={anchorEl}
+                open={isDrop}
+                onClick={closeDrop}
+                sx={{
+                    '& img': {
+                        pr: 1,
+                        width: '24px',
+                        height: '20px'
+                    }
+                }}
+            >
+                <Link
+                    to={{ pathname: `//mumbai.polygonscan.com/address/${address}` }}
+                    target="_blank"
+                >
+                    <MenuItem ><Typography color='#333'>View on Scan</Typography></MenuItem>
+                </Link>
+                <MenuItem onClick={logout}>Disconnect Wallet</MenuItem>
+            </StyledMenu>
         </div>
     )
 }
