@@ -11,6 +11,7 @@ import SubmitSwap from './SubmitSwap'
 import SwitchIOCurrency from './SwitchIOCurrency'
 import replaceBrowserHistory from 'src/utils/replaceBrowserHistory'
 import currencyId from 'src/utils/currencyId'
+import { Box } from '@mui/material'
 
 const useStyles = makeStyles((theme) => ({
     cardView: {
@@ -114,6 +115,7 @@ function SwapContainer() {
                 onCurrencySelect={handleOutputSelect}
                 onUserInput={handleTypeOutput}
             />
+            <Box mb={2} />
             <SubmitSwap />
         </div >
     )

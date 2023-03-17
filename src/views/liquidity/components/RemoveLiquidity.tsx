@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material"
+import { Box, Divider, Slider, Stack, Typography } from "@mui/material"
 import { BigNumber, Contract } from "ethers"
 import { useCallback, useMemo, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
@@ -25,7 +25,25 @@ import { GAS_PRICE_GWEI } from "src/state/types"
 import { useUserSlippageTolerance } from "src/state/user/hooks"
 import useTransactionDeadline from "src/hooks/useTransactionDeadline"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import { CurrencyLogo } from "src/components/styled_components/CurrencyLogo"
+import { StyledButton } from "./Styled"
+import { useTokenBalance } from "src/state/wallet/hooks"
 
+const marks: Array<{ value: number, label: string }> = [
+    {
+        value: 25,
+        label: '25%'
+    }, {
+        value: 50,
+        label: '50%'
+    }, {
+        value: 75,
+        label: '75%'
+    }, {
+        value: 100,
+        label: '100%'
+    }
+]
 export default function RemoveLiquity() {
 
 
@@ -47,14 +65,13 @@ export default function RemoveLiquity() {
 
     // burn state
     const { independentField, typedValue } = useBurnState()
-    const { pair, parsedAmounts, error, tokenToReceive, estimateZapOutAmount } = useDerivedBurnInfo(
+    const { pair, parsedAmounts, error, tokenToReceive } = useDerivedBurnInfo(
         currencyA ?? undefined,
         currencyB ?? undefined
     )
     const { onUserInput: _onUserInput } = useBurnActionHandlers()
 
-    // modal and loading
-    const [showDetailed, setShowDetailed] = useState<boolean>(false)
+    const userLpTokenBalance = useTokenBalance(account ?? undefined, pair?.liquidityToken)
 
     const [{ attemptingTxn, liquidityErrorMessage, txHash }, setLiquidityState] = useState<{
         attemptingTxn: boolean
@@ -78,7 +95,7 @@ export default function RemoveLiquity() {
                 ? '<1'
                 : parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
         [Field.LIQUIDITY]:
-            independentField === Field.LIQUIDITY ? typedValue : parsedAmounts[Field.LIQUIDITY]?.toSignificant(6) ?? '',
+            independentField === Field.LIQUIDITY ? typedValue : parsedAmounts[Field.LIQUIDITY]?.toSignificant(6) ?? '0',
         [Field.CURRENCY_A]:
             independentField === Field.CURRENCY_A ? typedValue : parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',
         [Field.CURRENCY_B]:
@@ -112,7 +129,7 @@ export default function RemoveLiquity() {
             { name: 'verifyingContract', type: 'address' },
         ]
         const domain = {
-            name: 'Pancake LPs',
+            name: 'SVCD LPs',
             version: '1',
             chainId,
             verifyingContract: pair.liquidityToken.address,
@@ -334,12 +351,6 @@ export default function RemoveLiquity() {
         [onUserInput],
     )
 
-    const oneCurrencyIsNative = currencyA?.isNative || currencyB?.isNative
-    const oneCurrencyIsWNative = Boolean(
-        chainId &&
-        ((currencyA && WNATIVE[chainId]?.equals(currencyA)) || (currencyB && WNATIVE[chainId]?.equals(currencyB))),
-    )
-
     const [innerLiquidityPercentage, setInnerLiquidityPercentage] = useDebouncedChangeHandler(
         Number.parseInt(parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0)),
         liquidityPercentChangeCallback,
@@ -349,10 +360,21 @@ export default function RemoveLiquity() {
         (value) => setInnerLiquidityPercentage(Math.ceil(value)),
         [setInnerLiquidityPercentage],
     )
+    
+    const enableBtnText = approval === ApprovalState.PENDING ? t('Enabling') : approval === ApprovalState.APPROVED ? t('Enabled') : t('Enable')
+    const removeBtnDisable = !chainId || !account || !routerContract || parsedAmounts[Field.LIQUIDITY]?.toExact() === undefined || attemptingTxn || approval !== ApprovalState.APPROVED
 
     return (
-        <Box>
-            <Box p={4} pb={3} sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            '& > .MuiBox-root': {
+                p: 3,
+                display: 'flex'
+            }
+        }}>
+            <Box alignItems='center' >
                 <Box sx={{ cursor: 'pointer' }} onClick={() => navigate('/liquidity')}>
                     <KeyboardBackspaceIcon />
                 </Box>
@@ -364,6 +386,98 @@ export default function RemoveLiquity() {
                     }}>{t(`Remove ${currencyA?.symbol}-${currencyB?.symbol} liquidity`)} 🎁</Typography>
                     <Typography mt={1}>{t(`To receive ${currencyA?.symbol} and ${currencyB?.symbol}`)}</Typography>
                 </Box>
+            </Box>
+            <Divider />
+            <Box flexDirection='column'>
+                <Typography mb={1} ml={3}>
+                    Wallet Balance : {userLpTokenBalance?.toSignificant(4) ?? 0} LP
+                </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 2,
+                    border: '1px solid #eee',
+                    borderRadius: '20px'
+                }}>
+                    <Typography ml={2} whiteSpace='nowrap' minWidth='50px'>{formattedAmounts[Field.LIQUIDITY]}</Typography>
+                    <Slider
+                        defaultValue={0}
+                        value={innerLiquidityPercentage}
+                        aria-label="Default"
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                        onChange={(e, val) => {
+                            handleChangePercent(val)
+                        }}
+                        sx={{ color: '#e57a3b', mx: 3 }}
+                    />
+                </Box>
+            </Box>
+            <Box flexDirection='column' mt={-4}>
+                <Typography mb={1} ml={3}>
+                    Receive
+                </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    p: 3,
+                    gap: 1,
+                    border: '1px solid #eee',
+                    borderRadius: '20px',
+                    '& > .MuiBox-root': {
+                        display: 'flex',
+                        width: '100%',
+                        justifyContent: 'space-between'
+                    }
+                }}>
+                    <Box>
+                        <Box display='flex' alignItems='center' gap={1}>
+                            <CurrencyLogo currency={currencyA} />
+                            <Typography>{currencyA?.symbol}</Typography>
+                        </Box>
+                        <Typography>{formattedAmounts[Field.CURRENCY_A] || '0'} (50%)</Typography>
+                    </Box>
+                    <Box >
+                        <Box display='flex' alignItems='center' gap={1}>
+                            <CurrencyLogo currency={currencyB} />
+                            <Typography>{currencyB?.symbol}</Typography>
+                        </Box>
+                        <Typography>{formattedAmounts[Field.CURRENCY_B] || '0'} (50%)</Typography>
+                    </Box>
+                </Box>
+            </Box>
+            <Box sx={{
+                mt: -4,
+                '& > .MuiBox-root': {
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    px: 3
+                }
+            }}>
+                <Box>
+                    <Typography>LP rewards APR:</Typography>
+                    <Typography>1.45%</Typography>
+                </Box>
+            </Box>
+            <Divider />
+            <Box sx={{ display: 'flex', gap: 2 }}>
+                {
+                    (approval !== ApprovalState.APPROVED && parsedAmounts[Field.LIQUIDITY] !== undefined) &&
+                    <StyledButton
+                        disabled={approval === ApprovalState.PENDING}
+                        onClick={approveCallback}
+                    >
+                        {enableBtnText}
+                    </StyledButton>
+                }
+                <StyledButton
+                    disabled={removeBtnDisable}
+                    onClick={onRemove}
+                >
+                    Remove
+                </StyledButton>
             </Box>
         </Box>
     )

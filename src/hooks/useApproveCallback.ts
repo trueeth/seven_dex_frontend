@@ -27,6 +27,7 @@ export function useApproveCallback(
 
     const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined
     const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
+
     const pendingApproval = useHasPendingApproval(token?.address, spender)
 
     // check the current approval status

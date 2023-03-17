@@ -6,6 +6,8 @@ import { styled } from "@mui/system"
 export const StyledButton = styled(Button)<{ outlined?: boolean }>(({ outlined }) => ({
     padding: '10px 0',
     width: '90%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     borderRadius: '20px',
     border: 'none',
     fontSize: '1.2rem',

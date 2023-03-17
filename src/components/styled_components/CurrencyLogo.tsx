@@ -9,6 +9,6 @@ export const CurrencyLogo = ({ currency }: {
             width: '24px', height: '24px'
         }
     }}>
-        <img src={currency.logoURI} />
+        <img src={currency?.logoURI} />
     </Box>
 )
