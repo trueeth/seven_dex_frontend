@@ -33,6 +33,15 @@ export const isAddress = memoize((value: any): string | false => {
     }
 })
 
+// shorten the checksummed version of the input address to have 0x + 4 characters at start and end
+export function shortenAddress(address: string, chars = 4): string {
+    const parsed = isAddress(address)
+    if (!parsed) {
+        throw Error(`Invalid 'address' parameter '${address}'.`)
+    }
+    return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
+}
+
 export function getContract(address: string, ABI: any, signer?: Signer | Provider): Contract {
     if (!isAddress(address) || address === AddressZero) {
         throw Error(`Invalid 'address' parameter '${address}'.`)
@@ -162,5 +171,8 @@ export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {
 export function escapeRegExp(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
+
+
+
 
 

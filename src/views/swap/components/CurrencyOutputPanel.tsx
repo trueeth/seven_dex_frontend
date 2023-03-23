@@ -8,7 +8,7 @@ import { useAccount } from 'wagmi'
 import { useCurrencyBalance } from 'src/state/wallet/hooks'
 
 
-function CurrencyOutputPanel({ currency, onCurrencySelect, onUserInput }) {
+function CurrencyOutputPanel({ currency, value, onCurrencySelect, onUserInput }) {
 
 
     const { t } = useTranslation()
@@ -39,6 +39,7 @@ function CurrencyOutputPanel({ currency, onCurrencySelect, onUserInput }) {
                     <TextField
                         variant="standard"
                         autoComplete='off'
+                        value={value}
                         onChange={(e) => onUserInput(e.target.value)}
                         InputProps={{
                             disableUnderline: true,

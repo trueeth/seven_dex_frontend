@@ -7,7 +7,7 @@ import TokenSelectModal from 'src/components/TokenSelectModal'
 import { useAccount } from 'wagmi'
 import { useCurrencyBalance } from 'src/state/wallet/hooks'
 
-function CurrencyInputPanel({ currency, onCurrencySelect, onUserInput }) {
+function CurrencyInputPanel({ currency, value, onCurrencySelect, onUserInput, onMax }) {
 
     const { t } = useTranslation()
     const [open, setOpen] = useState(false)
@@ -15,7 +15,7 @@ function CurrencyInputPanel({ currency, onCurrencySelect, onUserInput }) {
     const { address: account } = useAccount()
     const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
 
-    
+
     return (
         <div>
             <Box>
@@ -35,6 +35,7 @@ function CurrencyInputPanel({ currency, onCurrencySelect, onUserInput }) {
                     <TextField
                         variant="standard"
                         autoComplete='off'
+                        value={value}
                         onChange={(e) => onUserInput(e.target.value)}
                         InputProps={{
                             disableUnderline: true,
@@ -54,7 +55,7 @@ function CurrencyInputPanel({ currency, onCurrencySelect, onUserInput }) {
                             bgcolor: 'rgb(255, 231, 172)'
                         }
                     }}>
-                        <Button >{t('Max')}</Button>
+                        <Button onClick={onMax}>{t('Max')}</Button>
                         <Button
                             onClick={() => setOpen(true)}
                             endIcon={<KeyboardArrowDownIcon />}

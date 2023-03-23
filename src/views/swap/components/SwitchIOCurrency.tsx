@@ -1,11 +1,9 @@
 import { Divider } from "@mui/material"
 import { Box } from "@mui/system"
 import { IconArrowsUpDown } from "@tabler/icons"
-import { useSwapActionHandlers } from "src/state/swap/useSwapActionHandler"
 
-function SwitchIOCurrency() {
+function SwitchIOCurrency({ onSwitch }) {
 
-    const { onSwitchTokens } = useSwapActionHandlers()
 
     return (
         <div>
@@ -21,7 +19,7 @@ function SwitchIOCurrency() {
                     borderRadius: '9999px',
                     cursor: 'pointer'
                 }}
-                    onClick={onSwitchTokens}
+                    onClick={() => onSwitch()}
                 >
                     <IconArrowsUpDown color='#333' size={18} />
                 </Box>

@@ -1,6 +1,6 @@
 import { TransactionResponse } from "@ethersproject/providers"
 import { useCallback, useMemo } from "react"
-import { MaxUint256 } from "src/config/constants"
+import { MaxUint256, TradeType } from "src/config/constants"
 import { useHasPendingApproval, useTransactionAdder } from "src/state/transactions/hooks"
 import { Currency, CurrencyAmount } from "src/utils/token"
 import { useAccount } from "wagmi"
@@ -8,6 +8,11 @@ import { useTokenContract } from "./useContract"
 import useTokenAllowance from "./useTokenAllowance"
 import { useCallWithGasPrice } from "./useCallWithGasPrice"
 import { calculateGasMargin } from "src/utils"
+import { computeSlippageAdjustedAmounts } from "src/utils/exchange"
+import { Field } from "src/state/swap/actions"
+import { Trade } from "src/utils/trade"
+import { ROUTER_ADDRESS } from "src/config/constants/exchange"
+import { ChainId } from "src/config/constants/chains"
 
 
 export enum ApprovalState {
@@ -114,3 +119,15 @@ export function useApproveCallback(
 
     return [approvalState, approve]
 }
+
+
+// wraps useApproveCallback in the context of a swap
+export function useApproveCallbackFromTrade(trade?: Trade<Currency, Currency, TradeType>, allowedSlippage = 0) {
+    const amountToApprove = useMemo(
+        () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
+        [trade, allowedSlippage],
+    )
+
+    return useApproveCallback(amountToApprove, ROUTER_ADDRESS[ChainId.MUMBAI])
+}
+

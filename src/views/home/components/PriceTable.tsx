@@ -49,6 +49,7 @@ function PriceTable() {
 
     const classes = useStyles()
     const allCurrency = useAllCurrencies()
+
     return (
         <div className={classes.priceTable}>
             <Typography sx={{}}>Top Traded</Typography>
