@@ -400,7 +400,7 @@ function SupplyTokens({
             <Box p={3} display='flex' alignItems='center' flexDirection='column'>
                 {
                     shouldShowApprovalGroup ?
-                        <Box sx={{ display: 'flex', gap: 2 }}>
+                        <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
                             {showFieldAApproval && (
                                 <StyledButton
                                     onClick={approveACallback}
