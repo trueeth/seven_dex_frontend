@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@mui/styles'
 import { useDerivedSwapInfo, useSwapState } from 'src/state/swap/hooks'
 import { Field } from 'src/state/swap/actions'
@@ -10,8 +10,7 @@ import CurrencyOutputPanel from './CurrencyOutputPanel'
 import SwitchIOCurrency from './SwitchIOCurrency'
 import replaceBrowserHistory from 'src/utils/replaceBrowserHistory'
 import currencyId from 'src/utils/currencyId'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
-import useDebounce from 'src/hooks/useDebounce'
+import { Box, Button, Skeleton } from '@mui/material'
 import useWrapCallback, { WrapType } from 'src/hooks/useWrapCallback'
 import { Trade } from 'src/utils/trade'
 import JSBI from 'jsbi'
@@ -26,7 +25,7 @@ import TradePrice from './TradePrice'
 import { useAccount } from 'wagmi'
 import { useTranslation } from 'src/context/Localization'
 import confirmPriceImpactWithoutFee from 'src/utils/confirmPriceImpactWithoutFee'
-import { useSwapCallback } from 'src/hooks/useSwapCallback'
+import { useSwapCallArguments, useSwapCallback } from 'src/hooks/useSwapCallback'
 import CircularProgress from '@mui/material/CircularProgress'
 
 
@@ -84,7 +83,6 @@ function SwapContainer() {
         outputCurrency,
         recipient,
     )
-
 
     const {
         wrapType,
@@ -212,6 +210,7 @@ function SwapContainer() {
 
     // the callback to execute the swap
 
+
     const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage, recipient)
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
@@ -249,7 +248,6 @@ function SwapContainer() {
             approval === ApprovalState.PENDING ||
             (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
         !(priceImpactSeverity > 3)
-
 
     // errors
     const [showInverted, setShowInverted] = useState<boolean>(false)

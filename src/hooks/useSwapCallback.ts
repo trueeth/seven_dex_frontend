@@ -48,7 +48,7 @@ type EstimatedSwapCall = SuccessfulCall | FailedCall
  * @param allowedSlippage user allowed slippage
  * @param recipientAddress
  */
-function useSwapCallArguments(
+export function useSwapCallArguments(
     trade: Trade<Currency, Currency, TradeType> | undefined, // trade to execute, required
     allowedSlippage: number = INITIAL_ALLOWED_SLIPPAGE, // in bips
     recipientAddress: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
@@ -59,11 +59,12 @@ function useSwapCallArguments(
 
     const recipient = recipientAddress === null ? account : recipientAddress
     const deadline = useTransactionDeadline()
+    const contract: Contract | null = useRouterContract()
 
     return useMemo(() => {
         if (!trade || !recipient || !library || !account || !chainId || !deadline) return []
 
-        const contract: Contract | null = useRouterContract()
+
         if (!contract) {
             return []
         }
@@ -104,12 +105,12 @@ export function useSwapCallback(
     const { account, chainId } = useActiveWeb3React()
     const library = useWeb3LibraryContext()
 
-    // const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddress)
-    const swapCalls = []
+    const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddress)
 
     const addTransaction = useTransactionAdder()
 
     const recipient = recipientAddress === null ? account : recipientAddress
+
 
     return useMemo(() => {
         if (!trade || !library || !account || !chainId) {
@@ -132,7 +133,6 @@ export function useSwapCallback(
                             contract,
                         } = call
                         const options = !value || isZero(value) ? {} : { value }
-
                         return contract.estimateGas[methodName](...args, options)
                             .then((gasEstimate) => {
                                 return {
