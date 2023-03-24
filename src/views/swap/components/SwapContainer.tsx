@@ -25,7 +25,7 @@ import TradePrice from './TradePrice'
 import { useAccount } from 'wagmi'
 import { useTranslation } from 'src/context/Localization'
 import confirmPriceImpactWithoutFee from 'src/utils/confirmPriceImpactWithoutFee'
-import { useSwapCallArguments, useSwapCallback } from 'src/hooks/useSwapCallback'
+import { useSwapCallback } from 'src/hooks/useSwapCallback'
 import CircularProgress from '@mui/material/CircularProgress'
 
 

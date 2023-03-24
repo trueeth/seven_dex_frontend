@@ -76,10 +76,10 @@ function PriceTable() {
                                             {allCurrency[key].symbol}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell>{TokenDetails[allCurrency[key].symbol].volumn}</TableCell>
-                                    <TableCell>{TokenDetails[allCurrency[key].symbol].price}</TableCell>
-                                    <TableCell>{TokenDetails[allCurrency[key].symbol].change24}</TableCell>
-                                    <TableCell>{TokenDetails[allCurrency[key].symbol].change7d}</TableCell>
+                                    <TableCell>{TokenDetails[allCurrency[key].symbol]?.volumn}</TableCell>
+                                    <TableCell>{TokenDetails[allCurrency[key].symbol]?.price}</TableCell>
+                                    <TableCell>{TokenDetails[allCurrency[key].symbol]?.change24}</TableCell>
+                                    <TableCell>{TokenDetails[allCurrency[key].symbol]?.change7d}</TableCell>
                                 </TableRow>
                             ))
                         }
