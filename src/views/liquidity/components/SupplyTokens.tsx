@@ -49,7 +49,7 @@ function SupplyTokens({
         pair,
         pairState,
         currencyBalances,
-        parsedAmounts: mintParsedAmounts,
+        parsedAmounts,
         price,
         noLiquidity,
         liquidityMinted,
@@ -84,14 +84,14 @@ function SupplyTokens({
     const formattedAmounts = useMemo(
         () => ({
             [independentField]: typedValue,
-            [dependentField]: noLiquidity ? otherTypedValue : mintParsedAmounts[dependentField]?.toSignificant(6) ?? '',
+            [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
         }),
         [
             dependentField,
             independentField,
             noLiquidity,
             otherTypedValue,
-            mintParsedAmounts,
+            parsedAmounts,
             typedValue
         ],
     )
@@ -99,10 +99,10 @@ function SupplyTokens({
 
     // check whether the user has approved the router on the tokens
     const [approvalA, approveACallback] = useApproveCallback(
-        mintParsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[chainId],
+        parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[chainId],
     )
     const [approvalB, approveBCallback] = useApproveCallback(
-        mintParsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[chainId],
+        parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[chainId],
     )
     const showFieldAApproval =
         (approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING)
@@ -118,7 +118,7 @@ function SupplyTokens({
     async function onAdd() {
         if (!chainId || !account || !routerContract) return
 
-        const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = mintParsedAmounts
+        const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
         if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB) {
             return
         }
@@ -172,9 +172,9 @@ function SupplyTokens({
                     setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response.hash })
 
                     const symbolA = currencies[Field.CURRENCY_A]?.symbol
-                    const amountA = mintParsedAmounts[Field.CURRENCY_A]?.toSignificant(3)
+                    const amountA = parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)
                     const symbolB = currencies[Field.CURRENCY_B]?.symbol
-                    const amountB = mintParsedAmounts[Field.CURRENCY_B]?.toSignificant(3)
+                    const amountB = parsedAmounts[Field.CURRENCY_B]?.toSignificant(3)
                     addTransaction(response, {
                         summary: `Add ${amountA} ${symbolA} and ${amountB} ${symbolB}`,
                         translatableSummary: {
@@ -204,16 +204,17 @@ function SupplyTokens({
             })
     }
 
-    const supplyText = maxAmounts[Field.CURRENCY_A]?.toExact() < formattedAmounts[Field.CURRENCY_A] ||
-        maxAmounts[Field.CURRENCY_B]?.toExact() < formattedAmounts[Field.CURRENCY_B] ?
+    const supplyText = Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A]) ||
+        Number(maxAmounts[Field.CURRENCY_B]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_B]) ?
         'Insufficient Balance' :
         formattedAmounts[Field.CURRENCY_A] === '' || formattedAmounts[Field.CURRENCY_B] === '' ?
             'Input Amounts' :
             attemptingTxn ? 'Suppling Assets' : 'Supply'
 
+
     const supplyDisable = !chainId || !account || !routerContract ||
-        (maxAmounts[Field.CURRENCY_A]?.toExact() < formattedAmounts[Field.CURRENCY_A]) ||
-        (maxAmounts[Field.CURRENCY_B]?.toExact() < formattedAmounts[Field.CURRENCY_B]) ||
+        (Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A])) ||
+        (Number(maxAmounts[Field.CURRENCY_B]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_B])) ||
         formattedAmounts[Field.CURRENCY_A] === '' ||
         formattedAmounts[Field.CURRENCY_B] === '' ||
         attemptingTxn

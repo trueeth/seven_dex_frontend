@@ -67,11 +67,10 @@ function Settings() {
 
     const parseCustomSlippage = (value: string) => {
         if (value === '' || inputRegex.test(escapeRegExp(value))) {
-            setSlippageInput(value)
-
             try {
                 const valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(value) * 100).toString())
                 if (!Number.isNaN(valueAsIntFromRoundedFloat) && valueAsIntFromRoundedFloat < 5000) {
+                    setSlippageInput(value)
                     setUserSlippageTolerance(valueAsIntFromRoundedFloat)
                 }
             } catch (error) {
@@ -81,11 +80,11 @@ function Settings() {
     }
 
     const parseCustomDeadline = (value: string) => {
-        setDeadlineInput(value)
 
         try {
             const valueAsInt: number = Number.parseInt(value) * 60
             if (!Number.isNaN(valueAsInt) && valueAsInt > 60 && valueAsInt < THREE_DAYS_IN_SECONDS) {
+                setDeadlineInput(value)
                 setTtl(valueAsInt)
             } else {
                 deadlineError = DeadlineError.InvalidInput
