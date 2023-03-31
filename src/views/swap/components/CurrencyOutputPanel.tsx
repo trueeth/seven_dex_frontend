@@ -6,6 +6,7 @@ import { useTranslation } from 'src/context/Localization'
 import TokenSelectModal from 'src/components/TokenSelectModal'
 import { useAccount } from 'wagmi'
 import { useCurrencyBalance } from 'src/state/wallet/hooks'
+import { numberInputOnWheelPreventChange } from 'src/utils'
 
 
 function CurrencyOutputPanel({ currency, value, onCurrencySelect, onUserInput }) {
@@ -49,6 +50,7 @@ function CurrencyOutputPanel({ currency, value, onCurrencySelect, onUserInput })
 
                         }}
                         sx={{ input: { fontSize: '28px', fontWeight: 'bold', color: '#555' } }}
+                        onWheel={numberInputOnWheelPreventChange}
                     />
                     <Box sx={{
                         display: 'flex',

@@ -12,6 +12,8 @@ import { ONE, THREE, TWO, VMType, VM_TYPE_MAXIMA, ZERO } from 'src/config/consta
 import JSBI from 'jsbi'
 import { Price } from './price'
 import { BigNumber } from 'ethers'
+import { ChainId, mumbai } from 'src/config/constants/chains'
+import { chains } from './wagmi'
 
 // warns if addresses are not checksummed
 // eslint-disable-next-line consistent-return
@@ -171,6 +173,55 @@ export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {
 export function escapeRegExp(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
+
+export function getBlockExploreLink(
+    data: string | number,
+    type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',
+    chainIdOverride?: number,
+): string {
+    const chainId = chainIdOverride || ChainId.MUMBAI
+    const chain = chains.find((c) => c.id === chainId)
+    if (!chain) return mumbai.blockExplorers.default.url
+    switch (type) {
+        case 'transaction': {
+            return `${chain.blockExplorers.default.url}/tx/${data}`
+        }
+        case 'token': {
+            return `${chain.blockExplorers.default.url}/token/${data}`
+        }
+        case 'block': {
+            return `${chain.blockExplorers.default.url}/block/${data}`
+        }
+        case 'countdown': {
+            return `${chain.blockExplorers.default.url}/block/countdown/${data}`
+        }
+        default: {
+            return `${chain.blockExplorers.default.url}/address/${data}`
+        }
+    }
+}
+
+export function getBlockExploreName(chainIdOverride?: number) {
+    const chainId = chainIdOverride || ChainId.MUMBAI
+    const chain = chains.find((c) => c.id === chainId)
+
+    return chain?.blockExplorers?.default.name || mumbai.blockExplorers.default.name
+}
+
+export const numberInputOnWheelPreventChange = (e) => {
+    // Prevent the input value change
+    e.target.blur()
+
+    // Prevent the page/container scrolling
+    e.stopPropagation()
+
+    setTimeout(() => {
+        e.target.focus()
+    }, 0)
+}
+
+
+
 
 
 

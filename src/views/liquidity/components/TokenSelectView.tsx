@@ -24,7 +24,6 @@ function TokenSelectView({
     const navigate = useNavigate()
     const { handleCurrencyASelect, handleCurrencyBSelect } = useCurrencySelectRoute()
 
-
     return (
         <Box sx={{ width: '100%' }}>
             <Box p={4} pb={3} sx={{ display: 'flex', alignItems: 'center' }}>

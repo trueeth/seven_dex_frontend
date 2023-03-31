@@ -18,7 +18,7 @@ import { calculateSlippageAmount, useRouterContract } from 'src/utils/exchange'
 import { CurrencyAmount, Token } from 'src/utils/token'
 import { useMemo, useState } from "react"
 import { useActiveChainId } from "src/hooks/useActiveChainId"
-import { calculateGasMargin } from "src/utils"
+import { calculateGasMargin, numberInputOnWheelPreventChange } from "src/utils"
 import { BigNumber } from "ethers"
 import { TransactionResponse } from "@ethersproject/providers"
 import { GAS_PRICE_GWEI } from "src/state/types"
@@ -101,9 +101,11 @@ function SupplyTokens({
     const [approvalA, approveACallback] = useApproveCallback(
         parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[chainId],
     )
+
     const [approvalB, approveBCallback] = useApproveCallback(
         parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[chainId],
     )
+
     const showFieldAApproval =
         (approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING)
     const showFieldBApproval =
@@ -184,6 +186,7 @@ function SupplyTokens({
                         type: 'add-liquidity',
                     })
 
+
                     if (pair) {
                         addPair(pair)
                     }
@@ -202,6 +205,8 @@ function SupplyTokens({
                     txHash: undefined,
                 })
             })
+
+        onFieldAInput('0')
     }
 
     const supplyText = Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A]) ||
@@ -305,6 +310,7 @@ function SupplyTokens({
                                 bgcolor: 'rgb(255, 231, 172,0.3)',
                                 input: { fontSize: '18px', fontWeight: 'bold', color: '#444', textAlign: 'right' }
                             }}
+                            onWheel={numberInputOnWheelPreventChange}
                         />
                     </Box>
                 </Box>
@@ -347,6 +353,7 @@ function SupplyTokens({
                                 bgcolor: 'rgb(255, 231, 172,0.3)',
                                 input: { fontSize: '18px', fontWeight: 'bold', color: '#444', textAlign: 'right' }
                             }}
+                            onWheel={numberInputOnWheelPreventChange}
                         />
                     </Box>
                 </Box>

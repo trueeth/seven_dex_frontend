@@ -12,6 +12,8 @@ import {
 } from './actions'
 import { useAllChainTransactions } from './hooks'
 import { TransactionDetails } from './reducer'
+import useToast from 'src/hooks/useToast'
+import { ToastDescriptionWithTx } from 'src/components/toast'
 
 export function shouldCheck(
     fetchedTransactions: { [txHash: string]: TransactionDetails },
@@ -27,6 +29,8 @@ export const Updater: React.FC<{ chainId: number }> = ({ chainId }) => {
 
     const dispatch = useAppDispatch()
     const transactions = useAllChainTransactions(chainId)
+
+    const { toastError, toastSuccess } = useToast()
 
     const fetchedTransactions = useRef<{ [txHash: string]: TransactionDetails }>({})
 
@@ -67,6 +71,12 @@ export const Updater: React.FC<{ chainId: number }> = ({ chainId }) => {
                                     },
                                 }),
                             )
+
+                            const toast = receipt.status === 1 ? toastSuccess : toastError
+                            toast(
+                                t('Transaction receipt'),
+                                <ToastDescriptionWithTx txHash={receipt.transactionHash} txChainId={chainId} />,
+                            )
                             return true
                         },
                         { onceBlock: provider },
@@ -77,7 +87,7 @@ export const Updater: React.FC<{ chainId: number }> = ({ chainId }) => {
                 getTransaction()
             },
         )
-    }, [chainId, provider, transactions, dispatch, t])
+    }, [chainId, provider, transactions, dispatch, toastSuccess, toastError, t])
 
     return null
 }

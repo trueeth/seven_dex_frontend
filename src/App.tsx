@@ -5,9 +5,6 @@ import ViewBase from './components/viewbase'
 import { WagmiProvider, client } from './utils/wagmi'
 import { Provider } from 'react-redux'
 import store from './state'
-import { ToastContainer } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css'
-
 import { SWRConfig } from 'swr'
 import { LanguageProvider } from './context/Localization'
 import { fetchStatusMiddleware } from './hooks/useSWRContract'
@@ -20,6 +17,7 @@ import Farm from 'src/views/farm'
 import Liquidity from './views/liquidity'
 import Swap from './views/swap'
 import useEagerConnect from './hooks/useEagerConnect'
+import { ToastListener, ToastsProvider } from './context/ToastsContext'
 
 function GlobalHooks() {
     usePollBlockNumber()
@@ -49,30 +47,32 @@ export default function App() {
         <BrowserRouter>
             <WagmiProvider client={client}>
                 <Provider store={store}>
-                    <ToastContainer autoClose={3000} limit={3} pauseOnFocusLoss={false} />
                     <LanguageProvider>
                         <SWRConfig
                             value={{
                                 use: [fetchStatusMiddleware]
                             }}
                         >
-                            <GlobalHooks />
-                            <Updaters />
-                            <ThemeProvider theme={theme}>
-                                <ViewBase>
-                                    <Routes>
-                                        <Route path='/' element={<Home />} />
-                                        <Route path='/home' element={<Home />} />
-                                        <Route path='/swap' element={<Swap />} />
-                                        <Route path='/docs' element={<Docs />} />
-                                        <Route path='/farm' element={<Farm />} />
-                                        <Route path='/liquidity' element={<Liquidity />} />
-                                        <Route path='/add' element={<Liquidity />} />
-                                        <Route path='/remove' element={<Liquidity />} />
-                                        <Route path='/bridge' element={<Bridge />} />
-                                    </Routes>
-                                </ViewBase>
-                            </ThemeProvider>
+                            <ToastsProvider>
+                                <GlobalHooks />
+                                <Updaters />
+                                <ThemeProvider theme={theme}>
+                                    <ViewBase>
+                                        <Routes>
+                                            <Route path='/' element={<Home />} />
+                                            <Route path='/home' element={<Home />} />
+                                            <Route path='/swap' element={<Swap />} />
+                                            <Route path='/docs' element={<Docs />} />
+                                            <Route path='/farm' element={<Farm />} />
+                                            <Route path='/liquidity' element={<Liquidity />} />
+                                            <Route path='/add' element={<Liquidity />} />
+                                            <Route path='/remove' element={<Liquidity />} />
+                                            <Route path='/bridge' element={<Bridge />} />
+                                        </Routes>
+                                    </ViewBase>
+                                    <ToastListener />
+                                </ThemeProvider>
+                            </ToastsProvider>
                         </SWRConfig>
                     </LanguageProvider>
                 </Provider>

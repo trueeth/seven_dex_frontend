@@ -13,6 +13,7 @@ import { Field } from "src/state/swap/actions"
 import { Trade } from "src/utils/trade"
 import { ROUTER_ADDRESS } from "src/config/constants/exchange"
 import { ChainId } from "src/config/constants/chains"
+import JSBI from "jsbi"
 
 
 export enum ApprovalState {
@@ -33,6 +34,7 @@ export function useApproveCallback(
     const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined
     const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
 
+
     const pendingApproval = useHasPendingApproval(token?.address, spender)
 
     // check the current approval status
@@ -44,7 +46,8 @@ export function useApproveCallback(
         if (!currentAllowance) return ApprovalState.UNKNOWN
 
         // amountToApprove will be defined if currentAllowance is
-        return currentAllowance.lessThan(amountToApprove)
+        // return currentAllowance.lessThan(amountToApprove)
+        return JSBI.lessThan(currentAllowance.quotient, amountToApprove.quotient)
             ? pendingApproval
                 ? ApprovalState.PENDING
                 : ApprovalState.NOT_APPROVED

@@ -6,6 +6,7 @@ import { useTranslation } from 'src/context/Localization'
 import TokenSelectModal from 'src/components/TokenSelectModal'
 import { useAccount } from 'wagmi'
 import { useCurrencyBalance } from 'src/state/wallet/hooks'
+import { numberInputOnWheelPreventChange } from 'src/utils'
 
 function CurrencyInputPanel({ currency, value, onCurrencySelect, onUserInput, onMax }) {
 
@@ -14,6 +15,7 @@ function CurrencyInputPanel({ currency, value, onCurrencySelect, onUserInput, on
 
     const { address: account } = useAccount()
     const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+
 
 
     return (
@@ -45,6 +47,7 @@ function CurrencyInputPanel({ currency, value, onCurrencySelect, onUserInput, on
 
                         }}
                         sx={{ input: { fontSize: '28px', fontWeight: 'bold', color: '#555' } }}
+                        onWheel={numberInputOnWheelPreventChange}
                     />
                     <Box sx={{
                         display: 'flex',
