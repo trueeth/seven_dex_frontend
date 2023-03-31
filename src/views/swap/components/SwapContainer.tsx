@@ -27,6 +27,8 @@ import { useTranslation } from 'src/context/Localization'
 import confirmPriceImpactWithoutFee from 'src/utils/confirmPriceImpactWithoutFee'
 import { useSwapCallback } from 'src/hooks/useSwapCallback'
 import CircularProgress from '@mui/material/CircularProgress'
+import { useAllTransactions } from 'src/state/transactions/hooks'
+import { useActiveChainId } from 'src/hooks/useActiveChainId'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +60,8 @@ function SwapContainer() {
     const classes = useStyles()
     const { address: account } = useAccount()
     const { t } = useTranslation()
+    const allTransactions = useAllTransactions()
+    const { chainId } = useActiveChainId()
     const {
         independentField,
         typedValue,
@@ -74,7 +78,6 @@ function SwapContainer() {
     const [allowedSlippage] = useUserSlippageTolerance()
 
     const { isLoading } = useRefreshBlockNumber()
-
 
     const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo(
         independentField,
@@ -145,6 +148,8 @@ function SwapContainer() {
     useEffect(() => {
         if (approval === ApprovalState.PENDING) {
             setApprovalSubmitted(true)
+        } else {
+            setApprovalSubmitted(false)
         }
     }, [approval, approvalSubmitted])
 
@@ -225,7 +230,7 @@ function SwapContainer() {
         setSwapState({ attemptingTxn: true, tradeToConfirm, swapErrorMessage: undefined, txHash: undefined })
         swapCallback()
             .then((hash) => {
-                setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
+                setSwapState({ attemptingTxn: true, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
             })
             .catch((error) => {
                 setSwapState({
@@ -237,6 +242,14 @@ function SwapContainer() {
             })
     }, [priceImpactWithoutFee, swapCallback, tradeToConfirm])
 
+    useEffect(() => {
+        if (txHash) {
+            const swapTx = allTransactions[chainId][txHash]
+            if (swapTx.confirmedTime)
+                setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: undefined })
+        }
+    }, [txHash, allTransactions])
+
     // warnings on slippage
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
@@ -245,8 +258,7 @@ function SwapContainer() {
     const showApproveFlow =
         !swapInputError &&
         (approval === ApprovalState.NOT_APPROVED ||
-            approval === ApprovalState.PENDING ||
-            (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
+            approval === ApprovalState.PENDING) &&
         !(priceImpactSeverity > 3)
 
     // errors
@@ -325,8 +337,6 @@ function SwapContainer() {
                                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                                     {t('Approving')} <CircularProgress sx={{ color: 'white' }} />
                                 </Box>
-                            ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                                t('Approved')
                             ) : (
                                 t('Approve %asset%', { asset: currencies[Field.INPUT]?.symbol ?? '' })
                             )}
@@ -344,7 +354,7 @@ function SwapContainer() {
                             }}
                             id="swap-button"
                             disabled={
-                                !isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3)
+                                !isValid || (priceImpactSeverity > 3) || !!swapCallbackError || attemptingTxn
                             }
                         >
                             {priceImpactSeverity > 3
@@ -352,6 +362,7 @@ function SwapContainer() {
                                 : priceImpactSeverity > 2
                                     ? t('Swap Anyway')
                                     : t('Swap')}
+                            {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
                         </Button>
                     </Box>
                 ) : (
@@ -367,14 +378,17 @@ function SwapContainer() {
                             handleSwap()
                         }}
                         id="swap-button"
-                        disabled={!isValid || (priceImpactSeverity > 3) || !!swapCallbackError}
+                        disabled={!isValid || (priceImpactSeverity > 3) || !!swapCallbackError || attemptingTxn}
                     >
-                        {swapInputError ||
-                            (priceImpactSeverity > 3
-                                ? `Price Impact Too High`
-                                : priceImpactSeverity > 2
-                                    ? t('Swap Anyway')
-                                    : t('Swap'))}
+                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                            {swapInputError ||
+                                (priceImpactSeverity > 3
+                                    ? `Price Impact Too High`
+                                    : priceImpactSeverity > 2
+                                        ? t('Swap Anyway')
+                                        : t('Swap'))}
+                            {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
+                        </Box>
                     </Button>
                 )}
             </Box>

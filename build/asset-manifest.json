@@ -3,16 +3,16 @@
     "static/js/0.84c1ccf9.chunk.js": "/static/js/0.84c1ccf9.chunk.js",
     "static/js/0.84c1ccf9.chunk.js.map": "/static/js/0.84c1ccf9.chunk.js.map",
     "main.css": "/static/css/main.db533bd1.chunk.css",
-    "main.js": "/static/js/main.aadef26e.chunk.js",
-    "main.js.map": "/static/js/main.aadef26e.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8b3e764a.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8b3e764a.js.map",
-    "static/js/3.356be9bc.chunk.js": "/static/js/3.356be9bc.chunk.js",
-    "static/js/3.356be9bc.chunk.js.map": "/static/js/3.356be9bc.chunk.js.map",
+    "main.js": "/static/js/main.288b488f.chunk.js",
+    "main.js.map": "/static/js/main.288b488f.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.b7c5aefe.js",
+    "runtime-main.js.map": "/static/js/runtime-main.b7c5aefe.js.map",
+    "static/js/3.2019775b.chunk.js": "/static/js/3.2019775b.chunk.js",
+    "static/js/3.2019775b.chunk.js.map": "/static/js/3.2019775b.chunk.js.map",
     "static/js/4.a42178d2.chunk.js": "/static/js/4.a42178d2.chunk.js",
     "static/js/4.a42178d2.chunk.js.map": "/static/js/4.a42178d2.chunk.js.map",
-    "static/js/5.4be88f3e.chunk.js": "/static/js/5.4be88f3e.chunk.js",
-    "static/js/5.4be88f3e.chunk.js.map": "/static/js/5.4be88f3e.chunk.js.map",
+    "static/js/5.a2ec94bd.chunk.js": "/static/js/5.a2ec94bd.chunk.js",
+    "static/js/5.a2ec94bd.chunk.js.map": "/static/js/5.a2ec94bd.chunk.js.map",
     "static/js/6.c92d24f8.chunk.js": "/static/js/6.c92d24f8.chunk.js",
     "static/js/6.c92d24f8.chunk.js.map": "/static/js/6.c92d24f8.chunk.js.map",
     "static/js/7.6819adaf.chunk.js": "/static/js/7.6819adaf.chunk.js",
@@ -24,7 +24,7 @@
     "index.html": "/index.html",
     "static/css/main.db533bd1.chunk.css.map": "/static/css/main.db533bd1.chunk.css.map",
     "static/js/0.84c1ccf9.chunk.js.LICENSE.txt": "/static/js/0.84c1ccf9.chunk.js.LICENSE.txt",
-    "static/js/3.356be9bc.chunk.js.LICENSE.txt": "/static/js/3.356be9bc.chunk.js.LICENSE.txt",
+    "static/js/3.2019775b.chunk.js.LICENSE.txt": "/static/js/3.2019775b.chunk.js.LICENSE.txt",
     "static/js/6.c92d24f8.chunk.js.LICENSE.txt": "/static/js/6.c92d24f8.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/furio.e1967d03.woff",
     "static/media/coinbasewallet.ff1bcce1.svg": "/static/media/coinbasewallet.ff1bcce1.svg",
@@ -39,9 +39,9 @@
     "static/media/walletconnect.a1aae2e6.svg": "/static/media/walletconnect.a1aae2e6.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.8b3e764a.js",
-    "static/js/3.356be9bc.chunk.js",
+    "static/js/runtime-main.b7c5aefe.js",
+    "static/js/3.2019775b.chunk.js",
     "static/css/main.db533bd1.chunk.css",
-    "static/js/main.aadef26e.chunk.js"
+    "static/js/main.288b488f.chunk.js"
   ]
 }

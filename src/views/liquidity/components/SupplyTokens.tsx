@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Divider, TextField, Tooltip, Typography } from "@mui/material"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { Currency } from "src/utils/token"
 import { StyledButton } from "./Styled"
@@ -12,17 +12,18 @@ import { ApprovalState, useApproveCallback } from "src/hooks/useApproveCallback"
 import { usePairAdder } from 'src/state/user/hooks'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'src/state/mint/hooks'
 import { maxAmountSpend } from 'src/utils/maxAmountSpend'
-import { useTransactionAdder } from 'src/state/transactions/hooks'
+import { useAllTransactions, useTransactionAdder } from 'src/state/transactions/hooks'
 import { calculateSlippageAmount, useRouterContract } from 'src/utils/exchange'
 
 import { CurrencyAmount, Token } from 'src/utils/token'
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useActiveChainId } from "src/hooks/useActiveChainId"
 import { calculateGasMargin, numberInputOnWheelPreventChange } from "src/utils"
 import { BigNumber } from "ethers"
 import { TransactionResponse } from "@ethersproject/providers"
 import { GAS_PRICE_GWEI } from "src/state/types"
 import { DEFAULT_TRANSACTION_DEADLINE } from "src/config/constants"
+import { useTranslation } from "src/context/Localization"
 
 function SupplyTokens({
     currencyA,
@@ -39,8 +40,10 @@ function SupplyTokens({
     const { chainId } = useActiveChainId()
     const currencyABalance = useCurrencyBalance(account ?? undefined, currencyA ?? undefined)
     const currencyBBalance = useCurrencyBalance(account ?? undefined, currencyB ?? undefined)
+    const { t } = useTranslation()
 
     const addPair = usePairAdder()
+    const allTransactions = useAllTransactions()
 
     const { independentField, typedValue, otherTypedValue } = useMintState()
     const {
@@ -171,7 +174,7 @@ function SupplyTokens({
                     gasLimit: calculateGasMargin(estimatedGasLimit),
                     gasPrice: GAS_PRICE_GWEI.fast,
                 }).then((response) => {
-                    setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response.hash })
+                    setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: response.hash })
 
                     const symbolA = currencies[Field.CURRENCY_A]?.symbol
                     const amountA = parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)
@@ -205,9 +208,15 @@ function SupplyTokens({
                     txHash: undefined,
                 })
             })
-
-        onFieldAInput('0')
     }
+
+    useEffect(() => {
+        if (txHash) {
+            const swapTx = allTransactions[chainId][txHash]
+            if (swapTx.confirmedTime)
+                setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
+        }
+    }, [txHash, allTransactions])
 
     const supplyText = Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A]) ||
         Number(maxAmounts[Field.CURRENCY_B]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_B]) ?
@@ -415,7 +424,9 @@ function SupplyTokens({
                                     disabled={approvalA === ApprovalState.PENDING}
                                 >
                                     {approvalA === ApprovalState.PENDING ? (
-                                        `Enabling  ${currencies[Field.CURRENCY_A]?.symbol}`
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                                            {t('Approving %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
+                                        </Box>
                                     ) : (
                                         `Approve  ${currencies[Field.CURRENCY_A]?.symbol}`
                                     )}
@@ -427,7 +438,9 @@ function SupplyTokens({
                                     disabled={approvalB === ApprovalState.PENDING}
                                 >
                                     {approvalB === ApprovalState.PENDING ? (
-                                        `Enabling  ${currencies[Field.CURRENCY_B]?.symbol}`
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                                            {t('Approving %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
+                                        </Box>
                                     ) : (
                                         `Approve  ${currencies[Field.CURRENCY_B]?.symbol}`
                                     )}
@@ -445,7 +458,10 @@ function SupplyTokens({
                                 onAdd()
                             }}
                         >
-                            {supplyText}
+                            <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                                {supplyText}
+                                {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
+                            </Box>
                         </StyledButton>
                 }
             </Box>

@@ -31,7 +31,7 @@ const StyledToastContainer = styled.div`
 export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProps>> = ({
   toasts,
   onRemove,
-  ttl = 3000,
+  ttl = 6000,
   stackSpacing = 24,
 }) => {
   return (

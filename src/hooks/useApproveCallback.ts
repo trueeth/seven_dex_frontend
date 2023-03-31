@@ -14,6 +14,8 @@ import { Trade } from "src/utils/trade"
 import { ROUTER_ADDRESS } from "src/config/constants/exchange"
 import { ChainId } from "src/config/constants/chains"
 import JSBI from "jsbi"
+import { useTranslation } from "src/context/Localization"
+import useToast from "./useToast"
 
 
 export enum ApprovalState {
@@ -30,6 +32,9 @@ export function useApproveCallback(
 ): [ApprovalState, () => Promise<void>] {
     const { address: account } = useAccount()
     const { callWithGasPrice } = useCallWithGasPrice()
+
+    const { t } = useTranslation()
+    const { toastError } = useToast()
 
     const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined
     const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
@@ -59,25 +64,30 @@ export function useApproveCallback(
 
     const approve = useCallback(async (): Promise<void> => {
         if (approvalState !== ApprovalState.NOT_APPROVED) {
+            toastError(t('Error'), t('Approve was called unnecessarily'))
             console.error('approve was called unnecessarily')
             return undefined
         }
         if (!token) {
+            toastError(t('Error'), t('No token'))
             console.error('no token')
             return undefined
         }
 
         if (!tokenContract) {
+            toastError(t('Error'), t('Cannot find contract of the token %tokenAddress%', { tokenAddress: token?.address }))
             console.error('tokenContract is null')
             return undefined
         }
 
         if (!amountToApprove) {
+            toastError(t('Error'), t('Missing amount to approve'))
             console.error('missing amount to approve')
             return undefined
         }
 
         if (!spender) {
+            toastError(t('Error'), t('No spender'))
             console.error('no spender')
             return undefined
         }
@@ -88,6 +98,7 @@ export function useApproveCallback(
             // general fallback for tokens who restrict approval amounts
             useExact = true
             return tokenContract.estimateGas.approve(spender, amountToApprove.quotient.toString()).catch(() => {
+                toastError(t('Error'), t('Unexpected error. Could not estimate gas for the approve.'))
                 console.error('estimate gas failure')
                 return null
             })

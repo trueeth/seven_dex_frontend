@@ -70,9 +70,6 @@ export const Toast: React.FC<React.PropsWithChildren<ToastProps>> = ({ toast, on
     return (
         <CSSTransition nodeRef={ref} timeout={250} style={style} {...props}>
             <StyledToast ref={ref} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                {/* <Alert title={title} variant={alertTypeMap[type]} onClick={handleRemove}>
-                    {description}
-                </Alert> */}
                 <Box
                     sx={{
                         bgcolor: '#fff',
@@ -81,7 +78,7 @@ export const Toast: React.FC<React.PropsWithChildren<ToastProps>> = ({ toast, on
                     }}
                     onClick={handleRemove}
                 >
-                    <Box sx={{ display: 'flex', gap: 1 }}>
+                    <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
                         <ToastIcon />
                         <Typography>{title}</Typography>
                     </Box>

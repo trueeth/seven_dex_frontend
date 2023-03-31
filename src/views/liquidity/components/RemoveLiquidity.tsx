@@ -1,6 +1,6 @@
-import { Box, Divider, Slider, Stack, Typography } from "@mui/material"
+import { Box, CircularProgress, Divider, Slider, Stack, Typography } from "@mui/material"
 import { BigNumber, Contract } from "ethers"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { ROUTER_ADDRESS } from "src/config/constants/exchange"
 import { useCurrency } from "src/hooks/Tokens"
@@ -15,7 +15,7 @@ import { SVC_TESTNET, WNATIVE } from "src/utils/token"
 import { useWeb3LibraryContext } from "src/utils/wagmi"
 import { useAccount } from "wagmi"
 import { splitSignature } from '@ethersproject/bytes'
-import { useTransactionAdder } from "src/state/transactions/hooks"
+import { useAllTransactions, useTransactionAdder } from "src/state/transactions/hooks"
 import { calculateSlippageAmount, useRouterContract } from "src/utils/exchange"
 import { calculateGasMargin } from "src/utils"
 import { TransactionResponse } from "@ethersproject/providers"
@@ -53,6 +53,7 @@ export default function RemoveLiquity() {
     const { address: account } = useAccount()
     const { chainId } = useActiveChainId()
     const library = useWeb3LibraryContext()
+    const allTransactions = useAllTransactions()
 
     const [searchParams,] = useSearchParams()
     const currencyIdA = searchParams.get('currencyA') ?? native.symbol
@@ -316,7 +317,7 @@ export default function RemoveLiquity() {
                 gasPrice: GAS_PRICE_GWEI.fast,
             })
                 .then((response: TransactionResponse) => {
-                    setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response.hash })
+                    setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: response.hash })
                     const amountA = parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)
                     const amountB = parsedAmounts[Field.CURRENCY_B]?.toSignificant(3)
                     addTransaction(response, {
@@ -344,6 +345,14 @@ export default function RemoveLiquity() {
         }
     }
 
+    useEffect(() => {
+        if (txHash) {
+            const swapTx = allTransactions[chainId][txHash]
+            if (swapTx.confirmedTime)
+                setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
+        }
+    }, [txHash, allTransactions])
+
     const liquidityPercentChangeCallback = useCallback(
         (value: number) => {
             onUserInput(Field.LIQUIDITY_PERCENT, value.toString())
@@ -360,8 +369,8 @@ export default function RemoveLiquity() {
         (value) => setInnerLiquidityPercentage(Math.ceil(value)),
         [setInnerLiquidityPercentage],
     )
-    
-    const enableBtnText = approval === ApprovalState.PENDING ? t('Enabling') : approval === ApprovalState.APPROVED ? t('Enabled') : t('Enable')
+
+    const enableBtnText = approval === ApprovalState.PENDING ? t('Approving') : approval === ApprovalState.APPROVED ? t('Approved') : t('Approve')
     const removeBtnDisable = !chainId || !account || !routerContract || parsedAmounts[Field.LIQUIDITY]?.toExact() === undefined || attemptingTxn || approval !== ApprovalState.APPROVED
 
     return (
@@ -469,14 +478,20 @@ export default function RemoveLiquity() {
                         disabled={approval === ApprovalState.PENDING}
                         onClick={approveCallback}
                     >
-                        {enableBtnText}
+                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                            {t(enableBtnText)}
+                            {approval === ApprovalState.PENDING && <CircularProgress sx={{ color: 'white' }} />}
+                        </Box>
                     </StyledButton>
                 }
                 <StyledButton
                     disabled={removeBtnDisable}
                     onClick={onRemove}
                 >
-                    Remove
+                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                        {t('Remove')}
+                        {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
+                    </Box>
                 </StyledButton>
             </Box>
         </Box>
