@@ -34,7 +34,8 @@ const modalStyle = {
         color: '#bbb'
     },
     '@media(max-width:450px)': {
-        width: '95%'
+        width: '95%',
+        height: '90vh'
     }
 }
 

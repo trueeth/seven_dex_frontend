@@ -49,7 +49,8 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             width: '95%',
             marginLeft: 'auto',
-            marginRight: 'auto'
+            marginRight: 'auto',
+            padding: '20px 15px'
         }
 
     }
@@ -316,7 +317,7 @@ function SwapContainer() {
                 }
             }}>
                 {!account ? (
-                    <Button sx={{ width: '100%' }}>Connect Wallet</Button>
+                    <Button sx={{ width: '100%' }}>{t('Connect Wallet')}</Button>
                 ) : showWrap ? (
                     <Button disabled={Boolean(wrapInputError)} onClick={onWrap} sx={{ width: '100%' }}>
                         {wrapInputError ??
@@ -383,7 +384,7 @@ function SwapContainer() {
                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                             {swapInputError ||
                                 (priceImpactSeverity > 3
-                                    ? `Price Impact Too High`
+                                    ? t('Price Impact Too High')
                                     : priceImpactSeverity > 2
                                         ? t('Swap Anyway')
                                         : t('Swap'))}

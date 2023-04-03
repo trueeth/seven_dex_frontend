@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage'
-import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
+import { FLUSH, PAUSE, PERSIST, persistReducer, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import { useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import transactions from './transactions/reducer'

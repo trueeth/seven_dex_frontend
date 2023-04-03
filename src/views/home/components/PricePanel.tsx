@@ -33,11 +33,11 @@ function PricePanel() {
     return (
         <div className={classes.pricePanel}>
             <Typography mb={2} textAlign='center'>{t('Token Prices')}</Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center', flexDirection: { xs: 'column', md: 'row' } }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
                 {Object.keys(TokenPrice).map((item, index) => (
                     <Box sx={{ display: 'flex', alignItems: 'center' }} key={index}>
                         <img src={TokenImage[item]} style={{ width: '40px', height: '40px' }} />
-                        <Box sx={{ mx: 2 }}>
+                        <Box sx={{ mx: 2, minWidth: '100px', textAlign: 'center' }}>
                             <Typography>{item.toLocaleUpperCase()}</Typography>
                             <Typography sx={{ fontSize: '24px', minWidth: '100px' }}>{TokenPrice[item]}</Typography>
                         </Box>

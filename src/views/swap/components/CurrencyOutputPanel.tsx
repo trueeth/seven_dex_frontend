@@ -31,7 +31,7 @@ function CurrencyOutputPanel({ currency, value, onCurrencySelect, onUserInput })
                     }
                 }}>
                     <Typography>{t('To')}</Typography>
-                    <Typography fontSize={12}>Balance: {selectedCurrencyBalance?.toSignificant(6) ?? 0}</Typography>
+                    <Typography fontSize={12}>{t('Balance')}: {selectedCurrencyBalance?.toSignificant(6) ?? 0}</Typography>
                 </Box>
                 <Box sx={{
                     display: 'flex',

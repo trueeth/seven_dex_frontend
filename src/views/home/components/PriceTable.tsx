@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { useAllCurrencies } from 'src/hooks/Tokens'
+import { useTranslation } from 'src/context/Localization'
 
 const useStyles = makeStyles((theme) => ({
     priceTable: {
@@ -49,20 +50,21 @@ function PriceTable() {
 
     const classes = useStyles()
     const allCurrency = useAllCurrencies()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.priceTable}>
-            <Typography sx={{}}>Top Traded</Typography>
+            <Typography sx={{}}>{t('Top Traded')}</Typography>
             <TableContainer>
                 <Table sx={{ '& .MuiTableCell-root': { textAlign: 'center' } }}>
                     <TableHead>
                         <TableRow>
                             <TableCell>#</TableCell>
-                            <TableCell>TOKEN</TableCell>
-                            <TableCell>VOLUME (24H)</TableCell>
-                            <TableCell>PRICE</TableCell>
-                            <TableCell>CHANGE (24H)</TableCell>
-                            <TableCell>CHANGE (7D)</TableCell>
+                            <TableCell>{t('TOKEN')}</TableCell>
+                            <TableCell>{t('VOLUME (24H)')}</TableCell>
+                            <TableCell>{t('PRICE')}</TableCell>
+                            <TableCell>{t('CHANGE (24H)')}</TableCell>
+                            <TableCell>{t('CHANGE (7D)')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

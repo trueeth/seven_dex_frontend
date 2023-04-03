@@ -31,7 +31,7 @@ function CurrencyInputPanel({ currency, value, onCurrencySelect, onUserInput, on
                     }
                 }}>
                     <Typography>{t('Swap')}</Typography>
-                    <Typography fontSize={12}>Balance: {selectedCurrencyBalance?.toSignificant(6) ?? 0}</Typography>
+                    <Typography fontSize={12}>{t('Balance')}: {selectedCurrencyBalance?.toSignificant(6) ?? 0}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex' }}>
                     <TextField

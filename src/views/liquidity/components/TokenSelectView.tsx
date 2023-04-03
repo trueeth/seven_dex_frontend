@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { StyledButton } from "./Styled"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "src/context/Localization"
 
 
 function TokenSelectView({
@@ -20,6 +21,7 @@ function TokenSelectView({
     onNext: () => void
 }) {
 
+    const { t } = useTranslation()
 
     const navigate = useNavigate()
     const { handleCurrencyASelect, handleCurrencyBSelect } = useCurrencySelectRoute()
@@ -35,13 +37,13 @@ function TokenSelectView({
                         fontSize: '24px',
                         fontWeight: 'bold',
                         color: '#444 !important'
-                    }}>Add Liquidity</Typography>
-                    <Typography mt={1}>Receive LP tokens and earn 0.17% trading fees</Typography>
+                    }}>{t('Add Liquidity')}</Typography>
+                    <Typography mt={1}>{t('Receive LP tokens and earn 0.17% trading fees')}</Typography>
                 </Box>
             </Box>
             <Divider />
             <Box p={3}>
-                <Typography sx={{ ml: 5 }}>Choose a valid pair</Typography>
+                <Typography sx={{ ml: 5 }}>{t('Choose a valid pair')}</Typography>
                 <Box sx={{
                     mt: 2,
                     px: 2,
@@ -60,13 +62,13 @@ function TokenSelectView({
                     />
                 </Box>
                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around', width: '100%' }}>
-                    <Typography>LP reward APR</Typography>
+                    <Typography>{t('LP reward APR')}</Typography>
                     <Typography>0.42%</Typography>
                 </Box>
             </Box>
             <Divider />
             <Box p={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <StyledButton onClick={onNext}>Next</StyledButton>
+                <StyledButton onClick={onNext}>{t('Next')}</StyledButton>
             </Box>
         </Box>
     )

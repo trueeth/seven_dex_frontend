@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from "@mui/material"
+import { useTranslation } from "src/context/Localization"
 import { useAllTokens } from "src/hooks/Tokens"
 import { registerToken } from "src/utils/registerToken"
 import { Token } from "src/utils/token"
@@ -14,6 +15,7 @@ function AddTokenToWallet() {
             token.logoURI)
     }
     const tokens = useAllTokens()
+    const { t } = useTranslation()
 
     return (
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
@@ -29,7 +31,7 @@ function AddTokenToWallet() {
                     textAlign: 'center',
                     color: '#ffae5a'
                 }}>
-                    Add SVC to wallet
+                    {t('Add SVC to wallet')}
                 </Typography>
             </Button>
         </Box>

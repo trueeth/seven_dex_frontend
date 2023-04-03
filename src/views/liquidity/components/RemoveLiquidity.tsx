@@ -11,7 +11,7 @@ import useNativeCurrency from "src/hooks/useNativeCurrency"
 import { Field } from "src/state/burn/actions"
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from "src/state/burn/hooks"
 import { Percent } from "src/utils/percent"
-import { SVC_TESTNET, WNATIVE } from "src/utils/token"
+import { SVC_TESTNET } from "src/utils/token"
 import { useWeb3LibraryContext } from "src/utils/wagmi"
 import { useAccount } from "wagmi"
 import { splitSignature } from '@ethersproject/bytes'
@@ -399,7 +399,7 @@ export default function RemoveLiquity() {
             <Divider />
             <Box flexDirection='column'>
                 <Typography mb={1} ml={3}>
-                    Wallet Balance : {userLpTokenBalance?.toSignificant(4) ?? 0} LP
+                    {t('Wallet Balance')} : {userLpTokenBalance?.toSignificant(4) ?? 0} LP
                 </Typography>
                 <Box sx={{
                     display: 'flex',
@@ -424,7 +424,7 @@ export default function RemoveLiquity() {
             </Box>
             <Box flexDirection='column' mt={-4}>
                 <Typography mb={1} ml={3}>
-                    Receive
+                    {t('Receive')}
                 </Typography>
                 <Box sx={{
                     display: 'flex',
@@ -466,7 +466,7 @@ export default function RemoveLiquity() {
                 }
             }}>
                 <Box>
-                    <Typography>LP rewards APR:</Typography>
+                    <Typography>{t('LP rewards APR')}:</Typography>
                     <Typography>1.45%</Typography>
                 </Box>
             </Box>

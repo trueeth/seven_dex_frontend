@@ -8,12 +8,14 @@ import { Currency } from 'src/utils/token'
 import { Trade } from 'src/utils/trade'
 import SwapRoute from './SwapRoute'
 import { IconInfoCircle } from '@tabler/icons'
+import { useTranslation } from 'src/context/Localization'
 
 export default function SwapDetail({ trade, allowedSlippage }: { trade: Trade<Currency, Currency, TradeType>; allowedSlippage: number }) {
 
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const isExactIn = trade.tradeType === TradeType.EXACT_INPUT
     const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(trade, allowedSlippage)
+    const { t } = useTranslation()
 
     return (
         <Box sx={{
@@ -24,17 +26,21 @@ export default function SwapDetail({ trade, allowedSlippage }: { trade: Trade<Cu
                 justifyContent: 'space-between',
                 '& .MuiBox-root': {
                     display: 'flex',
+                    width: 'fit-content',
                     alignItems: 'center',
                     '& .MuiButton-root': {
                         mx: -2
                     }
+                },
+                '& .MuiTypography-root:nth-child(2)': {
+                    textAlign: 'right'
                 }
             },
         }}>
             <Box>
                 <Box>
-                    <Typography> {isExactIn ? 'Minimum received' : 'Maximum sold'}</Typography>
-                    <Tooltip title='Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.' disableInteractive>
+                    <Typography> {isExactIn ? t('Minimum received') : t('Maximum sold')}</Typography>
+                    <Tooltip title={t('Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.')} disableInteractive>
                         <Button sx={{ display: 'flex' }}>
                             <IconInfoCircle color='#666' />
                         </Button>
@@ -49,8 +55,8 @@ export default function SwapDetail({ trade, allowedSlippage }: { trade: Trade<Cu
             </Box>
             <Box>
                 <Box>
-                    <Typography>Price Impace</Typography>
-                    <Tooltip title='The difference between the market price and estimated price due to trade size.' disableInteractive>
+                    <Typography>{t('Price Impace')}</Typography>
+                    <Tooltip title={t('The difference between the market price and estimated price due to trade size.')} disableInteractive>
                         <Button sx={{ display: 'flex' }}>
                             <IconInfoCircle color='#666' />
                         </Button>
@@ -60,8 +66,8 @@ export default function SwapDetail({ trade, allowedSlippage }: { trade: Trade<Cu
             </Box>
             <Box>
                 <Box>
-                    <Typography>Liquidity Provider Fee</Typography>
-                    <Tooltip title='For each trade a 0.25% fee is paid' disableInteractive>
+                    <Typography>{t('Liquidity Provider Fee')}</Typography>
+                    <Tooltip title={t('For each trade a 0.25% fee is paid')} disableInteractive>
                         <Button sx={{ display: 'flex' }}>
                             <IconInfoCircle color='#666' />
                         </Button>
@@ -71,8 +77,8 @@ export default function SwapDetail({ trade, allowedSlippage }: { trade: Trade<Cu
             </Box>
             <Box>
                 <Box>
-                    <Typography>Route</Typography>
-                    <Tooltip title='Routing through these tokens resulted in the best price for your trade.' disableInteractive>
+                    <Typography>{t('Route')}</Typography>
+                    <Tooltip title={t('Routing through these tokens resulted in the best price for your trade.')} disableInteractive>
                         <Button sx={{ display: 'flex' }}>
                             <IconInfoCircle color='#666' />
                         </Button>

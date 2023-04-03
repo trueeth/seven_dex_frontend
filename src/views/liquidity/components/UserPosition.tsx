@@ -8,11 +8,14 @@ import { useTokenBalancesWithLoadingIndicator } from "src/state/wallet/hooks"
 import { PairState, usePairs } from "src/hooks/usePairs"
 import FullPositionCard from './PositionCard'
 import { IconInfoCircle } from "@tabler/icons"
+import { useTranslation } from "src/context/Localization"
 
 
 export function UserPosition({ setStep }) {
 
     const { address: account } = useAccount()
+
+    const { t } = useTranslation()
 
     const trackedTokenPairs = useTrackedTokenPairs()
 
@@ -55,14 +58,14 @@ export function UserPosition({ setStep }) {
         if (!account) {
             return (
                 <Typography color="textSubtle" textAlign="center">
-                    Connect to a wallet to view your liquidity.
+                    {t('Connect to a wallet to view your liquidity.')}
                 </Typography>
             )
         }
         if (isLoading) {
             return (
                 <Typography color="textSubtle" textAlign="center">
-                    Loading...
+                    {t('Loading...')}
                 </Typography>
             )
         }
@@ -86,10 +89,10 @@ export function UserPosition({ setStep }) {
         return (
             <>
                 <Typography>
-                    No liquidity found.
+                    {t('No liquidity found.')}
                 </Typography>
-                <Typography>Don't see a pair you joined?</Typography>
-                <Typography>Find other LP tokens</Typography>
+                <Typography>{t('Do not see a pair you joined')}</Typography>
+                <Typography>{t('Find other LP tokens')}</Typography>
             </>
         )
     }
@@ -104,7 +107,7 @@ export function UserPosition({ setStep }) {
                         fontWeight: 'bold',
                         color: '#444 !important'
                     }}>
-                        Your Liquidity
+                        {t('Your Liquidity')}
                     </Typography>
                     <Tooltip
                         title='Your positions(assets) which was depostied in the seven dex trading pairs.'
@@ -115,7 +118,7 @@ export function UserPosition({ setStep }) {
                         </Button>
                     </Tooltip>
                 </Box>
-                <Typography mt={1}>Remove liquidity to receive tokens back</Typography>
+                <Typography mt={1}>{t('Remove liquidity to receive tokens back')}</Typography>
             </Box>
             <Box sx={{
                 bgcolor: 'rgb(255, 231, 172,0.3)',
@@ -130,7 +133,7 @@ export function UserPosition({ setStep }) {
             </Box>
             <Link to='/add'>
                 <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }} >
-                    <StyledButton onClick={() => setStep('select_token')}>+ Add Liquidity</StyledButton>
+                    <StyledButton onClick={() => setStep('select_token')}>+ {t('Add Liquidity')}</StyledButton>
                 </Box>
             </Link>
         </Box>

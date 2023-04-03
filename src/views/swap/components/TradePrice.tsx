@@ -3,6 +3,7 @@ import { Price } from 'src/utils/price'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import { Currency } from 'src/utils/token'
 import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'src/context/Localization'
 
 interface TradePriceProps {
     price?: Price<Currency, Currency>
@@ -12,6 +13,8 @@ interface TradePriceProps {
 }
 
 export default function TradePrice({ price, showInverted, setShowInverted, slippage }: TradePriceProps) {
+
+    const { t } = useTranslation()
 
     const formattedPrice = showInverted ? price?.toSignificant(6) : price?.invert()?.toSignificant(6)
 
@@ -38,7 +41,7 @@ export default function TradePrice({ price, showInverted, setShowInverted, slipp
                 </Box>
             </Box>
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-                <Typography>Slippage Tolerance</Typography>
+                <Typography>{t('Slippage Tolerance')}</Typography>
                 <Typography> {slippage / 100}%</Typography>
             </Box>
         </>

@@ -246,7 +246,7 @@ function SupplyTokens({
                             fontWeight: 'bold',
                             color: '#444 !important'
                         }}>
-                            Add Liquidity
+                            {t('Add Liquidity')}
                         </Typography>
                         <Tooltip
                             title='By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. 
@@ -259,7 +259,7 @@ function SupplyTokens({
                         </Tooltip>
                     </Box>
                     <Typography mt={1}>
-                        Receive LP tokens and earn 0.17% trading fees
+                        {t(' Receive LP tokens and earn 0.17% trading fees')}
                     </Typography>
                 </Box>
             </Box>
@@ -267,8 +267,8 @@ function SupplyTokens({
             {
                 noLiquidity &&
                 <Box sx={{ p: 3, pb: 0 }}>
-                    <Typography>You are the first liquidity provider.</Typography>
-                    <Typography>The ratio of tokens you add will set the price of this pair.</Typography>
+                    <Typography>{t('You are the first liquidity provider.')}</Typography>
+                    <Typography>{t('The ratio of tokens you add will set the price of this pair.')}</Typography>
                 </Box>
             }
             <Box
@@ -296,7 +296,7 @@ function SupplyTokens({
                                 <img src={currencyA?.logoURI} alt='tokenA' />
                                 <Typography >{currencyA?.symbol}</Typography>
                             </Box>
-                            <Typography sx={{ mr: 2, color: '#666 !important' }}>Balance: {currencyABalance?.toSignificant(6) ?? 0}</Typography>
+                            <Typography sx={{ mr: 2, color: '#666 !important' }}>{t('Balance')}: {currencyABalance?.toSignificant(6) ?? 0}</Typography>
                         </Box>
                         <TextField
                             variant="standard"
@@ -339,7 +339,7 @@ function SupplyTokens({
                                 <img src={currencyB?.logoURI} alt='tokenA' />
                                 <Typography >{currencyB?.symbol}</Typography>
                             </Box>
-                            <Typography sx={{ mr: 2, color: '#666 !important' }}>Balance: {currencyBBalance?.toSignificant(6) ?? 0}</Typography>
+                            <Typography sx={{ mr: 2, color: '#666 !important' }}>{t('Balance')}: {currencyBBalance?.toSignificant(6) ?? 0}</Typography>
                         </Box>
                         <TextField
                             variant="standard"
@@ -373,7 +373,7 @@ function SupplyTokens({
                     border: '1px solid #eee',
                     borderRadius: '32px'
                 }}>
-                    <Typography ml={2}>Prices and Shares</Typography>
+                    <Typography ml={2}>{t('Prices and Shares')}</Typography>
                     <Box sx={{
                         p: 2,
                         mt: 2,
@@ -408,7 +408,7 @@ function SupplyTokens({
                                 : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
                                 %
                             </Typography>
-                            <Typography>Share in Trading Pair</Typography>
+                            <Typography>{t('Share in Trading Pair')}</Typography>
                         </Box>
                     </Box>
                 </Box>
@@ -459,7 +459,7 @@ function SupplyTokens({
                             }}
                         >
                             <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                                {supplyText}
+                                {t(supplyText)}
                                 {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
                             </Box>
                         </StyledButton>

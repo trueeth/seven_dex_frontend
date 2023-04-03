@@ -182,7 +182,7 @@ function Settings() {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography color='#666' fontSize={14}>{t('Slippage Tolerance')}</Typography>
-                        <Tooltip title='Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%' disableInteractive>
+                        <Tooltip title={t('Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%')} disableInteractive>
                             <Button sx={{ display: 'flex' }}>
                                 <IconInfoCircle color='#666' />
                             </Button>
@@ -231,8 +231,8 @@ function Settings() {
                     </Box>
                     <Box mt={1}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography color='#666' fontSize={14}>Transaction Deadline</Typography>
-                            <Tooltip title='Your transaction will be revert if it is pending for more than this long' disableInteractive>
+                            <Typography color='#666' fontSize={14}>{t('Transaction Deadline')}</Typography>
+                            <Tooltip title={t('Your transaction will be revert if it is pending for more than this long')} disableInteractive>
                                 <Button sx={{ display: 'flex', ml: -1.5 }}>
                                     <IconInfoCircle color='#666' />
                                 </Button>
@@ -261,7 +261,7 @@ function Settings() {
                                     parseCustomDeadline(event.target.value)
                                 }
                             }}
-                            endAdornment={<InputAdornment position="end">minutes</InputAdornment>}
+                            endAdornment={<InputAdornment position="end">{t('minutes')}</InputAdornment>}
                             inputProps={{
 
                                 'aria-label': 'percentage',
@@ -269,14 +269,14 @@ function Settings() {
                         />
                     </Box>
                     <Box mt={1}>
-                        <Typography color='#666' fontSize={14}>Safe Mode</Typography>
+                        <Typography color='#666' fontSize={14}>{t('Safe Mode')}</Typography>
                         <Box sx={{ display: 'flex' }}>
                             <SwitchLarge
                                 sx={{ mt: 1 }}
                                 checked={true}
                             />
                             <Typography color='#666' fontSize={14} px={2}>
-                                Prevent high price impact trades. Disable at your own risk.
+                                {t('Prevent high price impact trades. Disable at your own risk.')}
                             </Typography>
                         </Box>
                     </Box>

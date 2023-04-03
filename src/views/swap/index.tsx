@@ -1,11 +1,10 @@
-
+import React from 'react'
 import { makeStyles } from '@mui/styles'
 import Settings from 'src/components/Settings'
 import { Box } from '@mui/system'
 import SwapContainer from './components/SwapContainer'
-import AddTokenToWallet from './components/AddTokenToWallet'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
-import { useAccount } from 'wagmi'
+import { Typography } from '@mui/material'
+import { useTranslation } from 'src/context/Localization'
 
 const useStyles = makeStyles(() => ({
     swapView: {
@@ -16,13 +15,14 @@ const useStyles = makeStyles(() => ({
 }))
 
 function Swap() {
-
     const classes = useStyles()
-    const { chainId } = useActiveChainId()
-    const { isConnected } = useAccount()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.swapView}>
+            {/* <Box sx={{ mt: 10 }}>
+                <Typography>No currencies selected</Typography>
+            </Box> */}
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -31,10 +31,13 @@ function Swap() {
             }}>
                 <Settings />
                 <SwapContainer />
-                {
-                    isConnected && chainId === 80001 &&
-                    <AddTokenToWallet />
-                }
+                <Typography sx={{
+                    width: '100%',
+                    textAlign: 'center',
+                    color: '#ffae5a'
+                }}>
+                    {t('Add SVC to wallet')}
+                </Typography>
             </Box>
         </div>
     )
