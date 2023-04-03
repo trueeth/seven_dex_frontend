@@ -65,7 +65,7 @@ function FeatureList() {
                         <ImageWrapper src={EarningIcon} />
                         <Box>
                             <Typography sx={{ color: '#e57a3b !important', fontSize: '24px' }}>{t('Earn SVC')}</Typography>
-                            <Typography>{t(' Deposit your LP tokens to earn additional rewards in SVC')}</Typography>
+                            <Typography>{t('Deposit your LP tokens to earn additional rewards in SVC')}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
