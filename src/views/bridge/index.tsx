@@ -2,6 +2,7 @@ import React from 'react'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
+import { useTranslation } from 'src/context/Localization'
 
 
 const useStyles = makeStyles(() => ({
@@ -17,6 +18,7 @@ const useStyles = makeStyles(() => ({
 function Bridge() {
 
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.farmView}>
@@ -26,7 +28,7 @@ function Bridge() {
                     fontWeight: 'bold',
                     color: '#666'
                 }}>
-                    We're Coming Soon!
+                    {t('We are Coming Soon!')}
                 </Typography>
             </Box>
         </div>

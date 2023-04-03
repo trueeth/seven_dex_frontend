@@ -392,8 +392,8 @@ export default function RemoveLiquity() {
                         fontSize: '20px',
                         fontWeight: 'bold',
                         color: '#444 !important'
-                    }}>{t(`Remove ${currencyA?.symbol}-${currencyB?.symbol} liquidity`)} 🎁</Typography>
-                    <Typography mt={1}>{t(`To receive ${currencyA?.symbol} and ${currencyB?.symbol}`)}</Typography>
+                    }}>{t('Remove %assetA%-%assetB% liquidity', { assetA: currencyA?.symbol, assetB: currencyB?.symbol })} 🎁</Typography>
+                    <Typography mt={1}>{t('To receive %assetA% and %assetB%', { assetA: currencyA?.symbol, assetB: currencyB?.symbol })}</Typography>
                 </Box>
             </Box>
             <Divider />

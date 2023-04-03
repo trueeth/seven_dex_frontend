@@ -3,12 +3,12 @@
     "static/js/0.4336dddd.chunk.js": "/static/js/0.4336dddd.chunk.js",
     "static/js/0.4336dddd.chunk.js.map": "/static/js/0.4336dddd.chunk.js.map",
     "main.css": "/static/css/main.db533bd1.chunk.css",
-    "main.js": "/static/js/main.081b4a17.chunk.js",
-    "main.js.map": "/static/js/main.081b4a17.chunk.js.map",
+    "main.js": "/static/js/main.dddcacfe.chunk.js",
+    "main.js.map": "/static/js/main.dddcacfe.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.795fe8ac.js",
     "runtime-main.js.map": "/static/js/runtime-main.795fe8ac.js.map",
-    "static/js/3.421110f5.chunk.js": "/static/js/3.421110f5.chunk.js",
-    "static/js/3.421110f5.chunk.js.map": "/static/js/3.421110f5.chunk.js.map",
+    "static/js/3.f67d2c62.chunk.js": "/static/js/3.f67d2c62.chunk.js",
+    "static/js/3.f67d2c62.chunk.js.map": "/static/js/3.f67d2c62.chunk.js.map",
     "static/js/4.6a775647.chunk.js": "/static/js/4.6a775647.chunk.js",
     "static/js/4.6a775647.chunk.js.map": "/static/js/4.6a775647.chunk.js.map",
     "static/js/5.7ab7e17b.chunk.js": "/static/js/5.7ab7e17b.chunk.js",
@@ -24,7 +24,7 @@
     "index.html": "/index.html",
     "static/css/main.db533bd1.chunk.css.map": "/static/css/main.db533bd1.chunk.css.map",
     "static/js/0.4336dddd.chunk.js.LICENSE.txt": "/static/js/0.4336dddd.chunk.js.LICENSE.txt",
-    "static/js/3.421110f5.chunk.js.LICENSE.txt": "/static/js/3.421110f5.chunk.js.LICENSE.txt",
+    "static/js/3.f67d2c62.chunk.js.LICENSE.txt": "/static/js/3.f67d2c62.chunk.js.LICENSE.txt",
     "static/js/6.ab9340ba.chunk.js.LICENSE.txt": "/static/js/6.ab9340ba.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/furio.e1967d03.woff",
     "static/media/coinbasewallet.c2cf66fe.svg": "/static/media/coinbasewallet.c2cf66fe.svg",
@@ -40,8 +40,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.795fe8ac.js",
-    "static/js/3.421110f5.chunk.js",
+    "static/js/3.f67d2c62.chunk.js",
     "static/css/main.db533bd1.chunk.css",
-    "static/js/main.081b4a17.chunk.js"
+    "static/js/main.dddcacfe.chunk.js"
   ]
 }

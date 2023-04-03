@@ -256,7 +256,7 @@ function FullPositionCard({
                                     navigate(`/add?currencyA=${currencyIdA}&currencyB=${currencyIdB}`)
                                 }}>
 
-                                    {t('+ Add liquidity instead')}
+                                    + {t('Add liquidity instead')}
                                 </OutlinedButton>
                             </Box>
                         )}

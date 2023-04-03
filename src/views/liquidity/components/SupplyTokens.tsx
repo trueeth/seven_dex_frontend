@@ -249,8 +249,7 @@ function SupplyTokens({
                             {t('Add Liquidity')}
                         </Typography>
                         <Tooltip
-                            title='By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. 
-                        Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.'
+                            title={t('By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.')}
                             disableInteractive
                         >
                             <Button sx={{ display: 'flex', ml: -1.5, mt: -1 }}>
@@ -259,7 +258,7 @@ function SupplyTokens({
                         </Tooltip>
                     </Box>
                     <Typography mt={1}>
-                        {t(' Receive LP tokens and earn 0.17% trading fees')}
+                        {t('Receive LP tokens and earn 0.17% trading fees')}
                     </Typography>
                 </Box>
             </Box>
@@ -427,9 +426,7 @@ function SupplyTokens({
                                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                                             {t('Approving %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
                                         </Box>
-                                    ) : (
-                                        `Approve  ${currencies[Field.CURRENCY_A]?.symbol}`
-                                    )}
+                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}
                                 </StyledButton>
                             )}
                             {showFieldBApproval && (
@@ -441,9 +438,7 @@ function SupplyTokens({
                                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                                             {t('Approving %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
                                         </Box>
-                                    ) : (
-                                        `Approve  ${currencies[Field.CURRENCY_B]?.symbol}`
-                                    )}
+                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}
                                 </StyledButton>
                             )}
                         </Box> :

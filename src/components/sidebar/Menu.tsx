@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useTranslation } from 'src/context/Localization'
+import { IconExternalLink } from '@tabler/icons'
 
 const useStyles = makeStyles(theme => ({
     menuList: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function MenuList() {
+function MenuList({ toggle }) {
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -36,26 +37,47 @@ function MenuList() {
                 alignItems: 'center',
                 '& .MuiTypography-root': {
                     px: 2
-                }
-            }}>
-                <Link to='/home'>
+                },
+                '& .active': {
+                    width: '80%',
+                    borderRadius: '20px',
+                    backgroundColor: '#e57a3b',
+                    '& .MuiTypography-root': {
+                        textAlign: 'center',
+                        color: '#fff'
+                    }
+                },
+
+            }}
+                onClick={toggle}
+            >
+                <NavLink to='/home'>
                     <Typography >{t('Home')}</Typography>
-                </Link>
-                <Link to='/swap'>
+                </NavLink>
+                <NavLink to='/swap'>
                     <Typography>{t('Swap')}</Typography>
-                </Link>
-                <Link to='/liquidity'>
+                </NavLink>
+                <NavLink to='/liquidity'>
                     <Typography>{t('Liquidity')}</Typography>
-                </Link>
-                <Link to='/bridge'>
+                </NavLink>
+                <NavLink to='/bridge'>
                     <Typography>{t('Bridge')}</Typography>
-                </Link>
+                </NavLink>
                 <Link to={{ pathname: "//staking-svc-matic.ceewen.xyz/" }} target="_blank">
                     <Typography>{t('Stake')}</Typography>
                 </Link>
-                <Link to='/farm'>
+                <NavLink to='/farm'>
                     <Typography>{t('Farm')}</Typography>
-                </Link>
+                </NavLink>
+                <NavLink to='/docs'>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Typography>{t('Docs')}</Typography>
+                        <IconExternalLink
+                            color='#fff'
+                            style={{ marginTop: '10px', marginLeft: '-10px' }}
+                        />
+                    </Box>
+                </NavLink>
             </Box>
         </div >
     )

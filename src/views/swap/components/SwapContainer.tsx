@@ -336,7 +336,7 @@ function SwapContainer() {
                         >
                             {approval === ApprovalState.PENDING ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                                    {t('Approving')} <CircularProgress sx={{ color: 'white' }} />
+                                    {t('Approving %asset%', { asset: currencies[Field.INPUT]?.symbol ?? '' })} <CircularProgress sx={{ color: 'white' }} />
                                 </Box>
                             ) : (
                                 t('Approve %asset%', { asset: currencies[Field.INPUT]?.symbol ?? '' })

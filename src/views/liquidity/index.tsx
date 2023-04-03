@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
     liquidityView: {
         width: '100vw',
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center'
     }
 }))
 
@@ -48,13 +50,10 @@ function Liquidity() {
 
     return (
         <div className={classes.liquidityView}>
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                height: 'fit-content'
-            }}>
-                <Settings />
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: { xs: '100%', sm: 'fit-content' } }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: { xs: '95%', sm: '500px' } }}>
+                    <Settings />
+                </Box>
                 <Container>
                     {positionView ?
                         <>
@@ -81,6 +80,7 @@ function Liquidity() {
                         </>
                     }
                 </Container>
+
             </Box>
         </div>
     )

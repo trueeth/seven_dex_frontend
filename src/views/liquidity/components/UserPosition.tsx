@@ -110,7 +110,7 @@ export function UserPosition({ setStep }) {
                         {t('Your Liquidity')}
                     </Typography>
                     <Tooltip
-                        title='Your positions(assets) which was depostied in the seven dex trading pairs.'
+                        title={t('Your positions(assets) which was depostied in the seven dex trading pairs.')}
                         disableInteractive
                     >
                         <Button sx={{ display: 'flex', ml: -1.5, mt: -1 }}>

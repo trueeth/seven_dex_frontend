@@ -55,7 +55,7 @@ export default function SwapDetail({ trade, allowedSlippage }: { trade: Trade<Cu
             </Box>
             <Box>
                 <Box>
-                    <Typography>{t('Price Impace')}</Typography>
+                    <Typography>{t('Price Impact')}</Typography>
                     <Tooltip title={t('The difference between the market price and estimated price due to trade size.')} disableInteractive>
                         <Button sx={{ display: 'flex' }}>
                             <IconInfoCircle color='#666' />
