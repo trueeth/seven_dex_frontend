@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { useAllCurrencies } from 'src/hooks/Tokens'
 import { useTranslation } from 'src/context/Localization'
+import { DataContext } from 'src/context/DataContext'
 
 const useStyles = makeStyles((theme) => ({
     priceTable: {
@@ -17,40 +18,41 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const TokenDetails = {
-    'MATIC': {
-        volumn: 775360094,
-        price: 1.49,
-        change24: 1.4,
-        change7d: 21.34
-    },
-    'SVC': {
-        volumn: 20094,
-        price: 0.01,
-        change24: 1.2,
-        change7d: 11.26
-
-    },
-    'WBTC': {
-        volumn: 4360094,
-        price: 24432.94,
-        change24: 1.37,
-        change7d: 11.87
-    },
-    'WETH': {
-        volumn: 405003,
-        price: 1693,
-        change24: 0.75,
-        change7d: 12.36
-    }
-}
-
 
 function PriceTable() {
 
     const classes = useStyles()
     const allCurrency = useAllCurrencies()
     const { t } = useTranslation()
+    const { tokenPrices } = useContext(DataContext)
+
+    const TokenDetails = {
+        'MATIC': {
+            volumn: 360094,
+            price: tokenPrices?.MATIC ?? 1.49,
+            change24: 1.4,
+            change7d: 21.34
+        },
+        'SVC': {
+            volumn: 20094,
+            price: tokenPrices?.SVC ?? 0.01,
+            change24: 1.2,
+            change7d: 11.26
+
+        },
+        'WBTC': {
+            volumn: 43604,
+            price: tokenPrices?.WBTC ?? 28032.94,
+            change24: 1.37,
+            change7d: 11.87
+        },
+        'WETH': {
+            volumn: 405003,
+            price: tokenPrices?.WETH ?? 1853,
+            change24: 0.75,
+            change7d: 12.36
+        }
+    }
 
     return (
         <div className={classes.priceTable}>

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useTranslation } from 'src/context/Localization'
 import { makeStyles } from '@mui/styles'
 import { TokenImage } from 'src/config'
+import { DataContext } from 'src/context/DataContext'
+
 
 const useStyles = makeStyles((theme) => ({
     pricePanel: {
@@ -18,17 +20,20 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const TokenPrice: Record<string, number> = {
-    'svc': 0.01,
-    'matic': 1.49,
-    'weth': 1693,
-    'wbtc': 24432.94
-}
 
 function PricePanel() {
 
     const classes = useStyles()
     const { t } = useTranslation()
+    const { tokenPrices } = useContext(DataContext)
+
+    const TokenPrice: Record<string, number> = {
+        'svc': tokenPrices?.SVC ?? 0.01,
+        'matic': tokenPrices?.MATIC ?? 1.49,
+        'weth': tokenPrices?.WETH ?? 1853,
+        'wbtc': tokenPrices?.WBTC ?? 28032.94
+    }
+
 
     return (
         <div className={classes.pricePanel}>
