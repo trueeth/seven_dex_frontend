@@ -18,6 +18,7 @@ import Liquidity from './views/liquidity'
 import Swap from './views/swap'
 import useEagerConnect from './hooks/useEagerConnect'
 import { ToastListener, ToastsProvider } from './context/ToastsContext'
+import { DataProvider } from './context/DataContext'
 
 function GlobalHooks() {
     usePollBlockNumber()
@@ -53,26 +54,28 @@ export default function App() {
                                 use: [fetchStatusMiddleware]
                             }}
                         >
-                            <ToastsProvider>
-                                <GlobalHooks />
-                                <Updaters />
-                                <ThemeProvider theme={theme}>
-                                    <ViewBase>
-                                        <Routes>
-                                            <Route path='/' element={<Home />} />
-                                            <Route path='/home' element={<Home />} />
-                                            <Route path='/swap' element={<Swap />} />
-                                            <Route path='/docs' element={<Docs />} />
-                                            <Route path='/farm' element={<Farm />} />
-                                            <Route path='/liquidity' element={<Liquidity />} />
-                                            <Route path='/add' element={<Liquidity />} />
-                                            <Route path='/remove' element={<Liquidity />} />
-                                            <Route path='/bridge' element={<Bridge />} />
-                                        </Routes>
-                                    </ViewBase>
-                                    <ToastListener />
-                                </ThemeProvider>
-                            </ToastsProvider>
+                            <DataProvider>
+                                <ToastsProvider>
+                                    <GlobalHooks />
+                                    <Updaters />
+                                    <ThemeProvider theme={theme}>
+                                        <ViewBase>
+                                            <Routes>
+                                                <Route path='/' element={<Home />} />
+                                                <Route path='/home' element={<Home />} />
+                                                <Route path='/swap' element={<Swap />} />
+                                                <Route path='/docs' element={<Docs />} />
+                                                <Route path='/farm' element={<Farm />} />
+                                                <Route path='/liquidity' element={<Liquidity />} />
+                                                <Route path='/add' element={<Liquidity />} />
+                                                <Route path='/remove' element={<Liquidity />} />
+                                                <Route path='/bridge' element={<Bridge />} />
+                                            </Routes>
+                                        </ViewBase>
+                                        <ToastListener />
+                                    </ThemeProvider>
+                                </ToastsProvider>
+                            </DataProvider>
                         </SWRConfig>
                     </LanguageProvider>
                 </Provider>

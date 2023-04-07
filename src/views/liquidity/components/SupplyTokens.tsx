@@ -212,9 +212,11 @@ function SupplyTokens({
 
     useEffect(() => {
         if (txHash) {
-            const swapTx = allTransactions[chainId][txHash]
-            if (swapTx.confirmedTime)
+            const supplyTx = allTransactions[chainId][txHash]
+            if (supplyTx.confirmedTime) {
                 setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
+                onFieldAInput('0')
+            }
         }
     }, [txHash, allTransactions])
 

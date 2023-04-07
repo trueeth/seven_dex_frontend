@@ -20,6 +20,7 @@ function AddTokenToWallet() {
     return (
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
             <Button
+                sx={{ cursor: 'pointer' }}
                 onClick={() =>
                     onRegisterToken(
                         tokens['0x40ae465CC90c636Ea0Ff123f91924d222F513a6E']

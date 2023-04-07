@@ -3,8 +3,7 @@ import { makeStyles } from '@mui/styles'
 import Settings from 'src/components/Settings'
 import { Box } from '@mui/system'
 import SwapContainer from './components/SwapContainer'
-import { Typography } from '@mui/material'
-import { useTranslation } from 'src/context/Localization'
+import AddTokenToWallet from './components/AddTokenToWallet'
 
 const useStyles = makeStyles(() => ({
     swapView: {
@@ -16,7 +15,6 @@ const useStyles = makeStyles(() => ({
 
 function Swap() {
     const classes = useStyles()
-    const { t } = useTranslation()
 
     return (
         <div className={classes.swapView}>
@@ -31,13 +29,7 @@ function Swap() {
             }}>
                 <Settings />
                 <SwapContainer />
-                <Typography sx={{
-                    width: '100%',
-                    textAlign: 'center',
-                    color: '#ffae5a'
-                }}>
-                    {t('Add SVC to wallet')}
-                </Typography>
+                <AddTokenToWallet />
             </Box>
         </div>
     )

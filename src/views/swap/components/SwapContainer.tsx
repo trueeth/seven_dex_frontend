@@ -246,8 +246,10 @@ function SwapContainer() {
     useEffect(() => {
         if (txHash) {
             const swapTx = allTransactions[chainId][txHash]
-            if (swapTx.confirmedTime)
+            if (swapTx.confirmedTime) {
                 setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: undefined })
+                onUserInput(Field.INPUT, '0')
+            }
         }
     }, [txHash, allTransactions])
 

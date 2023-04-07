@@ -347,9 +347,11 @@ export default function RemoveLiquity() {
 
     useEffect(() => {
         if (txHash) {
-            const swapTx = allTransactions[chainId][txHash]
-            if (swapTx.confirmedTime)
+            const removeTx = allTransactions[chainId][txHash]
+            if (removeTx.confirmedTime) {
                 setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
+                onUserInput(Field.LIQUIDITY, '0')
+            }
         }
     }, [txHash, allTransactions])
 

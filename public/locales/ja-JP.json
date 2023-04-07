@@ -1595,5 +1595,7 @@
     "We are Coming Soon!": "近日公開予定です！",
     "Your positions(assets) which was depostied in the seven dex trading pairs.": "セブンデックスの取引ペアに預けているお客様のポジション（資産）です。",
     "By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.": "流動性を追加することで、このペアの全取引の0.17%を取引ペアのシェアに比例して獲得することができます。手数料はペアに追加され、リアルタイムで発生し、あなたの流動性を撤回することによって請求することができます。",
-    "Remove SVC-MATIC liquidity To receive SVC and MATIC": "SVC-MATICの流動性を除去する SVCとMATICを受信するには"
+    "Remove SVC-MATIC liquidity To receive SVC and MATIC": "SVC-MATICの流動性を除去する SVCとMATICを受信するには",
+    "minutes": "分",
+    "Suppling Assets": "供給中"
 }
