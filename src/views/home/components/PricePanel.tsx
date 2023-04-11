@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useTranslation } from 'src/context/Localization'
@@ -27,13 +27,15 @@ function PricePanel() {
     const { t } = useTranslation()
     const { tokenPrices } = useContext(DataContext)
 
-    const TokenPrice: Record<string, number> = {
-        'svc': tokenPrices?.SVC ?? 0.01,
-        'matic': tokenPrices?.MATIC ?? 1.49,
-        'weth': tokenPrices?.WETH ?? 1853,
-        'wbtc': tokenPrices?.WBTC ?? 28032.94
-    }
-
+    const TokenPrice: Record<string, number> = useMemo(() => (
+        {
+            'svc': tokenPrices?.SVC ?? 0.01,
+            'matic': tokenPrices?.MATIC ?? 1.49,
+            'weth': tokenPrices?.WETH ?? 1853,
+            'wbtc': tokenPrices?.WBTC ?? 28032.94,
+            'b2z': tokenPrices?.B2Z ?? 0.2
+        }
+    ), [tokenPrices])
 
     return (
         <div className={classes.pricePanel}>

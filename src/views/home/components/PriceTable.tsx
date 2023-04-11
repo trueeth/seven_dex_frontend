@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles'
 import { useAllCurrencies } from 'src/hooks/Tokens'
 import { useTranslation } from 'src/context/Localization'
 import { DataContext } from 'src/context/DataContext'
+import { trim } from 'src/utils/trim'
 
 const useStyles = makeStyles((theme) => ({
     priceTable: {
@@ -24,33 +25,39 @@ function PriceTable() {
     const classes = useStyles()
     const allCurrency = useAllCurrencies()
     const { t } = useTranslation()
-    const { tokenPrices } = useContext(DataContext)
+    const { tokenPrices, tradeVolume } = useContext(DataContext)
 
     const TokenDetails = {
         'MATIC': {
-            volumn: 360094,
+            volumn: tradeVolume?.MATIC ?? 0,
             price: tokenPrices?.MATIC ?? 1.49,
             change24: 1.4,
             change7d: 21.34
         },
         'SVC': {
-            volumn: 20094,
+            volumn: tradeVolume?.SVC ?? 0,
             price: tokenPrices?.SVC ?? 0.01,
             change24: 1.2,
             change7d: 11.26
 
         },
         'WBTC': {
-            volumn: 43604,
+            volumn: tradeVolume?.WBTC ?? 0,
             price: tokenPrices?.WBTC ?? 28032.94,
             change24: 1.37,
             change7d: 11.87
         },
         'WETH': {
-            volumn: 405003,
+            volumn: tradeVolume?.WETH ?? 0,
             price: tokenPrices?.WETH ?? 1853,
             change24: 0.75,
             change7d: 12.36
+        },
+        'B2Z': {
+            volumn: tradeVolume?.B2Z ?? 270,
+            price: tokenPrices?.B2Z ?? 0.2,
+            change24: 0.35,
+            change7d: 1.36
         }
     }
 
@@ -80,8 +87,8 @@ function PriceTable() {
                                             {allCurrency[key].symbol}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell>{TokenDetails[allCurrency[key].symbol]?.volumn}</TableCell>
-                                    <TableCell>{TokenDetails[allCurrency[key].symbol]?.price}</TableCell>
+                                    <TableCell>{trim(TokenDetails[allCurrency[key].symbol]?.volumn, 3)}</TableCell>
+                                    <TableCell>{trim(TokenDetails[allCurrency[key].symbol]?.price, 3)}</TableCell>
                                     <TableCell>{TokenDetails[allCurrency[key].symbol]?.change24}</TableCell>
                                     <TableCell>{TokenDetails[allCurrency[key].symbol]?.change7d}</TableCell>
                                 </TableRow>

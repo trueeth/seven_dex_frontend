@@ -11,13 +11,14 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
     const fetcher = async (url: string) => {
         const res = await axios.get(BACKEND_URL + url)
-        return res.data
+        return res.data.data
     }
 
     const { data: tokenPrices } = useSWR('api/getPrice', fetcher)
+    const { data: tradeVolume } = useSWR('api/tradevolume', fetcher)
 
     return (
-        <DataContext.Provider value={{ tokenPrices }}>
+        <DataContext.Provider value={{ tokenPrices, tradeVolume }}>
             {children}
         </DataContext.Provider>
     )
