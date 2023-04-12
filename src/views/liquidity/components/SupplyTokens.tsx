@@ -440,7 +440,7 @@ function SupplyTokens({
                                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                                             {t('Approving %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
                                         </Box>
-                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}
+                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })}
                                 </StyledButton>
                             )}
                         </Box> :
