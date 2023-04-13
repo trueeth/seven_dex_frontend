@@ -4,6 +4,10 @@ import { makeStyles } from '@mui/styles'
 import PricePanel from './components/PricePanel'
 import PriceTable from './components/PriceTable'
 import FeatureList from './components/Feature'
+<<<<<<< HEAD
+=======
+import { useTranslation } from 'src/context/Localization'
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
 const useStyles = makeStyles(() => ({
     homeView: {
@@ -21,6 +25,10 @@ const useStyles = makeStyles(() => ({
 function Home() {
 
     const classes = useStyles()
+<<<<<<< HEAD
+=======
+    const { t } = useTranslation()
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
     return (
         <div className={classes.homeView}>
@@ -29,7 +37,11 @@ function Home() {
                 color: '#555',
                 textAlign: 'center'
             }}>
+<<<<<<< HEAD
                 Assets Exchange on Polygon
+=======
+                {t('Assets Exchange on Polygon')}
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
             </Typography>
             <PricePanel />
             <PriceTable />

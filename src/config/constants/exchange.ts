@@ -24,6 +24,11 @@ export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN: Percent = new Percent(JSBI.Bi
 // for non expert mode disable swaps above this
 export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(1500), BIPS_BASE) // 15%
 
+<<<<<<< HEAD
+=======
+export const BLOCKED_PRICE_IMPACT: Percent = new Percent(JSBI.BigInt(5000), BIPS_BASE)
+
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 // used to ensure the user doesn't send so much BNB so they end up with <.01
 
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), BIPS_BASE)

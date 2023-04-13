@@ -2,6 +2,8 @@
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
+    text-transform: none !important;
+    font-family: 'Square';
 }
 
 *::-webkit-scrollbar {
@@ -15,8 +17,8 @@
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: rgb(72, 83, 105);
-    outline: 1px solid rgb(50, 70, 90);
+    background-color: #e57a3ba0;
+    outline: 1px solid #e57a3b;
 }
 
 body {

@@ -6,7 +6,9 @@ import { IconMenu2, IconExternalLink } from '@tabler/icons'
 import ConnectButton from './ConnectWallet'
 import SelectNetwork from './SelectNetwork'
 
-import { NavLink } from 'react-router-dom'
+import LanguageSelector from './LanguageSelector'
+import { useTranslation } from 'src/context/Localization'
+import { Link } from 'react-router-dom'
 
 
 interface IHeader {
@@ -37,9 +39,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Header({ handleDrawerToggle }: IHeader) {
-    const is960 = useMediaQuery('(max-width:960px)')
-    const isXs = useMediaQuery('(max-width:768px)')
+    const is960 = useMediaQuery('(max-width:1024px)')
+    const isXs = useMediaQuery('(max-width:1024px)')
     const classes = useStyles()
+
+    const { t } = useTranslation()
 
     return (
         <div className={classes.topBar}>
@@ -62,40 +66,41 @@ function Header({ handleDrawerToggle }: IHeader) {
                             px: 2
                         }
                     }}>
-                        <NavLink to='/home'>
-                            <Typography >Home</Typography>
-                        </NavLink>
-                        <NavLink to='/swap'>
-                            <Typography>Swap</Typography>
-                        </NavLink>
-                        <NavLink to='/liquidity'>
-                            <Typography>Liquidity</Typography>
-                        </NavLink>
-                        <NavLink to='/bridge'>
-                            <Typography>Bridge</Typography>
-                        </NavLink>
-                        <NavLink to='/stake'>
-                            <Typography>Stake</Typography>
-                        </NavLink>
-                        <NavLink to='/farm'>
-                            <Typography>Farm</Typography>
-                        </NavLink>
-                        <NavLink to='/'>
+                        <Link to='/home'>
+                            <Typography >{t('Home')}</Typography>
+                        </Link>
+                        <Link to='/swap'>
+                            <Typography>{t('Swap')}</Typography>
+                        </Link>
+                        <Link to='/liquidity'>
+                            <Typography>{t('Liquidity')}</Typography>
+                        </Link>
+                        <Link to='/bridge'>
+                            <Typography>{t('Bridge')}</Typography>
+                        </Link>
+                        <Link to={{ pathname: "//staking-svc-matic.ceewen.xyz/" }} target="_blank">
+                            <Typography>{t('Stake')}</Typography>
+                        </Link>
+                        <Link to='/farm'>
+                            <Typography>{t('Farm')}</Typography>
+                        </Link>
+                        <Link to='/docs'>
                             <Box sx={{ display: 'flex' }}>
-                                <Typography>Docs</Typography>
+                                <Typography>{t('Docs')}</Typography>
                                 <IconExternalLink
                                     color='#888'
                                     style={{ marginLeft: '-14px', marginTop: '-3px' }}
                                 />
                             </Box>
-                        </NavLink>
+                        </Link>
                     </Box>
                 }
                 <Box display='flex' alignItems='center'>
 
                 </Box>
                 <Box display='flex' alignItems='center'>
-                    <SelectNetwork />
+                    <LanguageSelector />
+                    {/* <SelectNetwork /> */}
                     <ConnectButton />
                     {
                         is960 && (
@@ -106,7 +111,6 @@ function Header({ handleDrawerToggle }: IHeader) {
                                         boxShadow: '0px 1px 4px #ccc',
                                         mt: '3px'
                                     }}
-
                                 >
                                     <IconMenu2 color='#FFF' />
                                 </Avatar>

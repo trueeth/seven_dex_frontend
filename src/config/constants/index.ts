@@ -3,6 +3,11 @@ import JSBI from 'jsbi'
 
 // default allowed slippage, in bips
 
+<<<<<<< HEAD
+=======
+export const BACKEND_URL = 'https://dex-svc.ceewen.xyz:5819/'
+
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 export const DEFAULT_TRANSACTION_DEADLINE = '99999999999999999999999'
 
 export const INITIAL_ALLOWED_SLIPPAGE = 50

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Box, Button, CircularProgress, Divider, TextField, Tooltip, Typography } from "@mui/material"
+=======
+import { Box, Button, CircularProgress, Divider, TextField, Typography } from "@mui/material"
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { Currency } from "src/utils/token"
 import { StyledButton } from "./Styled"
@@ -24,6 +28,11 @@ import { TransactionResponse } from "@ethersproject/providers"
 import { GAS_PRICE_GWEI } from "src/state/types"
 import { DEFAULT_TRANSACTION_DEADLINE } from "src/config/constants"
 import { useTranslation } from "src/context/Localization"
+<<<<<<< HEAD
+=======
+import { CustomTooltip } from "src/components/styled_components/Tooltip"
+import useToast from "src/hooks/useToast"
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
 function SupplyTokens({
     currencyA,
@@ -41,6 +50,10 @@ function SupplyTokens({
     const currencyABalance = useCurrencyBalance(account ?? undefined, currencyA ?? undefined)
     const currencyBBalance = useCurrencyBalance(account ?? undefined, currencyB ?? undefined)
     const { t } = useTranslation()
+<<<<<<< HEAD
+=======
+    const { toastError } = useToast()
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
     const addPair = usePairAdder()
     const allTransactions = useAllTransactions()
@@ -196,6 +209,10 @@ function SupplyTokens({
                 }),
             )
             .catch((err) => {
+<<<<<<< HEAD
+=======
+                toastError(t('User rejected transaction'))
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                 if (err && err.code !== 4001) {
                     console.error(`Add Liquidity failed`, err, args, value)
                 }
@@ -212,9 +229,17 @@ function SupplyTokens({
 
     useEffect(() => {
         if (txHash) {
+<<<<<<< HEAD
             const swapTx = allTransactions[chainId][txHash]
             if (swapTx.confirmedTime)
                 setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
+=======
+            const supplyTx = allTransactions[chainId][txHash]
+            if (supplyTx.confirmedTime) {
+                setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
+                onFieldAInput('0')
+            }
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
         }
     }, [txHash, allTransactions])
 
@@ -248,18 +273,31 @@ function SupplyTokens({
                         }}>
                             {t('Add Liquidity')}
                         </Typography>
+<<<<<<< HEAD
                         <Tooltip
                             title='By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. 
                         Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.'
+=======
+                        <CustomTooltip
+                            arrow
+                            title={t('By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.')}
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                             disableInteractive
                         >
                             <Button sx={{ display: 'flex', ml: -1.5, mt: -1 }}>
                                 <IconInfoCircle color='#666' />
                             </Button>
+<<<<<<< HEAD
                         </Tooltip>
                     </Box>
                     <Typography mt={1}>
                         {t(' Receive LP tokens and earn 0.17% trading fees')}
+=======
+                        </CustomTooltip>
+                    </Box>
+                    <Typography mt={1}>
+                        {t('Receive LP tokens and earn 0.17% trading fees')}
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                     </Typography>
                 </Box>
             </Box>
@@ -302,7 +340,12 @@ function SupplyTokens({
                             variant="standard"
                             autoComplete='off'
                             onChange={(e) => {
+<<<<<<< HEAD
                                 onFieldAInput(e.target.value)
+=======
+                                if (Number(e.target.value) < 100000000)
+                                    onFieldAInput(e.target.value)
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                             }}
                             value={formattedAmounts[Field.CURRENCY_A]}
                             InputProps={{
@@ -345,7 +388,12 @@ function SupplyTokens({
                             variant="standard"
                             autoComplete='off'
                             onChange={(e) => {
+<<<<<<< HEAD
                                 onFieldBInput(e.target.value)
+=======
+                                if (Number(e.target.value) < 100000000)
+                                    onFieldBInput(e.target.value)
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                             }}
                             value={formattedAmounts[Field.CURRENCY_B]}
                             InputProps={{
@@ -427,9 +475,13 @@ function SupplyTokens({
                                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                                             {t('Approving %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
                                         </Box>
+<<<<<<< HEAD
                                     ) : (
                                         `Approve  ${currencies[Field.CURRENCY_A]?.symbol}`
                                     )}
+=======
+                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                                 </StyledButton>
                             )}
                             {showFieldBApproval && (
@@ -441,9 +493,13 @@ function SupplyTokens({
                                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                                             {t('Approving %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
                                         </Box>
+<<<<<<< HEAD
                                     ) : (
                                         `Approve  ${currencies[Field.CURRENCY_B]?.symbol}`
                                     )}
+=======
+                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })}
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                                 </StyledButton>
                             )}
                         </Box> :

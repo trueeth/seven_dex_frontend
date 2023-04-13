@@ -26,7 +26,11 @@ export default function TradePrice({ price, showInverted, setShowInverted, slipp
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+<<<<<<< HEAD
                 <Typography>Price:</Typography>
+=======
+                <Typography>{t('Price')}</Typography>
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     {show ? (
                         <>

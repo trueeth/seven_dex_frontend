@@ -41,7 +41,14 @@ function CurrencyOutputPanel({ currency, value, onCurrencySelect, onUserInput })
                         variant="standard"
                         autoComplete='off'
                         value={value}
+<<<<<<< HEAD
                         onChange={(e) => onUserInput(e.target.value)}
+=======
+                        onChange={(e) => {
+                            if (Number(e.target.value) < 100000000)
+                                onUserInput(e.target.value)
+                        }}
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                         InputProps={{
                             disableUnderline: true,
                             placeholder: '0.0',

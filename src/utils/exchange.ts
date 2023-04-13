@@ -11,13 +11,21 @@ import {
   ALLOWED_PRICE_IMPACT_LOW,
   ALLOWED_PRICE_IMPACT_MEDIUM,
   BIPS_BASE,
+<<<<<<< HEAD
+=======
+  BLOCKED_PRICE_IMPACT,
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
   BLOCKED_PRICE_IMPACT_NON_EXPERT,
   INPUT_FRACTION_AFTER_FEE,
   ONE_HUNDRED_PERCENT,
   ROUTER_ADDRESS,
 } from 'src/config/constants/exchange'
 
+<<<<<<< HEAD
 import { useActiveChainId } from 'src/hooks/useActiveChainId' 
+=======
+import { useActiveChainId } from 'src/hooks/useActiveChainId'
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 import { useContract } from 'src/hooks/useContract'
 
 import { Field } from '../state/swap/actions'
@@ -52,11 +60,19 @@ export function computeTradePriceBreakdown(trade: Trade<Currency, Currency, Trad
   const realizedLPFee = !trade
     ? undefined
     : ONE_HUNDRED_PERCENT.subtract(
+<<<<<<< HEAD
         trade.route.pairs.reduce<Fraction>(
           (currentFee: Fraction): Fraction => currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
           ONE_HUNDRED_PERCENT,
         ),
       )
+=======
+      trade.route.pairs.reduce<Fraction>(
+        (currentFee: Fraction): Fraction => currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
+        ONE_HUNDRED_PERCENT,
+      ),
+    )
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
   // remove lp fees from price impact
   const priceImpactWithoutFeeFraction = trade && realizedLPFee ? trade?.priceImpact.subtract(realizedLPFee) : undefined
@@ -91,7 +107,12 @@ export function computeSlippageAdjustedAmounts(
   }
 }
 
+<<<<<<< HEAD
 export function warningSeverity(priceImpact: Percent | undefined): 0 | 1 | 2 | 3 | 4 {
+=======
+export function warningSeverity(priceImpact: Percent | undefined): 0 | 1 | 2 | 3 | 4 | 5 {
+  if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT)) return 5
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
   if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT_NON_EXPERT)) return 4
   if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) return 3
   if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_MEDIUM)) return 2
@@ -100,17 +121,28 @@ export function warningSeverity(priceImpact: Percent | undefined): 0 | 1 | 2 | 3
 }
 
 export function formatExecutionPrice(
+<<<<<<< HEAD
   trade?: Trade<Currency, Currency, TradeType> ,
+=======
+  trade?: Trade<Currency, Currency, TradeType>,
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
   inverted?: boolean,
 ): string {
   if (!trade) {
     return ''
   }
   return inverted
+<<<<<<< HEAD
     ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.symbol} / ${
         trade.outputAmount.currency.symbol
       }`
     : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.symbol} / ${
         trade.inputAmount.currency.symbol
       }`
+=======
+    ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.symbol} / ${trade.outputAmount.currency.symbol
+    }`
+    : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.symbol} / ${trade.inputAmount.currency.symbol
+    }`
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 }

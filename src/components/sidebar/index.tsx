@@ -48,13 +48,13 @@ const Sidebar = ({ drawerOpen, drawerToggle }: IProps) => {
             <BrowserView>
                 <PerfectScrollbar component="div" className={classes.scrollHeight}>
                     <Box sx={{ mt: '20px', ml: '10px' }}>
-                        <MenuList />
+                        <MenuList toggle={drawerToggle} />
                     </Box>
                 </PerfectScrollbar>
             </BrowserView>
             <MobileView>
-                <Box sx={{ mt: '40px', ml: '10px' }}>
-                    <MenuList />
+                <Box sx={{ mt: '100px', ml: '10px' }}>
+                    <MenuList toggle={drawerToggle} />
                 </Box>
             </MobileView>
         </React.Fragment>
@@ -76,7 +76,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }: IProps) => {
                 ModalProps={{ keepMounted: true }}
                 PaperProps={{
                     sx: {
-                        backgroundColor: '#0e1f2f'
+                        backgroundColor: '#fff'
                     }
                 }}
             >

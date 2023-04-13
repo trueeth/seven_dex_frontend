@@ -17,6 +17,11 @@ import useTransactionDeadline from './useTransactionDeadline'
 import { Currency } from 'src/utils/token'
 import { useRouterContract } from 'src/utils/exchange'
 import { useWeb3LibraryContext } from 'src/utils/wagmi'
+<<<<<<< HEAD
+=======
+import useToast from './useToast'
+import { useTranslation } from 'src/context/Localization'
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
 
 export enum SwapCallbackState {
@@ -108,6 +113,11 @@ export function useSwapCallback(
     const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddress)
 
     const addTransaction = useTransactionAdder()
+<<<<<<< HEAD
+=======
+    const { toastError } = useToast()
+    const { t } = useTranslation()
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
     const recipient = recipientAddress === null ? account : recipientAddress
 
@@ -207,6 +217,10 @@ export function useSwapCallback(
                     })
                     .catch((error: any) => {
                         // if the user rejected the tx, pass this along
+<<<<<<< HEAD
+=======
+                        toastError(t('User rejected transaction.'))
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                         if (error?.code === 4001) {
                             throw new Error('Transaction rejected.')
                         } else {

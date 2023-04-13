@@ -13,6 +13,8 @@
     "APY": "年利",
     "Total Liquidity": "総流動性",
     "View on BscScan": "BscScanで表示",
+    "View on PolygonScan": "PolygonScanで表示",
+    "View on %site%": "%site%で表示",
     "Finished": "終了",
     "Project Site": "プロジェクトサイト",
     "See Token Info": "トークン情報を表示",
@@ -64,7 +66,10 @@
     "Burned": "バーン",
     "Prize Pot": "賞金総額",
     "Winning Tickets": "Winning Tickets",
+<<<<<<< HEAD
     "Token Prices": "Token Prices",
+=======
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     "Enable Contract": "スマートコントラクトを有効にする",
     "Disclaimer": "免責事項",
     "Disclaimer Content": "本ウェブサイトまたはその他の公式チャネルに掲載されているすべての情報は、情報提供のみを目的としており、機関投資家および洗練された個人投資家のみを対象としています。今後提供されるサービスは、それに関する法的契約の条件に従うものとします。本サイトのいかなる情報も、セブン・チェーン・ネットワークまたはその他の者による投資の推奨を意味するものではありません。セブン・チェーン・ネットワークおよびその関連サービスは、米国からの個人に対して提供されるものではありません。",
@@ -1112,6 +1117,10 @@
     "Price Updated": "価格を更新しました",
     "Accept": "承諾",
     "For each trade a %amount% fee is paid": "各取引に対して%amount%の手数料が支払われます",
+<<<<<<< HEAD
+=======
+    "For each trade a 0.25% fee is paid": "各取引に対して0.25%の手数料が支払われます",
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     "%amount% to LP token holders": "LPトークン保有者へ%amount%",
     "%amount% to the Treasury": "Treasuryへ%amount%",
     "%amount% towards CAKE buyback and burn": "CAKEの買い戻しとバーンへ%amount%",
@@ -1448,7 +1457,11 @@
     "Turn on NFT market subgraph health indicator all the time. Default is to show the indicator only when the network is delayed": "NFTマーケットサブグラフの状態インジケーターを常にオンにします。デフォルトでは、ネットワークに遅延が発生している場合にのみ表示されます",
     "Subgraph Health Indicator": "サブグラフ状態インジケーター",
     "Delay": "遅延",
+<<<<<<< HEAD
     "Add liquidity instead": "Add liquidity instead",
+=======
+    "Add liquidity instead": "流動性の追加",
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     "The latest credit calculation period has ended. Calculation will resume upon the next period starts.": "The latest credit calculation period has ended. Calculation will resume upon the next period starts.",
     "If the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.": "If the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.",
     "SAFEMOON has been migrated to": "SAFEMOON has been migrated to",
@@ -1553,5 +1566,53 @@
     "Learn More about IFO 3.1": "Learn More about IFO 3.1",
     "Lowest Price": "Lowest Price",
     "Highest Price": "Highest Price",
+<<<<<<< HEAD
     "Highest": "Highest"
+=======
+    "Highest": "Highest",
+    "Bridge": "ブリッヂ",
+    "Token Prices": "トークン価格",
+    "Top Traded": "トップ取引",
+    "Features": "機能",
+    "Swap Tokens": "トークンスワップ",
+    "Supply Liquidity": "供給流動性",
+    "Analytics": "分析",
+    "Trade any combination of ERC-20 tokens permissionless, with ease.": "ERC-20トークンの任意の組み合わせをパーミッションレスで、簡単に取引できます。",
+    "Earn 0.25% fee on trades proportional to your share of the pool.": "プールのシェアに比例した取引で0.25%の手数料を得ることができます。",
+    "Deposit your LP tokens to earn additional rewards in SVC": "LPトークンを入金してSVCで追加報酬を獲得する",
+    "Scan through SevenSwap analytics & Historical Data": "SevenSwapのアナリティクスとヒストリカルデータをスキャンする",
+    "Wallet Balance": "ウォレット残高",
+    "LP rewards APR": "LP特典APR",
+    "Approve %asset%": "%asset%を有効にする",
+    "Approving %asset%": "%asset%を有効にしています",
+    "Do not see a pair you joined": "参加したペアが見当たらない",
+    "Safe Mode": "セーフモード",
+    "Transaction Deadline": "取引締切日",
+    "Prevent high price impact trades. Disable at your own risk.": "高値のインパクトトレードを防止します。自己責任で無効にしてください。",
+    "Connect": "接続",
+    "Connect to a wallet": "ウォレットに接続する",
+    "Receive LP tokens and earn 0.17% trading fees": "LPトークンを受け取り、0.17%の取引手数料を得ることができます。",
+    "Prices and Shares": "価格とシェア",
+    "Input Amounts": "入力金額",
+    "Choose a valid pair": "有効なペアを選択してください",
+    "Approve": "有効にする",
+    "Approving": "有効化中",
+    "Receive": "を受け取る",
+    "Assets Exchange on Polygon": "Polygon ンでの資産交換",
+    "TOKEN": "トークン",
+    "VOLUME (24H)": "ボリューム(24H)",
+    "PRICE": "価格",
+    "CHANGE (24H)": "チェンジ(24H)",
+    "CHANGE (7D)": "チェンジ(7D)",
+    "Add SVC to wallet": "ウォレットにSVCを追加する",
+    "Share in Trading Pair": "トレーディングペアでのシェア",
+    "We are Coming Soon!": "近日公開予定です！",
+    "Your positions(assets) which was depostied in the seven dex trading pairs.": "セブンデックスの取引ペアに預けているお客様のポジション（資産）です。",
+    "By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.": "流動性を追加することで、このペアの全取引の0.17%を取引ペアのシェアに比例して獲得することができます。手数料はペアに追加され、リアルタイムで発生し、あなたの流動性を撤回することによって請求することができます。",
+    "Remove SVC-MATIC liquidity To receive SVC and MATIC": "SVC-MATICの流動性を除去する SVCとMATICを受信するには",
+    "minutes": "分",
+    "Suppling Assets": "供給中",
+    "The ratio of tokens you add will set the price of this pair.": "追加するトークンの比率によって、このペアの価格が設定されます。",
+    "SVC Token added successfully": "SVC トークンが正常に追加されました。"
+>>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 }

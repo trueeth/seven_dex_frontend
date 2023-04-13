@@ -1,15 +1,18 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 // import { makeStyles } from '@mui/styles';
-import { Button, Box, Typography, Modal, useMediaQuery } from '@mui/material'
+import { Button, Box, Typography, Modal, useMediaQuery, MenuList, MenuItem } from '@mui/material'
 import { IconX } from '@tabler/icons'
-import { formart } from '../../helper/formatAddress';
+import { formart } from '../../utils/formatAddress';
 import MetamaskIcon from '../../asset/images/metamask.svg'
 import WalletConnectIcon from '../../asset/images/walletconnect.svg'
 import CoinbaseWalletIcon from '../../asset/images/coinbasewallet.svg'
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import useAuth from 'src/hooks/useAuth';
 import { ConnectorNames } from 'src/config';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { useTranslation } from 'src/context/Localization';
+import { StyledMenu } from './Styled';
+import { Link } from 'react-router-dom';
 
 const modalStyle = {
     position: 'absolute',
@@ -49,14 +52,27 @@ function ConnectButton() {
     }
 
     const [connecting, setConnect] = useState('Metamask')
-    const { isConnected, address } = useAccount();
-    const { login, loading } = useAuth();
+    const { isConnected: connected, address } = useAccount()
+    const { login, loading, logout } = useAuth()
+
+    const isConnected = useMemo(() => (connected), [connected])
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (isConnected) {
             setOpen(false);
         }
     }, [isConnected])
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const isDrop = Boolean(anchorEl)
+
+    const openDrop = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const closeDrop = () => {
+        setAnchorEl(null)
+    }
 
     return (
         <div>
@@ -80,16 +96,19 @@ function ConnectButton() {
                             bgcolor: '#e57a3b'
                         }
                     }}
-                    onClick={() => {
+                    onClick={(evt) => {
                         if (!isConnected)
-                            setOpen(!open)
+                            setOpen(true)
+                        else
+                            openDrop(evt)
                     }}
+                    aria-controls={isDrop ? 'customized-menu' : undefined}
                 >
                     {(() => {
                         if (isConnected)
                             return formart(address as string)
                         else
-                            return isXs ? 'Connect' : ' Connect Wallet'
+                            return isXs ? t('Connect') : t('Connect Wallet')
                     })()}
                 </Button>
             </Box>
@@ -107,7 +126,7 @@ function ConnectButton() {
                         sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
                         onClick={() => setOpen(false)}
                     >
-                        <Typography>Connect to a wallet</Typography>
+                        <Typography>{t('Connect to a wallet')}</Typography>
                         <IconX />
                     </Box >
                     {
@@ -137,7 +156,7 @@ function ConnectButton() {
                                         loading && (connecting === wallet.name) &&
                                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                             <FiberManualRecordIcon color='info' sx={{ mr: 1 }} />
-                                            {isXs ? '' : 'connecting'}
+                                            {isXs ? '' : t('connecting')}
                                         </Typography>
                                     }
                                 </Box>
@@ -146,6 +165,27 @@ function ConnectButton() {
                     }
                 </Box>
             </Modal>
+            <StyledMenu
+                id="customized-menu"
+                anchorEl={anchorEl}
+                open={isDrop}
+                onClick={closeDrop}
+                sx={{
+                    '& img': {
+                        pr: 1,
+                        width: '24px',
+                        height: '20px'
+                    }
+                }}
+            >
+                <Link
+                    to={{ pathname: `//mumbai.polygonscan.com/address/${address}` }}
+                    target="_blank"
+                >
+                    <MenuItem ><Typography color='#333'>{t('View on Scan')}</Typography></MenuItem>
+                </Link>
+                <MenuItem onClick={logout}>{t('Disconnect Wallet')}</MenuItem>
+            </StyledMenu>
         </div>
     )
 }
