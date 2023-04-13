@@ -11,13 +11,14 @@ import {
   ALLOWED_PRICE_IMPACT_LOW,
   ALLOWED_PRICE_IMPACT_MEDIUM,
   BIPS_BASE,
+  BLOCKED_PRICE_IMPACT,
   BLOCKED_PRICE_IMPACT_NON_EXPERT,
   INPUT_FRACTION_AFTER_FEE,
   ONE_HUNDRED_PERCENT,
   ROUTER_ADDRESS,
 } from 'src/config/constants/exchange'
 
-import { useActiveChainId } from 'src/hooks/useActiveChainId' 
+import { useActiveChainId } from 'src/hooks/useActiveChainId'
 import { useContract } from 'src/hooks/useContract'
 
 import { Field } from '../state/swap/actions'
@@ -52,11 +53,11 @@ export function computeTradePriceBreakdown(trade: Trade<Currency, Currency, Trad
   const realizedLPFee = !trade
     ? undefined
     : ONE_HUNDRED_PERCENT.subtract(
-        trade.route.pairs.reduce<Fraction>(
-          (currentFee: Fraction): Fraction => currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
-          ONE_HUNDRED_PERCENT,
-        ),
-      )
+      trade.route.pairs.reduce<Fraction>(
+        (currentFee: Fraction): Fraction => currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
+        ONE_HUNDRED_PERCENT,
+      ),
+    )
 
   // remove lp fees from price impact
   const priceImpactWithoutFeeFraction = trade && realizedLPFee ? trade?.priceImpact.subtract(realizedLPFee) : undefined
@@ -91,7 +92,8 @@ export function computeSlippageAdjustedAmounts(
   }
 }
 
-export function warningSeverity(priceImpact: Percent | undefined): 0 | 1 | 2 | 3 | 4 {
+export function warningSeverity(priceImpact: Percent | undefined): 0 | 1 | 2 | 3 | 4 | 5 {
+  if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT)) return 5
   if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT_NON_EXPERT)) return 4
   if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) return 3
   if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_MEDIUM)) return 2
@@ -100,17 +102,15 @@ export function warningSeverity(priceImpact: Percent | undefined): 0 | 1 | 2 | 3
 }
 
 export function formatExecutionPrice(
-  trade?: Trade<Currency, Currency, TradeType> ,
+  trade?: Trade<Currency, Currency, TradeType>,
   inverted?: boolean,
 ): string {
   if (!trade) {
     return ''
   }
   return inverted
-    ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.symbol} / ${
-        trade.outputAmount.currency.symbol
-      }`
-    : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.symbol} / ${
-        trade.inputAmount.currency.symbol
-      }`
+    ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.symbol} / ${trade.outputAmount.currency.symbol
+    }`
+    : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.symbol} / ${trade.inputAmount.currency.symbol
+    }`
 }

@@ -28,6 +28,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { CurrencyLogo } from "src/components/styled_components/CurrencyLogo"
 import { StyledButton } from "./Styled"
 import { useTokenBalance } from "src/state/wallet/hooks"
+import useToast from "src/hooks/useToast"
 
 const marks: Array<{ value: number, label: string }> = [
     {
@@ -48,6 +49,7 @@ export default function RemoveLiquity() {
 
 
     const { t } = useTranslation()
+    const { toastError } = useToast()
     const navigate = useNavigate()
     const native = useNativeCurrency()
     const { address: account } = useAccount()
@@ -330,6 +332,7 @@ export default function RemoveLiquity() {
                     })
                 })
                 .catch((err) => {
+                    toastError(t('User rejected transaction'))
                     if (err && err.code !== 4001) {
                         console.error(`Remove Liquidity failed`, err, args)
                     }

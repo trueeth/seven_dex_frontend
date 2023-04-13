@@ -6,7 +6,6 @@ import TokenSelectModal from 'src/components/TokenSelectModal'
 
 function CurrencyInputPanel({ currency, onCurrencySelect }) {
 
-
     const [open, setOpen] = useState(false)
 
     return (

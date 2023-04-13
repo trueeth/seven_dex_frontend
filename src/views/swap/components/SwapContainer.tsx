@@ -29,6 +29,7 @@ import { useSwapCallback } from 'src/hooks/useSwapCallback'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useAllTransactions } from 'src/state/transactions/hooks'
 import { useActiveChainId } from 'src/hooks/useActiveChainId'
+import { Percent } from 'src/utils/percent'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -262,7 +263,7 @@ function SwapContainer() {
         !swapInputError &&
         (approval === ApprovalState.NOT_APPROVED ||
             approval === ApprovalState.PENDING) &&
-        !(priceImpactSeverity > 3)
+        !(priceImpactSeverity > 3 && !priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000))))
 
     // errors
     const [showInverted, setShowInverted] = useState<boolean>(false)
@@ -357,14 +358,15 @@ function SwapContainer() {
                             }}
                             id="swap-button"
                             disabled={
-                                !isValid || (priceImpactSeverity > 3) || !!swapCallbackError || attemptingTxn
+                                !isValid || (priceImpactSeverity > 3 && !priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) || !!swapCallbackError || attemptingTxn
                             }
                         >
-                            {priceImpactSeverity > 3
-                                ? t('Price Impact High')
-                                : priceImpactSeverity > 2
-                                    ? t('Swap Anyway')
-                                    : t('Swap')}
+                            {priceImpactSeverity > 3 && (priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) ? t('Swap Anyway') :
+                                priceImpactSeverity > 3
+                                    ? t('Price Impact Too High')
+                                    : priceImpactSeverity > 2
+                                        ? t('Swap Anyway')
+                                        : t('Swap')}
                             {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
                         </Button>
                     </Box>
@@ -381,15 +383,17 @@ function SwapContainer() {
                             handleSwap()
                         }}
                         id="swap-button"
-                        disabled={!isValid || (priceImpactSeverity > 3) || !!swapCallbackError || attemptingTxn}
+                        disabled={!isValid || (priceImpactSeverity > 3 && !priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) || !!swapCallbackError || attemptingTxn}
                     >
                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                             {swapInputError ||
-                                (priceImpactSeverity > 3
-                                    ? t('Price Impact Too High')
-                                    : priceImpactSeverity > 2
-                                        ? t('Swap Anyway')
-                                        : t('Swap'))}
+                                (
+                                    priceImpactSeverity > 3 && (priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) ? t('Swap Anyway') :
+                                        priceImpactSeverity > 3
+                                            ? t('Price Impact Too High')
+                                            : priceImpactSeverity > 2
+                                                ? t('Swap Anyway')
+                                                : t('Swap'))}
                             {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
                         </Box>
                     </Button>

@@ -1598,5 +1598,6 @@
     "Remove SVC-MATIC liquidity To receive SVC and MATIC": "SVC-MATICの流動性を除去する SVCとMATICを受信するには",
     "minutes": "分",
     "Suppling Assets": "供給中",
-    "The ratio of tokens you add will set the price of this pair.": "追加するトークンの比率によって、このペアの価格が設定されます。"
+    "The ratio of tokens you add will set the price of this pair.": "追加するトークンの比率によって、このペアの価格が設定されます。",
+    "SVC Token added successfully": "SVC トークンが正常に追加されました。"
 }

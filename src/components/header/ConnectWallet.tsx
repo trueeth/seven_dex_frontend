@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 // import { makeStyles } from '@mui/styles';
 import { Button, Box, Typography, Modal, useMediaQuery, MenuList, MenuItem } from '@mui/material'
 import { IconX } from '@tabler/icons'
@@ -6,7 +6,7 @@ import { formart } from '../../utils/formatAddress';
 import MetamaskIcon from '../../asset/images/metamask.svg'
 import WalletConnectIcon from '../../asset/images/walletconnect.svg'
 import CoinbaseWalletIcon from '../../asset/images/coinbasewallet.svg'
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import useAuth from 'src/hooks/useAuth';
 import { ConnectorNames } from 'src/config';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -52,9 +52,10 @@ function ConnectButton() {
     }
 
     const [connecting, setConnect] = useState('Metamask')
-    const { isConnected, address } = useAccount()
+    const { isConnected: connected, address } = useAccount()
     const { login, loading, logout } = useAuth()
 
+    const isConnected = useMemo(() => (connected), [connected])
     const { t } = useTranslation()
 
     useEffect(() => {
@@ -125,7 +126,7 @@ function ConnectButton() {
                         sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
                         onClick={() => setOpen(false)}
                     >
-                        <Typography>Connect to a wallet</Typography>
+                        <Typography>{t('Connect to a wallet')}</Typography>
                         <IconX />
                     </Box >
                     {
@@ -155,7 +156,7 @@ function ConnectButton() {
                                         loading && (connecting === wallet.name) &&
                                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                             <FiberManualRecordIcon color='info' sx={{ mr: 1 }} />
-                                            {isXs ? '' : 'connecting'}
+                                            {isXs ? '' : t('connecting')}
                                         </Typography>
                                     }
                                 </Box>
@@ -181,9 +182,9 @@ function ConnectButton() {
                     to={{ pathname: `//mumbai.polygonscan.com/address/${address}` }}
                     target="_blank"
                 >
-                    <MenuItem ><Typography color='#333'>View on Scan</Typography></MenuItem>
+                    <MenuItem ><Typography color='#333'>{t('View on Scan')}</Typography></MenuItem>
                 </Link>
-                <MenuItem onClick={logout}>Disconnect Wallet</MenuItem>
+                <MenuItem onClick={logout}>{t('Disconnect Wallet')}</MenuItem>
             </StyledMenu>
         </div>
     )

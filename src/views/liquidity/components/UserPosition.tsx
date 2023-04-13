@@ -1,4 +1,4 @@
-import { Box, Button, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import { StyledButton } from "./Styled"
 import { Link } from "react-router-dom"
 import { useAccount } from "wagmi"
@@ -9,6 +9,7 @@ import { PairState, usePairs } from "src/hooks/usePairs"
 import FullPositionCard from './PositionCard'
 import { IconInfoCircle } from "@tabler/icons"
 import { useTranslation } from "src/context/Localization"
+import { CustomTooltip } from "src/components/styled_components/Tooltip"
 
 
 export function UserPosition({ setStep }) {
@@ -109,14 +110,15 @@ export function UserPosition({ setStep }) {
                     }}>
                         {t('Your Liquidity')}
                     </Typography>
-                    <Tooltip
+                    <CustomTooltip
+                        arrow
                         title={t('Your positions(assets) which was depostied in the seven dex trading pairs.')}
                         disableInteractive
                     >
                         <Button sx={{ display: 'flex', ml: -1.5, mt: -1 }}>
                             <IconInfoCircle color='#666' />
                         </Button>
-                    </Tooltip>
+                    </CustomTooltip>
                 </Box>
                 <Typography mt={1}>{t('Remove liquidity to receive tokens back')}</Typography>
             </Box>

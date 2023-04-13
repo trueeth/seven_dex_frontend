@@ -1,14 +1,13 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import Menu from '@mui/material/Menu'
 import Box from '@mui/material/Box'
-import Tooltip from '@mui/material/Tooltip'
 import { Button, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { IconAdjustmentsHorizontal, IconX, IconInfoCircle } from '@tabler/icons'
 import SwitchLarge from './styled_components/SwitchLarge'
 import { useTranslation } from 'src/context/Localization'
-import { useDispatch } from 'react-redux'
 import { useUserSlippageTolerance, useUserTransactionTTL } from 'src/state/user/hooks'
 import { escapeRegExp } from 'src/utils'
+import { CustomTooltip } from './styled_components/Tooltip'
 
 enum SlippageError {
     InvalidInput = 'InvalidInput',
@@ -31,12 +30,11 @@ function Settings() {
     const open = Boolean(anchorEl);
     const openModal = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-    };
+    }
     const closeModal = () => {
         setAnchorEl(null);
-    };
+    }
 
-    const dispatch = useDispatch()
     const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippageTolerance()
     const [ttl, setTtl] = useUserTransactionTTL()
 
@@ -69,7 +67,11 @@ function Settings() {
         if (value === '' || inputRegex.test(escapeRegExp(value))) {
             try {
                 const valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(value) * 100).toString())
-                if (!Number.isNaN(valueAsIntFromRoundedFloat) && valueAsIntFromRoundedFloat < 5000) {
+                if (Number.isNaN(valueAsIntFromRoundedFloat)) {
+                    setSlippageInput('')
+                    setUserSlippageTolerance(50)
+                }
+                if (valueAsIntFromRoundedFloat < 5000) {
                     setSlippageInput(value)
                     setUserSlippageTolerance(valueAsIntFromRoundedFloat)
                 }
@@ -83,7 +85,11 @@ function Settings() {
 
         try {
             const valueAsInt: number = Number.parseInt(value) * 60
-            if (!Number.isNaN(valueAsInt) && valueAsInt > 60 && valueAsInt < THREE_DAYS_IN_SECONDS) {
+            if (Number.isNaN(valueAsInt)) {
+                setDeadlineInput('')
+                setTtl(1200)
+            }
+            if (valueAsInt > 60 && valueAsInt < THREE_DAYS_IN_SECONDS) {
                 setDeadlineInput(value)
                 setTtl(valueAsInt)
             } else {
@@ -104,8 +110,6 @@ function Settings() {
             setUserSlippageTolerance(newSlip)
         }
     }
-
-
 
     const { t } = useTranslation()
 
@@ -182,11 +186,11 @@ function Settings() {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography color='#666' fontSize={14}>{t('Slippage Tolerance')}</Typography>
-                        <Tooltip title={t('Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%')} disableInteractive>
+                        <CustomTooltip arrow title={t('Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%')} disableInteractive>
                             <Button sx={{ display: 'flex' }}>
                                 <IconInfoCircle color='#666' />
                             </Button>
-                        </Tooltip>
+                        </CustomTooltip>
                     </Box>
                     <Box sx={{ display: 'flex' }}>
                         <ToggleButtonGroup
@@ -232,11 +236,11 @@ function Settings() {
                     <Box mt={1}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Typography color='#666' fontSize={14}>{t('Transaction Deadline')}</Typography>
-                            <Tooltip title={t('Your transaction will be revert if it is pending for more than this long')} disableInteractive>
+                            <CustomTooltip arrow title={t('Your transaction will revert if it is left confirming for longer than this time.')} disableInteractive>
                                 <Button sx={{ display: 'flex', ml: -1.5 }}>
                                     <IconInfoCircle color='#666' />
                                 </Button>
-                            </Tooltip>
+                            </CustomTooltip>
                         </Box>
                         <OutlinedInput
                             sx={{
@@ -287,3 +291,5 @@ function Settings() {
 }
 
 export default Settings
+
+

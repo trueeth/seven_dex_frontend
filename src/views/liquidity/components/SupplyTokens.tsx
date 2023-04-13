@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Divider, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Divider, TextField, Typography } from "@mui/material"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { Currency } from "src/utils/token"
 import { StyledButton } from "./Styled"
@@ -24,6 +24,8 @@ import { TransactionResponse } from "@ethersproject/providers"
 import { GAS_PRICE_GWEI } from "src/state/types"
 import { DEFAULT_TRANSACTION_DEADLINE } from "src/config/constants"
 import { useTranslation } from "src/context/Localization"
+import { CustomTooltip } from "src/components/styled_components/Tooltip"
+import useToast from "src/hooks/useToast"
 
 function SupplyTokens({
     currencyA,
@@ -41,6 +43,7 @@ function SupplyTokens({
     const currencyABalance = useCurrencyBalance(account ?? undefined, currencyA ?? undefined)
     const currencyBBalance = useCurrencyBalance(account ?? undefined, currencyB ?? undefined)
     const { t } = useTranslation()
+    const { toastError } = useToast()
 
     const addPair = usePairAdder()
     const allTransactions = useAllTransactions()
@@ -196,6 +199,7 @@ function SupplyTokens({
                 }),
             )
             .catch((err) => {
+                toastError(t('User rejected transaction'))
                 if (err && err.code !== 4001) {
                     console.error(`Add Liquidity failed`, err, args, value)
                 }
@@ -250,14 +254,15 @@ function SupplyTokens({
                         }}>
                             {t('Add Liquidity')}
                         </Typography>
-                        <Tooltip
+                        <CustomTooltip
+                            arrow
                             title={t('By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.')}
                             disableInteractive
                         >
                             <Button sx={{ display: 'flex', ml: -1.5, mt: -1 }}>
                                 <IconInfoCircle color='#666' />
                             </Button>
-                        </Tooltip>
+                        </CustomTooltip>
                     </Box>
                     <Typography mt={1}>
                         {t('Receive LP tokens and earn 0.17% trading fees')}
@@ -303,7 +308,8 @@ function SupplyTokens({
                             variant="standard"
                             autoComplete='off'
                             onChange={(e) => {
-                                onFieldAInput(e.target.value)
+                                if (Number(e.target.value) < 100000000)
+                                    onFieldAInput(e.target.value)
                             }}
                             value={formattedAmounts[Field.CURRENCY_A]}
                             InputProps={{
@@ -346,7 +352,8 @@ function SupplyTokens({
                             variant="standard"
                             autoComplete='off'
                             onChange={(e) => {
-                                onFieldBInput(e.target.value)
+                                if (Number(e.target.value) < 100000000)
+                                    onFieldBInput(e.target.value)
                             }}
                             value={formattedAmounts[Field.CURRENCY_B]}
                             InputProps={{

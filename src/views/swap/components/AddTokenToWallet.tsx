@@ -1,21 +1,24 @@
 import { Box, Button, Typography } from "@mui/material"
 import { useTranslation } from "src/context/Localization"
 import { useAllTokens } from "src/hooks/Tokens"
+import useToast from "src/hooks/useToast"
 import { registerToken } from "src/utils/registerToken"
 import { Token } from "src/utils/token"
 
 
 function AddTokenToWallet() {
 
-    const onRegisterToken = (token: Token) => {
-        registerToken(
+    const tokens = useAllTokens()
+    const { t } = useTranslation()
+    const { toastSuccess } = useToast()
+    const onRegisterToken = async (token: Token) => {
+        await registerToken(
             token.address,
             token.symbol,
             token.decimals,
             token.logoURI)
+        toastSuccess(t('SVC Token added successfully'))
     }
-    const tokens = useAllTokens()
-    const { t } = useTranslation()
 
     return (
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
