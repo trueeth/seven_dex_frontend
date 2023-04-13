@@ -101,11 +101,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
                 let interpolatedText = translatedText
                 Object.keys(data).forEach((dataKey) => {
                     const templateKey = new RegExp(`%${dataKey}%`, 'g')
-<<<<<<< HEAD
-                    interpolatedText = interpolatedText.replace(templateKey, data[dataKey].toString())
-=======
                     interpolatedText = interpolatedText.replace(templateKey, data[dataKey]?.toString())
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                 })
 
                 return interpolatedText

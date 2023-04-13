@@ -13,11 +13,8 @@
     "APY": "年利",
     "Total Liquidity": "総流動性",
     "View on BscScan": "BscScanで表示",
-<<<<<<< HEAD
-=======
     "View on PolygonScan": "PolygonScanで表示",
     "View on %site%": "%site%で表示",
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     "Finished": "終了",
     "Project Site": "プロジェクトサイト",
     "See Token Info": "トークン情報を表示",
@@ -69,10 +66,6 @@
     "Burned": "バーン",
     "Prize Pot": "賞金総額",
     "Winning Tickets": "Winning Tickets",
-<<<<<<< HEAD
-    "Token Prices": "Token Prices",
-=======
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     "Enable Contract": "スマートコントラクトを有効にする",
     "Disclaimer": "免責事項",
     "Disclaimer Content": "本ウェブサイトまたはその他の公式チャネルに掲載されているすべての情報は、情報提供のみを目的としており、機関投資家および洗練された個人投資家のみを対象としています。今後提供されるサービスは、それに関する法的契約の条件に従うものとします。本サイトのいかなる情報も、セブン・チェーン・ネットワークまたはその他の者による投資の推奨を意味するものではありません。セブン・チェーン・ネットワークおよびその関連サービスは、米国からの個人に対して提供されるものではありません。",
@@ -1120,10 +1113,7 @@
     "Price Updated": "価格を更新しました",
     "Accept": "承諾",
     "For each trade a %amount% fee is paid": "各取引に対して%amount%の手数料が支払われます",
-<<<<<<< HEAD
-=======
     "For each trade a 0.25% fee is paid": "各取引に対して0.25%の手数料が支払われます",
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     "%amount% to LP token holders": "LPトークン保有者へ%amount%",
     "%amount% to the Treasury": "Treasuryへ%amount%",
     "%amount% towards CAKE buyback and burn": "CAKEの買い戻しとバーンへ%amount%",
@@ -1460,11 +1450,7 @@
     "Turn on NFT market subgraph health indicator all the time. Default is to show the indicator only when the network is delayed": "NFTマーケットサブグラフの状態インジケーターを常にオンにします。デフォルトでは、ネットワークに遅延が発生している場合にのみ表示されます",
     "Subgraph Health Indicator": "サブグラフ状態インジケーター",
     "Delay": "遅延",
-<<<<<<< HEAD
-    "Add liquidity instead": "Add liquidity instead",
-=======
     "Add liquidity instead": "流動性の追加",
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     "The latest credit calculation period has ended. Calculation will resume upon the next period starts.": "The latest credit calculation period has ended. Calculation will resume upon the next period starts.",
     "If the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.": "If the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.",
     "SAFEMOON has been migrated to": "SAFEMOON has been migrated to",
@@ -1569,9 +1555,6 @@
     "Learn More about IFO 3.1": "Learn More about IFO 3.1",
     "Lowest Price": "Lowest Price",
     "Highest Price": "Highest Price",
-<<<<<<< HEAD
-    "Highest": "Highest"
-=======
     "Highest": "Highest",
     "Bridge": "ブリッヂ",
     "Token Prices": "トークン価格",
@@ -1621,5 +1604,4 @@
     "View on Scan": "PolygonScanで表示",
     "Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%": "価格がこのパーセンテージを超えて不利に変化した場合、取引は元に戻されます。デフォルトは 0.5% です。",
     "User rejected transaction.": "ユーザーがトランザクションを拒否しました。"
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 }

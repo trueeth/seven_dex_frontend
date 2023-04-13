@@ -28,10 +28,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { CurrencyLogo } from "src/components/styled_components/CurrencyLogo"
 import { StyledButton } from "./Styled"
 import { useTokenBalance } from "src/state/wallet/hooks"
-<<<<<<< HEAD
-=======
 import useToast from "src/hooks/useToast"
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
 const marks: Array<{ value: number, label: string }> = [
     {
@@ -52,10 +49,7 @@ export default function RemoveLiquity() {
 
 
     const { t } = useTranslation()
-<<<<<<< HEAD
-=======
     const { toastError } = useToast()
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     const navigate = useNavigate()
     const native = useNativeCurrency()
     const { address: account } = useAccount()
@@ -338,10 +332,7 @@ export default function RemoveLiquity() {
                     })
                 })
                 .catch((err) => {
-<<<<<<< HEAD
-=======
                     toastError(t('User rejected transaction'))
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                     if (err && err.code !== 4001) {
                         console.error(`Remove Liquidity failed`, err, args)
                     }
@@ -359,17 +350,11 @@ export default function RemoveLiquity() {
 
     useEffect(() => {
         if (txHash) {
-<<<<<<< HEAD
-            const swapTx = allTransactions[chainId][txHash]
-            if (swapTx.confirmedTime)
-                setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
-=======
             const removeTx = allTransactions[chainId][txHash]
             if (removeTx.confirmedTime) {
                 setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: undefined })
                 onUserInput(Field.LIQUIDITY, '0')
             }
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
         }
     }, [txHash, allTransactions])
 
@@ -412,13 +397,8 @@ export default function RemoveLiquity() {
                         fontSize: '20px',
                         fontWeight: 'bold',
                         color: '#444 !important'
-<<<<<<< HEAD
-                    }}>{t(`Remove ${currencyA?.symbol}-${currencyB?.symbol} liquidity`)} 🎁</Typography>
-                    <Typography mt={1}>{t(`To receive ${currencyA?.symbol} and ${currencyB?.symbol}`)}</Typography>
-=======
                     }}>{t('Remove %assetA%-%assetB% liquidity', { assetA: currencyA?.symbol, assetB: currencyB?.symbol })} 🎁</Typography>
                     <Typography mt={1}>{t('To receive %assetA% and %assetB%', { assetA: currencyA?.symbol, assetB: currencyB?.symbol })}</Typography>
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                 </Box>
             </Box>
             <Divider />

@@ -60,8 +60,6 @@
             "chainId": 80001,
             "decimals": 18,
             "logoURI": "https://tokens.pancakeswap.finance/images/symbol/wbtc.png"
-<<<<<<< HEAD
-=======
         },
         {
             "name": "B2Z Exchange",
@@ -70,7 +68,6 @@
             "chainId": 80001,
             "decimals": 18,
             "logoURI": "./assets/images/b2z.png"
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
         }
     ]
 }

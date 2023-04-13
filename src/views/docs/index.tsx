@@ -2,10 +2,7 @@ import React from 'react'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
-<<<<<<< HEAD
-=======
 import { useTranslation } from 'src/context/Localization'
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
 const useStyles = makeStyles(() => ({
     docsView: {
@@ -20,10 +17,7 @@ const useStyles = makeStyles(() => ({
 function Docs() {
 
     const classes = useStyles()
-<<<<<<< HEAD
-=======
     const { t } = useTranslation()
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
     return (
         <div className={classes.docsView}>
@@ -33,11 +27,7 @@ function Docs() {
                     fontWeight: 'bold',
                     color: '#666'
                 }}>
-<<<<<<< HEAD
-                    We're Coming Soon!
-=======
                     {t('We are Coming Soon!')}
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                 </Typography>
             </Box>
         </div>

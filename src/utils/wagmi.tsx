@@ -12,11 +12,7 @@ import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, WagmiConfigProps, useNetwork } from 'wagmi'
 import { Provider, WebSocketProvider } from '@wagmi/core'
 
-<<<<<<< HEAD
-const CHAINS = [polygon, polygonMumbai, mainnet, goerli];
-=======
 const CHAINS = [polygonMumbai];
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
 
 export const { provider, chains } = configureChains(CHAINS, [
     jsonRpcProvider({

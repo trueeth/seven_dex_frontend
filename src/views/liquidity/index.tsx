@@ -18,13 +18,9 @@ const useStyles = makeStyles((theme) => ({
     liquidityView: {
         width: '100vw',
         display: 'flex',
-<<<<<<< HEAD
-        justifyContent: 'center'
-=======
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center'
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
     }
 }))
 
@@ -54,20 +50,10 @@ function Liquidity() {
 
     return (
         <div className={classes.liquidityView}>
-<<<<<<< HEAD
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                height: 'fit-content'
-            }}>
-                <Settings />
-=======
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: { xs: '100%', sm: 'fit-content' } }}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: { xs: '95%', sm: '500px' } }}>
                     <Settings />
                 </Box>
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                 <Container>
                     {positionView ?
                         <>
@@ -94,10 +80,6 @@ function Liquidity() {
                         </>
                     }
                 </Container>
-<<<<<<< HEAD
-=======
-
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
             </Box>
         </div>
     )

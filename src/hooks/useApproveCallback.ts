@@ -123,11 +123,7 @@ export function useApproveCallback(
                 })
             })
             .catch((error: any) => {
-<<<<<<< HEAD
-                console.error('Failed to approve token', error)
-=======
                 toastError(t('User rejected transaction.'))
->>>>>>> 0f09354e5f02d1237ada755e69a066c117b42283
                 if (error?.code !== 4001) {
                     console.log('transaction error')
                 }
