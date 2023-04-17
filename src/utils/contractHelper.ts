@@ -15,7 +15,7 @@ import type { Erc20, Multicall } from 'src/config/abi/types'
 export const getContract = ({
     abi,
     address,
-    chainId = ChainId.MUMBAI,
+    chainId = ChainId.POLYGON,
     signer,
 }: {
     abi: any

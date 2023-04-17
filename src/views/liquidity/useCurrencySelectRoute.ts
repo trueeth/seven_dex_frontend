@@ -1,4 +1,4 @@
-import { Currency, SVC_TESTNET } from 'src/utils/token'
+import { Currency, SVC_MAINNET } from 'src/utils/token'
 import useNativeCurrency from 'src/hooks/useNativeCurrency'
 import { useCallback } from 'react'
 import currencyId from 'src/utils/currencyId'
@@ -11,7 +11,7 @@ export const useCurrencySelectRoute = () => {
 
     const [searchParams,] = useSearchParams()
     const currencyIdA = searchParams.get('currencyA') ?? native.symbol
-    const currencyIdB = searchParams.get('currencyB') ?? SVC_TESTNET.address
+    const currencyIdB = searchParams.get('currencyB') ?? SVC_MAINNET.address
 
 
     const handleCurrencyASelect = useCallback(

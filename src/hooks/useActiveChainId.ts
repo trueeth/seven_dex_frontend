@@ -47,11 +47,9 @@ export function useLocalNetworkChain() {
 
 export const useActiveChainId = () => {
     const localChainId = useLocalNetworkChain()
-    const queryChainId = useAtomValue(queryChainIdAtom)
 
     const { chain } = useNetwork()
-    // const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.MUMBAI : undefined)
-    const chainId = ChainId.MUMBAI
+    const chainId = ChainId.POLYGON
 
     const isNotMatched = useDeferredValue(chain && localChainId && chain.id !== localChainId)
 

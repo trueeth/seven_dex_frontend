@@ -11,7 +11,7 @@ import useNativeCurrency from "src/hooks/useNativeCurrency"
 import { Field } from "src/state/burn/actions"
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from "src/state/burn/hooks"
 import { Percent } from "src/utils/percent"
-import { SVC_TESTNET } from "src/utils/token"
+import { SVC_MAINNET } from "src/utils/token"
 import { useWeb3LibraryContext } from "src/utils/wagmi"
 import { useAccount } from "wagmi"
 import { splitSignature } from '@ethersproject/bytes'
@@ -59,7 +59,7 @@ export default function RemoveLiquity() {
 
     const [searchParams,] = useSearchParams()
     const currencyIdA = searchParams.get('currencyA') ?? native.symbol
-    const currencyIdB = searchParams.get('currencyB') ?? SVC_TESTNET.address
+    const currencyIdB = searchParams.get('currencyB') ?? SVC_MAINNET.address
 
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)

@@ -487,4 +487,13 @@ export const SVC_TESTNET = new ERC20Token(
     'https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png'
 )
 
+export const SVC_MAINNET = new ERC20Token(
+    ChainId.POLYGON,
+    '0x9aA68BA3746D05009135D5f33D3Ced069dcA719b',
+    18,
+    'SVC',
+    'Seven Chain Token',
+    'https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png'
+)
+
 

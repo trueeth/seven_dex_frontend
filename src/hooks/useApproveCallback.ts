@@ -141,6 +141,6 @@ export function useApproveCallbackFromTrade(trade?: Trade<Currency, Currency, Tr
         () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
         [trade, allowedSlippage],
     )
-    return useApproveCallback(amountToApprove, ROUTER_ADDRESS[ChainId.MUMBAI])
+    return useApproveCallback(amountToApprove, ROUTER_ADDRESS[ChainId.POLYGON])
 }
 

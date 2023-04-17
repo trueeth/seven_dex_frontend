@@ -62,7 +62,7 @@ export type MultiCall = <T = any>(abi: any[], calls: Call[], chainId?: ChainId) 
 export function createMulticall<TProvider extends Provider>(
     provider: ({ chainId }: { chainId?: number | undefined }) => TProvider,
 ) {
-    const multicall: MultiCall = async (abi: any[], calls: Call[], chainId = ChainId.MUMBAI) => {
+    const multicall: MultiCall = async (abi: any[], calls: Call[], chainId = ChainId.POLYGON) => {
         const multi = getMulticallContract(chainId, provider({ chainId }))
         if (!multi) throw new Error(`Multicall Provider missing for ${chainId}`)
         const itf = new Interface(abi)
@@ -78,7 +78,7 @@ export function createMulticall<TProvider extends Provider>(
         return res as any
     }
 
-    const multicallv2: MultiCallV2 = async ({ abi, calls, chainId = ChainId.MUMBAI, options, provider: _provider }) => {
+    const multicallv2: MultiCallV2 = async ({ abi, calls, chainId = ChainId.POLYGON, options, provider: _provider }) => {
         const { requireSuccess = true, ...overrides } = options || {}
         const multi = getMulticallContract(chainId, _provider || provider({ chainId }))
         if (!multi) throw new Error(`Multicall Provider missing for ${chainId}`)
@@ -98,7 +98,7 @@ export function createMulticall<TProvider extends Provider>(
         return res as any
     }
 
-    const multicallv3 = async ({ calls, chainId = ChainId.MUMBAI, allowFailure, overrides }: MulticallV3Params) => {
+    const multicallv3 = async ({ calls, chainId = ChainId.POLYGON, allowFailure, overrides }: MulticallV3Params) => {
         const multi = getMulticallContract(chainId, provider({ chainId }))
         if (!multi) throw new Error(`Multicall Provider missing for ${chainId}`)
         const interfaceCache = new WeakMap()

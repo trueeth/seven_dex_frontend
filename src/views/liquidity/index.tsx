@@ -7,7 +7,7 @@ import { UserPosition } from './components/UserPosition'
 import { useMemo, useState } from 'react'
 import useNativeCurrency from 'src/hooks/useNativeCurrency'
 import TokenSelectView from './components/TokenSelectView'
-import { SVC_TESTNET } from 'src/utils/token'
+import { SVC_MAINNET } from 'src/utils/token'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { useCurrency } from 'src/hooks/Tokens'
 import SupplyTokens from './components/SupplyTokens'
@@ -42,7 +42,7 @@ function Liquidity() {
 
     const [searchParams,] = useSearchParams()
     const currencyIdA = searchParams.get('currencyA') ?? native.symbol
-    const currencyIdB = searchParams.get('currencyB') ?? SVC_TESTNET.address
+    const currencyIdB = searchParams.get('currencyB') ?? SVC_MAINNET.address
 
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)

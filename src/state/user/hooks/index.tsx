@@ -63,7 +63,7 @@ export function useGasPrice(chainIdOverride?: number): string {
     const { data: bscProviderGasPrice = GAS_PRICE_GWEI.default } = useSWR(
         library &&
         library.provider &&
-        chainId === ChainId.MUMBAI &&
+        chainId === ChainId.POLYGON &&
         userGas === GAS_PRICE_GWEI.rpcDefault && ['bscProviderGasPrice', library.provider],
         async () => {
             const gasPrice = await library.getGasPrice()

@@ -192,7 +192,7 @@ function ConnectButton() {
                 }}
             >
                 <Link
-                    to={{ pathname: `//mumbai.polygonscan.com/address/${address}` }}
+                    to={{ pathname: `//polygonscan.com/address/${address}` }}
                     target="_blank"
                 >
                     <MenuItem ><Typography color='#333'>{t('View on Scan')}</Typography></MenuItem>

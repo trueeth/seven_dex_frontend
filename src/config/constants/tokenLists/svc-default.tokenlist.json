@@ -16,7 +16,7 @@
         {
             "name": "Seven Chain Token",
             "symbol": "SVC",
-            "address": "0x762729F36206Bc985ed462E625e0200cF51ACc46",
+            "address": "0x9aA68BA3746D05009135D5f33D3Ced069dcA719b",
             "decimals": 18,
             "chainId": 137,
             "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png"
@@ -60,6 +60,14 @@
             "chainId": 80001,
             "decimals": 18,
             "logoURI": "https://tokens.pancakeswap.finance/images/symbol/wbtc.png"
+        },
+        {
+            "name": "B2Z Exchange",
+            "symbol": "B2Z",
+            "address": "0xbec158cd8dF7E48322485816Eab3a984f69458d8",
+            "chainId": 137,
+            "decimals": 18,
+            "logoURI": "./assets/images/b2z.png"
         },
         {
             "name": "B2Z Exchange",

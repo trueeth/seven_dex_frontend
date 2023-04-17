@@ -1,7 +1,7 @@
 import React from 'react'
 import { configureChains, createClient } from 'wagmi'
 import memoize from 'lodash/memoize'
-import { polygon, polygonMumbai, mainnet, goerli } from 'wagmi/chains'
+import { polygon } from 'wagmi/chains'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
@@ -12,7 +12,7 @@ import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, WagmiConfigProps, useNetwork } from 'wagmi'
 import { Provider, WebSocketProvider } from '@wagmi/core'
 
-const CHAINS = [polygonMumbai];
+const CHAINS = [polygon];
 
 export const { provider, chains } = configureChains(CHAINS, [
     jsonRpcProvider({
