@@ -1603,5 +1603,6 @@
     "connecting": "接続中",
     "View on Scan": "PolygonScanで表示",
     "Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%": "価格がこのパーセンテージを超えて不利に変化した場合、取引は元に戻されます。デフォルトは 0.5% です。",
-    "User rejected transaction.": "ユーザーがトランザクションを拒否しました。"
+    "User rejected transaction.": "ユーザーがトランザクションを拒否しました。",
+    "Switch Network in your wallet": "ウォレットのスイッチ ネットワーク。"
 }

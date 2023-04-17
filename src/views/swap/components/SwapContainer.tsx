@@ -63,7 +63,8 @@ function SwapContainer() {
     const { address: account } = useAccount()
     const { t } = useTranslation()
     const allTransactions = useAllTransactions()
-    const { chainId } = useActiveChainId()
+    const { chainId, isWrongNetwork } = useActiveChainId()
+
     const {
         independentField,
         typedValue,
@@ -319,7 +320,7 @@ function SwapContainer() {
                     },
                 }
             }}>
-                {!account ? (
+                {!account || isWrongNetwork ? (
                     <Button sx={{ width: '100%' }}>{t('Connect Wallet')}</Button>
                 ) : showWrap ? (
                     <Button disabled={Boolean(wrapInputError)} onClick={onWrap} sx={{ width: '100%' }}>

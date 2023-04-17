@@ -1,12 +1,17 @@
 import { Box, Button, Typography } from "@mui/material"
 import { useTranslation } from "src/context/Localization"
 import { useAllTokens } from "src/hooks/Tokens"
+import { useActiveChainId } from "src/hooks/useActiveChainId"
 import useToast from "src/hooks/useToast"
 import { registerToken } from "src/utils/registerToken"
 import { Token } from "src/utils/token"
+import { useAccount } from "wagmi"
 
 
 function AddTokenToWallet() {
+
+    const { address: account } = useAccount()
+    const { isWrongNetwork } = useActiveChainId()
 
     const tokens = useAllTokens()
     const { t } = useTranslation()
@@ -22,22 +27,25 @@ function AddTokenToWallet() {
 
     return (
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-            <Button
-                sx={{ cursor: 'pointer' }}
-                onClick={() =>
-                    onRegisterToken(
-                        tokens['0x40ae465CC90c636Ea0Ff123f91924d222F513a6E']
-                    )
-                }
-            >
-                <Typography sx={{
-                    width: '100%',
-                    textAlign: 'center',
-                    color: '#ffae5a'
-                }}>
-                    {t('Add SVC to wallet')}
-                </Typography>
-            </Button>
+            {
+                (account && !isWrongNetwork) &&
+                <Button
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() =>
+                        onRegisterToken(
+                            tokens['0x40ae465CC90c636Ea0Ff123f91924d222F513a6E']
+                        )
+                    }
+                >
+                    <Typography sx={{
+                        width: '100%',
+                        textAlign: 'center',
+                        color: '#ffae5a'
+                    }}>
+                        {t('Add SVC to wallet')}
+                    </Typography>
+                </Button>
+            }
         </Box>
     )
 }

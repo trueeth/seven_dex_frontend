@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material"
 import { StyledButton } from "./Styled"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useAccount } from "wagmi"
 import { toLiquidityToken, useTrackedTokenPairs } from "src/state/user/hooks"
 import { useMemo } from "react"
@@ -10,6 +10,7 @@ import FullPositionCard from './PositionCard'
 import { IconInfoCircle } from "@tabler/icons"
 import { useTranslation } from "src/context/Localization"
 import { CustomTooltip } from "src/components/styled_components/Tooltip"
+import { useActiveChainId } from "src/hooks/useActiveChainId"
 
 
 export function UserPosition({ setStep }) {
@@ -17,6 +18,9 @@ export function UserPosition({ setStep }) {
     const { address: account } = useAccount()
 
     const { t } = useTranslation()
+    const { isWrongNetwork } = useActiveChainId()
+    const navigate = useNavigate()
+
 
     const trackedTokenPairs = useTrackedTokenPairs()
 
@@ -56,7 +60,7 @@ export function UserPosition({ setStep }) {
 
 
     const renderBody = () => {
-        if (!account) {
+        if (!account || isWrongNetwork) {
             return (
                 <Typography color="textSubtle" textAlign="center">
                     {t('Connect to a wallet to view your liquidity.')}
@@ -133,11 +137,14 @@ export function UserPosition({ setStep }) {
             }}>
                 {renderBody()}
             </Box>
-            <Link to='/add'>
-                <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }} >
-                    <StyledButton onClick={() => setStep('select_token')}>+ {t('Add Liquidity')}</StyledButton>
-                </Box>
-            </Link>
+            <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }} >
+                <StyledButton onClick={() => {
+                    if (account && !isWrongNetwork) {
+                        navigate('/add')
+                        setStep('select_token')
+                    }
+                }}>+ {t('Add Liquidity')}</StyledButton>
+            </Box>
         </Box>
     )
 }

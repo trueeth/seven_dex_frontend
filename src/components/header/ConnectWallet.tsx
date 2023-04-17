@@ -6,13 +6,15 @@ import { formart } from '../../utils/formatAddress';
 import MetamaskIcon from '../../asset/images/metamask.svg'
 import WalletConnectIcon from '../../asset/images/walletconnect.svg'
 import CoinbaseWalletIcon from '../../asset/images/coinbasewallet.svg'
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import useAuth from 'src/hooks/useAuth';
 import { ConnectorNames } from 'src/config';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useTranslation } from 'src/context/Localization';
 import { StyledMenu } from './Styled';
 import { Link } from 'react-router-dom';
+import { DEFAULT_CHAIN_ID } from 'src/config/constants/chains';
+import useToast from 'src/hooks/useToast';
 
 const modalStyle = {
     position: 'absolute',
@@ -52,11 +54,14 @@ function ConnectButton() {
     }
 
     const [connecting, setConnect] = useState('Metamask')
-    const { isConnected: connected, address } = useAccount()
+    const { isConnected, address } = useAccount()
     const { login, loading, logout } = useAuth()
-
-    const isConnected = useMemo(() => (connected), [connected])
+    const { chain } = useNetwork()
     const { t } = useTranslation()
+    const { toastError } = useToast()
+
+    const isWrongNetwork = useMemo(() => chain?.id !== DEFAULT_CHAIN_ID, [chain])
+    const { switchNetwork } = useSwitchNetwork()
 
     useEffect(() => {
         if (isConnected) {
@@ -99,14 +104,22 @@ function ConnectButton() {
                     onClick={(evt) => {
                         if (!isConnected)
                             setOpen(true)
+                        else if (isWrongNetwork) {
+                            if (switchNetwork)
+                                switchNetwork(DEFAULT_CHAIN_ID)
+                            else
+                                toastError(t('Switch Network in your wallet'))
+                        }
                         else
                             openDrop(evt)
                     }}
                     aria-controls={isDrop ? 'customized-menu' : undefined}
                 >
                     {(() => {
-                        if (isConnected)
+                        if (isConnected && !isWrongNetwork)
                             return formart(address as string)
+                        else if (isConnected)
+                            return t('Switch Network')
                         else
                             return isXs ? t('Connect') : t('Connect Wallet')
                     })()}

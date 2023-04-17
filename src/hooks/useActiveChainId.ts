@@ -50,13 +50,14 @@ export const useActiveChainId = () => {
     const queryChainId = useAtomValue(queryChainIdAtom)
 
     const { chain } = useNetwork()
-    const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.MUMBAI : undefined)
+    // const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.MUMBAI : undefined)
+    const chainId = ChainId.MUMBAI
 
     const isNotMatched = useDeferredValue(chain && localChainId && chain.id !== localChainId)
 
     return {
         chainId,
-        isWrongNetwork: (chain?.unsupported ?? false) || isNotMatched,
+        isWrongNetwork: (chain?.unsupported ?? false),
         isNotMatched,
     }
 }
