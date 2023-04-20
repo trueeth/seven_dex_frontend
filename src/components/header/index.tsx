@@ -78,7 +78,7 @@ function Header({ handleDrawerToggle }: IHeader) {
                         <Link to='/bridge'>
                             <Typography>{t('Bridge')}</Typography>
                         </Link>
-                        <Link to={{ pathname: "//staking-svc-matic.ceewen.xyz/" }} target="_blank">
+                        <Link to={{ pathname: "//staking.seven-project.com/" }} target="_blank">
                             <Typography>{t('Stake')}</Typography>
                         </Link>
                         <Link to='/farm'>

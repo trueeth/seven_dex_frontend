@@ -63,7 +63,7 @@ function MenuList({ toggle }) {
                 <NavLink to='/bridge'>
                     <Typography>{t('Bridge')}</Typography>
                 </NavLink>
-                <Link to={{ pathname: "//staking-svc-matic.ceewen.xyz/" }} target="_blank">
+                <Link to={{ pathname: "//staking.seven-project.com/" }} target="_blank">
                     <Typography>{t('Stake')}</Typography>
                 </Link>
                 <NavLink to='/farm'>
