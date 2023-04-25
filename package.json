@@ -21,7 +21,6 @@
         "@mui/styled-engine-sc": "^5.10.6",
         "@mui/styles": "^5.10.10",
         "@reduxjs/toolkit": "^1.8.6",
-        "@sentry/nextjs": "^7.36.0",
         "@tabler/icons": "^1.105.0",
         "@web3-react/core": "^6.1.9",
         "@web3-react/injected-connector": "^6.0.7",

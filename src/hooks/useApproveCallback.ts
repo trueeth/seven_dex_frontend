@@ -6,7 +6,6 @@ import { Currency, CurrencyAmount } from "src/utils/token"
 import { useAccount } from "wagmi"
 import { useTokenContract } from "./useContract"
 import useTokenAllowance from "./useTokenAllowance"
-import { useCallWithGasPrice } from "./useCallWithGasPrice"
 import { calculateGasMargin } from "src/utils"
 import { computeSlippageAdjustedAmounts } from "src/utils/exchange"
 import { Field } from "src/state/swap/actions"
@@ -31,7 +30,6 @@ export function useApproveCallback(
     spender?: string,
 ): [ApprovalState, () => Promise<void>] {
     const { address: account } = useAccount()
-    const { callWithGasPrice } = useCallWithGasPrice()
 
     const { t } = useTranslation()
     const { toastError } = useToast()
@@ -106,14 +104,10 @@ export function useApproveCallback(
 
         if (!estimatedGas) return undefined
 
-        return callWithGasPrice(
-            tokenContract,
-            'approve',
-            [spender, useExact ? amountToApprove.quotient.toString() : MaxUint256],
-            {
+        return tokenContract
+            .approve(spender, useExact ? amountToApprove.quotient.toString() : MaxUint256, {
                 gasLimit: calculateGasMargin(estimatedGas),
-            },
-        )
+            })
             .then((response: TransactionResponse) => {
                 addTransaction(response, {
                     summary: `Approve ${amountToApprove.currency.symbol}`,
@@ -129,7 +123,7 @@ export function useApproveCallback(
                 }
                 throw error
             })
-    }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction, callWithGasPrice])
+    }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction])
 
     return [approvalState, approve]
 }

@@ -5,7 +5,6 @@ import { tryParseAmount } from 'src/state/swap/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useWNativeContract } from './useContract'
-import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useActiveChainId } from './useActiveChainId'
 import { useAccount } from 'wagmi'
 
@@ -30,7 +29,6 @@ export default function useWrapCallback(
     const { t } = useTranslation()
     const { chainId } = useActiveChainId()
     const { address: account } = useAccount()
-    const { callWithGasPrice } = useCallWithGasPrice()
     const wbnbContract = useWNativeContract()
     const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
     // we can always parse the amount typed as the input currency, since wrapping is 1:1
@@ -49,9 +47,8 @@ export default function useWrapCallback(
                     sufficientBalance && inputAmount
                         ? async () => {
                             try {
-                                const txReceipt = await callWithGasPrice(wbnbContract, 'deposit', undefined, {
-                                    value: `0x${inputAmount.quotient.toString(16)}`,
-                                })
+
+                                const txReceipt = await wbnbContract.deposit({ value: `0x${inputAmount.quotient.toString(16)}` })
                                 const amount = inputAmount.toSignificant(6)
                                 const native = inputCurrency.symbol
                                 const wrap = WNATIVE[chainId].symbol
@@ -77,9 +74,7 @@ export default function useWrapCallback(
                     sufficientBalance && inputAmount
                         ? async () => {
                             try {
-                                const txReceipt = await callWithGasPrice(wbnbContract, 'withdraw', [
-                                    `0x${inputAmount.quotient.toString(16)}`,
-                                ])
+                                const txReceipt = await wbnbContract.withdraw(`0x${inputAmount.quotient.toString(16)}`)
                                 const amount = inputAmount.toSignificant(6)
                                 const wrap = WNATIVE[chainId].symbol
                                 const native = outputCurrency.symbol
@@ -98,5 +93,5 @@ export default function useWrapCallback(
             }
         }
         return NOT_APPLICABLE
-    }, [wbnbContract, chainId, inputCurrency, outputCurrency, t, inputAmount, balance, addTransaction, callWithGasPrice])
+    }, [wbnbContract, chainId, inputCurrency, outputCurrency, t, inputAmount, balance, addTransaction])
 }
