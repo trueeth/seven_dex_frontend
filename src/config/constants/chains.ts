@@ -35,8 +35,8 @@ export const polygon: Chain = {
     name: 'Polygon Chain',
     network: 'polygon',
     rpcUrls: {
-        public: 'https://matic-mumbai.chainstacklabs.com',
-        default: 'https://matic-mumbai.chainstacklabs.com',
+        public: { http: ['https://matic-mumbai.chainstacklabs.com'] },
+        default: { http: ['https://matic-mumbai.chainstacklabs.com'] },
     },
     blockExplorers: {
         default: explorer,
@@ -59,8 +59,8 @@ export const mumbai: Chain = {
         symbol: 'MATIC',
     },
     rpcUrls: {
-        public: 'https://matic-mumbai.chainstacklabs.com',
-        default: 'https://matic-mumbai.chainstacklabs.com',
+        public: { http: ['https://matic-mumbai.chainstacklabs.com'] },
+        default: { http: ['https://matic-mumbai.chainstacklabs.com'] },
     },
     blockExplorers: {
         default: { name: 'PolygonScan', url: 'https://mumbai.polygonscan.com/' },

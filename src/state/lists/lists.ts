@@ -1,5 +1,5 @@
 import { createListsAtom, createTokenListReducer, NEW_LIST_STATE } from './reducer'
-import { DEFAULT_ACTIVE_LIST_URLS, DEFAULT_LIST_OF_LISTS, UNSUPPORTED_LIST_URLS } from 'src/config/constants/lists'
+import { DEFAULT_ACTIVE_LIST_URLS, DEFAULT_LIST_OF_LISTS, UNSUPPORTED_LIST_URLS } from '@/config/constants/lists'
 
 export const initialState = {
     lastInitializedDefaultListOfLists: DEFAULT_LIST_OF_LISTS,

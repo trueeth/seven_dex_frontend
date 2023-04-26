@@ -1,7 +1,7 @@
 /* eslint-disable no-continue */
 /* eslint-disable no-await-in-loop */
-import { TokenList } from 'src/utils/token'
-import uriToHttp from 'src/utils/uriToHttp'
+import { TokenList } from '@/utils/token'
+import uriToHttp from '@/utils/uriToHttp'
 import Ajv from 'ajv'
 import schema from './svcswap.json'
 

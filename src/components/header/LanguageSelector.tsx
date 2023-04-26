@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import LanguageIcon from '@mui/icons-material/Language'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 import { StyledMenu } from './Styled'
 
 

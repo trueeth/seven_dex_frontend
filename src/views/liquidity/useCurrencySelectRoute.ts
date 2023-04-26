@@ -1,7 +1,7 @@
-import { Currency, SVC_TESTNET } from 'src/utils/token'
-import useNativeCurrency from 'src/hooks/useNativeCurrency'
+import { Currency, SVC_TESTNET } from '@/utils/token'
+import useNativeCurrency from '@/hooks/useNativeCurrency'
 import { useCallback } from 'react'
-import currencyId from 'src/utils/currencyId'
+import currencyId from '@/utils/currencyId'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 

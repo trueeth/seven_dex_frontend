@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { ChainId } from 'src/config/constants/chains'
-import { getBlockExploreLink, getBlockExploreName } from 'src/utils'
-import truncateHash from 'src/utils/truncateHash'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
-import { useTranslation } from 'src/context/Localization'
+import { ChainId } from '@/config/constants/chains'
+import { getBlockExploreLink, getBlockExploreName } from '@/utils'
+import truncateHash from '@/utils/truncateHash'
+import { useActiveChainId } from '@/hooks/useActiveChainId'
+import { useTranslation } from '@/context/Localization'
 import { Typography } from '@mui/material'
 
 interface DescriptionWithTxProps {

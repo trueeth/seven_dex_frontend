@@ -13,7 +13,7 @@ import {
     disableList,
     updateListVersion,
 } from './actions'
-import { getVersionUpgrade, VersionUpgrade, TokenList } from 'src/utils/token'
+import { getVersionUpgrade, VersionUpgrade, TokenList } from '@/utils/token'
 
 export interface ListsState {
     readonly byUrl: {

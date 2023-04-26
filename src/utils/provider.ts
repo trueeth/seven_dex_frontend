@@ -1,5 +1,5 @@
 import { ethers } from "ethers"
-import { DEFAULT_CHAIN_ID, DEFAULT_PROVIDER } from "src/config/constants/chains";
+import { DEFAULT_CHAIN_ID, DEFAULT_PROVIDER } from "@/config/constants/chains";
 import Web3 from 'web3'
 
 let provider: ethers.providers.Web3Provider | null = null

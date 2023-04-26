@@ -1,16 +1,14 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { Language } from './types'
 import memoize from 'lodash/memoize'
-import { EN, languages } from 'src/config/localization/languages'
-import translations from 'src/config/localization/translations.json'
+import { EN, languages } from '@/config/localization/languages'
+import translations from '@/config/localization/translations.json'
 import { ContextApi, ProviderState, TranslateFunction } from './types'
 import { LS_KEY, fetchLocale, getLanguageCodeFromLS } from './helpers'
 
-
-
 const initialState: ProviderState = {
     isFetching: true,
-    currentLanguage: EN,
+    currentLanguage: EN
 }
 
 const includesVariableRegex = new RegExp(/%\S+?%/, 'gm')
@@ -32,7 +30,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
 
         return {
             ...initialState,
-            currentLanguage: languages[codeFromStorage] || EN,
+            currentLanguage: languages[codeFromStorage] || EN
         }
     })
     const { currentLanguage } = state
@@ -51,7 +49,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
 
             setState((prevState) => ({
                 ...prevState,
-                isFetching: false,
+                isFetching: false
             }))
         }
 
@@ -62,7 +60,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
         if (!languageMap.has(language.locale)) {
             setState((prevState) => ({
                 ...prevState,
-                isFetching: true,
+                isFetching: true
             }))
 
             const locale = await fetchLocale(language.locale)
@@ -77,14 +75,14 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
             setState((prevState) => ({
                 ...prevState,
                 isFetching: false,
-                currentLanguage: language,
+                currentLanguage: language
             }))
         } else {
             localStorage?.setItem(LS_KEY, language.locale)
             setState((prevState) => ({
                 ...prevState,
                 isFetching: false,
-                currentLanguage: language,
+                currentLanguage: language
             }))
         }
     }, [])
@@ -109,8 +107,10 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
 
             return translatedText
         },
-        [currentLanguage],
+        [currentLanguage]
     )
 
-    return <LanguageContext.Provider value={{ ...state, setLanguage, t: translate }}>{children}</LanguageContext.Provider>
+    return (
+        <LanguageContext.Provider value={{ ...state, setLanguage, t: translate }}>{children}</LanguageContext.Provider>
+    )
 }

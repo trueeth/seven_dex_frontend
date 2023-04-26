@@ -1,31 +1,31 @@
 import { Box, Button, CircularProgress, Divider, TextField, Typography } from "@mui/material"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
-import { Currency } from "src/utils/token"
+import { Currency } from "@/utils/token"
 import { StyledButton } from "./Styled"
 import AddIcon from '@mui/icons-material/Add'
 import { IconInfoCircle } from '@tabler/icons'
 import { useAccount } from "wagmi"
-import { useCurrencyBalance } from "src/state/wallet/hooks"
-import { Field } from "src/state/mint/actions"
-import { ONE_BIPS, ROUTER_ADDRESS } from "src/config/constants/exchange"
-import { ApprovalState, useApproveCallback } from "src/hooks/useApproveCallback"
-import { usePairAdder } from 'src/state/user/hooks'
-import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'src/state/mint/hooks'
-import { maxAmountSpend } from 'src/utils/maxAmountSpend'
-import { useAllTransactions, useTransactionAdder } from 'src/state/transactions/hooks'
-import { calculateSlippageAmount, useRouterContract } from 'src/utils/exchange'
+import { useCurrencyBalance } from "@/state/wallet/hooks"
+import { Field } from "@/state/mint/actions"
+import { ONE_BIPS, ROUTER_ADDRESS } from "@/config/constants/exchange"
+import { ApprovalState, useApproveCallback } from "@/hooks/useApproveCallback"
+import { usePairAdder } from '@/state/user/hooks'
+import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '@/state/mint/hooks'
+import { maxAmountSpend } from '@/utils/maxAmountSpend'
+import { useAllTransactions, useTransactionAdder } from '@/state/transactions/hooks'
+import { calculateSlippageAmount, useRouterContract } from '@/utils/exchange'
 
-import { CurrencyAmount, Token } from 'src/utils/token'
+import { CurrencyAmount, Token } from '@/utils/token'
 import { useEffect, useMemo, useState } from "react"
-import { useActiveChainId } from "src/hooks/useActiveChainId"
-import { calculateGasMargin, numberInputOnWheelPreventChange } from "src/utils"
+import { useActiveChainId } from "@/hooks/useActiveChainId"
+import { calculateGasMargin, numberInputOnWheelPreventChange } from "@/utils"
 import { BigNumber } from "ethers"
 import { TransactionResponse } from "@ethersproject/providers"
-import { GAS_PRICE_GWEI } from "src/state/types"
-import { DEFAULT_TRANSACTION_DEADLINE } from "src/config/constants"
-import { useTranslation } from "src/context/Localization"
-import { CustomTooltip } from "src/components/styled_components/Tooltip"
-import useToast from "src/hooks/useToast"
+import { GAS_PRICE_GWEI } from "@/state/types"
+import { DEFAULT_TRANSACTION_DEADLINE } from "@/config/constants"
+import { useTranslation } from "@/context/Localization"
+import { CustomTooltip } from "@/components/styled_components/Tooltip"
+import useToast from "@/hooks/useToast"
 
 function SupplyTokens({
     currencyA,

@@ -1,5 +1,5 @@
-import {  Currency, CurrencyAmount, Native, Token, WNATIVE } from './token'
-import { ChainId } from 'src/config/constants/chains'
+import { Currency, CurrencyAmount, Native, Token, WNATIVE } from './token'
+import { ChainId } from '@/config/constants/chains'
 
 export function wrappedCurrency(currency: Currency | undefined, chainId: ChainId | undefined): Token | undefined {
   return chainId && currency?.isNative ? WNATIVE[chainId] : currency?.isToken ? currency : undefined

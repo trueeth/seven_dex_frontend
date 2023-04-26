@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import merge from 'lodash/merge'
 import pickBy from 'lodash/pickBy'
 import forEach from 'lodash/forEach'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 import { useProvider } from 'wagmi'
 import { poll } from '@ethersproject/web'
 
@@ -12,8 +12,8 @@ import {
 } from './actions'
 import { useAllChainTransactions } from './hooks'
 import { TransactionDetails } from './reducer'
-import useToast from 'src/hooks/useToast'
-import { ToastDescriptionWithTx } from 'src/components/toast'
+import useToast from '@/hooks/useToast'
+import { ToastDescriptionWithTx } from '@/components/toast'
 
 export function shouldCheck(
     fetchedTransactions: { [txHash: string]: TransactionDetails },

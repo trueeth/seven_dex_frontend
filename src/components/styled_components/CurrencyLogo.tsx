@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import { Currency } from "src/utils/token"
+import { Currency } from "@/utils/token"
 
 export const CurrencyLogo = ({ currency }: {
     currency: Currency,

@@ -2,15 +2,15 @@ import { Box, Button, Typography } from "@mui/material"
 import { StyledButton } from "./Styled"
 import { useNavigate } from "react-router-dom"
 import { useAccount } from "wagmi"
-import { toLiquidityToken, useTrackedTokenPairs } from "src/state/user/hooks"
+import { toLiquidityToken, useTrackedTokenPairs } from "@/state/user/hooks"
 import { useMemo } from "react"
-import { useTokenBalancesWithLoadingIndicator } from "src/state/wallet/hooks"
-import { PairState, usePairs } from "src/hooks/usePairs"
+import { useTokenBalancesWithLoadingIndicator } from "@/state/wallet/hooks"
+import { PairState, usePairs } from "@/hooks/usePairs"
 import FullPositionCard from './PositionCard'
 import { IconInfoCircle } from "@tabler/icons"
-import { useTranslation } from "src/context/Localization"
-import { CustomTooltip } from "src/components/styled_components/Tooltip"
-import { useActiveChainId } from "src/hooks/useActiveChainId"
+import { useTranslation } from "@/context/Localization"
+import { CustomTooltip } from "@/components/styled_components/Tooltip"
+import { useActiveChainId } from "@/hooks/useActiveChainId"
 
 
 export function UserPosition({ setStep }) {

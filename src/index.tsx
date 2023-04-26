@@ -15,7 +15,7 @@ declare global {
 declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme { }
 }
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
     <React.StrictMode>
         <App />

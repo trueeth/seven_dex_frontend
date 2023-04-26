@@ -1,11 +1,10 @@
-import { Currency, WNATIVE } from 'src/utils/token'
+import { Currency, WNATIVE } from '@/utils/token'
 import { useMemo } from 'react'
-import { useTranslation } from 'src/context/Localization'
-import { tryParseAmount } from 'src/state/swap/hooks'
+import { useTranslation } from '@/context/Localization'
+import { tryParseAmount } from '@/state/swap/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useWNativeContract } from './useContract'
-import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useActiveChainId } from './useActiveChainId'
 import { useAccount } from 'wagmi'
 
@@ -25,12 +24,11 @@ const NOT_APPLICABLE = { wrapType: WrapType.NOT_APPLICABLE }
 export default function useWrapCallback(
     inputCurrency: Currency | undefined,
     outputCurrency: Currency | undefined,
-    typedValue: string | undefined,
+    typedValue: string | undefined
 ): { wrapType: WrapType; execute?: undefined | (() => Promise<void>); inputError?: string } {
     const { t } = useTranslation()
     const { chainId } = useActiveChainId()
     const { address: account } = useAccount()
-    const { callWithGasPrice } = useCallWithGasPrice()
     const wbnbContract = useWNativeContract()
     const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
     // we can always parse the amount typed as the input currency, since wrapping is 1:1
@@ -48,22 +46,25 @@ export default function useWrapCallback(
                 execute:
                     sufficientBalance && inputAmount
                         ? async () => {
-                            try {
-                                const txReceipt = await callWithGasPrice(wbnbContract, 'deposit', undefined, {
-                                    value: `0x${inputAmount.quotient.toString(16)}`,
-                                })
-                                const amount = inputAmount.toSignificant(6)
-                                const native = inputCurrency.symbol
-                                const wrap = WNATIVE[chainId].symbol
-                                addTransaction(txReceipt, {
-                                    summary: `Wrap ${amount} ${native} to ${wrap}`,
-                                    translatableSummary: { text: 'Wrap %amount% %native% to %wrap%', data: { amount, native, wrap } },
-                                    type: 'wrap',
-                                })
-                            } catch (error) {
-                                console.error('Could not deposit', error)
-                            }
-                        }
+                              try {
+                                  const txReceipt = await wbnbContract.deposit({
+                                      value: `0x${inputAmount.quotient.toString(16)}`,
+                                  })
+                                  const amount = inputAmount.toSignificant(6)
+                                  const native = inputCurrency.symbol
+                                  const wrap = WNATIVE[chainId].symbol
+                                  addTransaction(txReceipt, {
+                                      summary: `Wrap ${amount} ${native} to ${wrap}`,
+                                      translatableSummary: {
+                                          text: 'Wrap %amount% %native% to %wrap%',
+                                          data: { amount, native, wrap },
+                                      },
+                                      type: 'wrap',
+                                  })
+                              } catch (error) {
+                                  console.error('Could not deposit', error)
+                              }
+                          }
                         : undefined,
                 inputError: sufficientBalance
                     ? undefined
@@ -76,21 +77,24 @@ export default function useWrapCallback(
                 execute:
                     sufficientBalance && inputAmount
                         ? async () => {
-                            try {
-                                const txReceipt = await callWithGasPrice(wbnbContract, 'withdraw', [
-                                    `0x${inputAmount.quotient.toString(16)}`,
-                                ])
-                                const amount = inputAmount.toSignificant(6)
-                                const wrap = WNATIVE[chainId].symbol
-                                const native = outputCurrency.symbol
-                                addTransaction(txReceipt, {
-                                    summary: `Unwrap ${amount} ${wrap} to ${native}`,
-                                    translatableSummary: { text: 'Unwrap %amount% %wrap% to %native%', data: { amount, wrap, native } },
-                                })
-                            } catch (error) {
-                                console.error('Could not withdraw', error)
-                            }
-                        }
+                              try {
+                                  const txReceipt = await wbnbContract.withdraw({
+                                      value: `0x${inputAmount.quotient.toString(16)}`,
+                                  })
+                                  const amount = inputAmount.toSignificant(6)
+                                  const wrap = WNATIVE[chainId].symbol
+                                  const native = outputCurrency.symbol
+                                  addTransaction(txReceipt, {
+                                      summary: `Unwrap ${amount} ${wrap} to ${native}`,
+                                      translatableSummary: {
+                                          text: 'Unwrap %amount% %wrap% to %native%',
+                                          data: { amount, wrap, native },
+                                      },
+                                  })
+                              } catch (error) {
+                                  console.error('Could not withdraw', error)
+                              }
+                          }
                         : undefined,
                 inputError: sufficientBalance
                     ? undefined
@@ -98,5 +102,5 @@ export default function useWrapCallback(
             }
         }
         return NOT_APPLICABLE
-    }, [wbnbContract, chainId, inputCurrency, outputCurrency, t, inputAmount, balance, addTransaction, callWithGasPrice])
+    }, [wbnbContract, chainId, inputCurrency, outputCurrency, t, inputAmount, balance, addTransaction])
 }

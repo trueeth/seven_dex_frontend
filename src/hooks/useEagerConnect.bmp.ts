@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { useCallback } from 'react'
-import { MiniProgramConnector } from 'src/utils/miniProgram'
+import { MiniProgramConnector } from '@/utils/miniProgram'
 import { useConnect } from 'wagmi'
-import { getWeb3Provider } from 'src/utils/mpBridge'
+import { getWeb3Provider } from '@/utils/mpBridge'
 import { chains } from '../utils/wagmi'
 
 const injected = new MiniProgramConnector({ chains, getWeb3Provider })

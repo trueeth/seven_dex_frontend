@@ -1,5 +1,5 @@
-import { ChainId } from 'src/config/constants/chains'
-import { Native, NativeCurrency } from 'src/utils/token'
+import { ChainId } from '@/config/constants/chains'
+import { Native, NativeCurrency } from '@/utils/token'
 import { useMemo } from 'react'
 import { useActiveChainId } from './useActiveChainId'
 

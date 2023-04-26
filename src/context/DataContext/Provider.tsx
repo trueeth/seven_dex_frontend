@@ -1,7 +1,7 @@
 import { createContext } from "react"
 import { DataContextApi } from "./types"
 import axios from 'axios'
-import { BACKEND_URL } from "src/config/constants"
+import { BACKEND_URL } from "@/config/constants"
 import useSWR from 'swr'
 
 

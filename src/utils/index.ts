@@ -8,11 +8,11 @@ import invariant from 'tiny-invariant'
 import warning from 'tiny-warning'
 import { Currency, CurrencyAmount, Token } from './token'
 import { Percent } from './percent'
-import { ONE, THREE, TWO, VMType, VM_TYPE_MAXIMA, ZERO } from 'src/config/constants'
+import { ONE, THREE, TWO, VMType, VM_TYPE_MAXIMA, ZERO } from '@/config/constants'
 import JSBI from 'jsbi'
 import { Price } from './price'
 import { BigNumber } from 'ethers'
-import { ChainId, mumbai } from 'src/config/constants/chains'
+import { ChainId, mumbai } from '@/config/constants/chains'
 import { chains } from './wagmi'
 
 // warns if addresses are not checksummed

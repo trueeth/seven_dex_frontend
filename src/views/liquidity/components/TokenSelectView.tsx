@@ -1,12 +1,12 @@
 import { Box, Divider, Typography } from "@mui/material"
-import CurrencyInputPanel from "src/components/CurrencyInputPanel"
-import { Currency } from "src/utils/token"
+import CurrencyInputPanel from "@/components/CurrencyInputPanel"
+import { Currency } from "@/utils/token"
 import { useCurrencySelectRoute } from "../useCurrencySelectRoute"
 import AddIcon from '@mui/icons-material/Add'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { StyledButton } from "./Styled"
 import { useNavigate } from "react-router-dom"
-import { useTranslation } from "src/context/Localization"
+import { useTranslation } from "@/context/Localization"
 
 
 function TokenSelectView({

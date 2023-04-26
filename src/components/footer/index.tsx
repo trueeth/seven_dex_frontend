@@ -8,7 +8,7 @@ import MediumIcon from '../../asset/images/medium.svg'
 import FacebookIcon from '../../asset/images/facebook.svg'
 import InstagramIcon from '../../asset/images/instagram.svg'
 import SevenChainIcon from '../../asset/images/seven_chain_logo.png'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 
 
 const useStyles = makeStyles(() => ({

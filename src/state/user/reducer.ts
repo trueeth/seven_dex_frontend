@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { SerializedWrappedToken } from 'src/utils/wrappedTokenInfo'
+import { SerializedWrappedToken } from '@/utils/wrappedTokenInfo'
 import omitBy from 'lodash/omitBy'
-import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from 'src/config/constants/index'
+import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '@/config/constants/index'
 import { updateVersion } from '../global/actions'
 import {
     addSerializedPair,

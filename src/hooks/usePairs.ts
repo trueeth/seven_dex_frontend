@@ -1,12 +1,12 @@
 import { CurrencyAmount, Currency } from '../utils/token'
 import { useMemo } from 'react'
-import IPairABI from 'src/config/abi/IPair.json'
+import IPairABI from '@/config/abi/IPair.json'
 import { Interface } from '@ethersproject/abi'
 
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 import { wrappedCurrency } from '../utils/wrappedCurrency'
 import { useActiveChainId } from './useActiveChainId'
-import { Pair } from 'src/utils/pair'
+import { Pair } from '@/utils/pair'
 
 const PAIR_INTERFACE = new Interface(IPairABI)
 

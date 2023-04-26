@@ -1,4 +1,4 @@
-import { Currency } from "src/utils/token";
+import { Currency } from "@/utils/token";
 
 
 
