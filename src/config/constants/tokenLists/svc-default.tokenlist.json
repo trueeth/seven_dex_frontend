@@ -19,7 +19,7 @@
             "address": "0x762729F36206Bc985ed462E625e0200cF51ACc46",
             "decimals": 18,
             "chainId": 137,
-            "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png"
+            "logoURI": "./assets/images/svc.png"
         },
         {
             "name": "Seven Chain Token",
@@ -27,7 +27,7 @@
             "address": "0x40ae465CC90c636Ea0Ff123f91924d222F513a6E",
             "decimals": 18,
             "chainId": 80001,
-            "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png"
+            "logoURI": "./assets/images/svc.png"
         },
         {
             "name": "Wrapped Ether",
