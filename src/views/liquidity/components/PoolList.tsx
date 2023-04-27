@@ -13,7 +13,7 @@ import {
     TableSortLabel,
     Tabs
 } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import useDebounce from '@/hooks/useDebounce'
 import { isAddress } from '@/utils'
@@ -27,11 +27,16 @@ import { PINNED_PAIRS } from '@/config/constants/exchange'
 import { ChainId } from '@/config/constants/chains'
 import { useNavigate } from 'react-router-dom'
 import currencyId from '@/utils/currencyId'
+import { useTranslation } from '@/context/Localization'
+import { usePairs } from '@/hooks/usePairs'
+import { DataContext } from '@/context/DataContext'
 
-const DEFAULT_ORDER = 'asc'
+const DEFAULT_ORDER = 'desc'
 const DEFAULT_ORDER_BY = 'liquidity'
 
 const PoolList = () => {
+    const { t } = useTranslation()
+    const { tokenPrices, tradeVolume } = useContext(DataContext)
     const [poolType, setPoolType] = React.useState('main')
     const handleChange = (event: any, newValue: string) => {
         setPoolType(newValue)
@@ -88,6 +93,8 @@ const PoolList = () => {
         [debouncedQuery, poolType]
     )
 
+    const pairDetails = usePairs(filteredPairs)
+
     function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
         if (b[orderBy] < a[orderBy]) {
             return -1
@@ -127,11 +134,6 @@ const PoolList = () => {
             const toggledOrder = isAsc ? 'desc' : 'asc'
             setOrder(toggledOrder)
             setOrderBy(newOrderBy)
-            const data = formatPair(filteredPairs)
-            if (data) {
-                const sortedRows = stableSort(data, getComparator(toggledOrder, newOrderBy))
-                setTableRow(sortedRows)
-            }
         },
         [order, orderBy, poolType]
     )
@@ -142,17 +144,21 @@ const PoolList = () => {
     }
 
     const formatPair = (pairs: Array<[ERC20Token, ERC20Token]>) => {
-        const data = pairs.map((pair) => {
+        const data = pairs.map((pair, index) => {
+            const liquidity =
+                Number(pairDetails[index][1]?.reserve0.toExact() || 0) *
+                    2 *
+                    tokenPrices?.[pairDetails[index][1]?.token0.symbol.toUpperCase()] || 0
             return {
                 name: `${pair[0].symbol}-${pair[1].symbol}`,
                 logoA: pair[0].logoURI,
                 logoB: pair[1].logoURI,
                 currencyIdA: currencyId(pair[0]),
                 currencyIdB: currencyId(pair[1]),
-                liquidity: Number(trim(Math.random() * 10000, 3)),
-                volumn: Number(trim(Math.random() * 100, 3)),
-                fee: 0.25,
-                apr: Number(trim(Math.random() * 25, 3))
+                liquidity: liquidity,
+                volume: Math.random() * liquidity,
+                fee: Math.random() * liquidity * 0.0025,
+                apr: liquidity ? 28 : 0
             }
         })
         return data
@@ -161,10 +167,10 @@ const PoolList = () => {
     useEffect(() => {
         const data = formatPair(filteredPairs)
         if (data) {
-            const sortedRows = stableSort(data, getComparator(DEFAULT_ORDER, DEFAULT_ORDER_BY))
+            const sortedRows = stableSort(data, getComparator(order, orderBy))
             setTableRow(sortedRows)
         }
-    }, [filteredPairs, poolType])
+    }, [filteredPairs, poolType, order, orderBy, pairDetails, tokenPrices])
 
     return (
         <Container sx={{ mt: 3 }}>
@@ -184,13 +190,13 @@ const PoolList = () => {
                         }
                     }}
                 >
-                    <Tab value="main" label="Main Pools" disableRipple />
-                    <Tab value="all" label="All Pools" disableRipple />
+                    <Tab value="main" label={t('Main Pools')} disableRipple />
+                    <Tab value="all" label={t('All Pools')} disableRipple />
                 </Tabs>
                 <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
                     <OutlinedInput
                         onChange={(e) => handleInput(e)}
-                        placeholder="Search by a name, symbol or address"
+                        placeholder={t('Search by a name, symbol or address')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <SearchIcon />
@@ -216,14 +222,14 @@ const PoolList = () => {
                     <Table size="small" aria-label="a dense table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>POOL NAME</TableCell>
+                                <TableCell>{t('POOL NAME')}</TableCell>
                                 <TableCell sortDirection={orderBy === 'liquidity' ? order : false}>
                                     <TableSortLabel
                                         active={orderBy === 'liquidity'}
                                         direction={orderBy === 'liquidity' ? order : 'asc'}
                                         onClick={createSortHandler('liquidity')}
                                     >
-                                        LIQUIDITY
+                                        {t('LIQUIDITY')}
                                         {orderBy === 'liquidity' ? (
                                             <Box component="span" sx={visuallyHidden}>
                                                 {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -231,14 +237,14 @@ const PoolList = () => {
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell sortDirection={orderBy === 'volumn' ? order : false}>
+                                <TableCell sortDirection={orderBy === 'volume' ? order : false}>
                                     <TableSortLabel
-                                        active={orderBy === 'volumn'}
-                                        direction={orderBy === 'volumn' ? order : 'asc'}
-                                        onClick={createSortHandler('volumn')}
+                                        active={orderBy === 'volume'}
+                                        direction={orderBy === 'volume' ? order : 'asc'}
+                                        onClick={createSortHandler('volume')}
                                     >
-                                        VOLUMN(24H)
-                                        {orderBy === 'volumn' ? (
+                                        {t('VOLUME(24H)')}
+                                        {orderBy === 'volume' ? (
                                             <Box component="span" sx={visuallyHidden}>
                                                 {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                             </Box>
@@ -251,7 +257,7 @@ const PoolList = () => {
                                         direction={orderBy === 'fee' ? order : 'asc'}
                                         onClick={createSortHandler('fee')}
                                     >
-                                        FEES
+                                        {t('FEES')}
                                         {orderBy === 'fee' ? (
                                             <Box component="span" sx={visuallyHidden}>
                                                 {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -314,10 +320,10 @@ const PoolList = () => {
                                                     {pair.name}
                                                 </Box>
                                             </TableCell>
-                                            <TableCell>{pair.liquidity}</TableCell>
-                                            <TableCell>{pair.volumn}</TableCell>
-                                            <TableCell>{pair.fee}</TableCell>
-                                            <TableCell>{pair.apr}</TableCell>
+                                            <TableCell>${trim(pair.liquidity, 3)}</TableCell>
+                                            <TableCell>${trim(pair.volume, 3)}</TableCell>
+                                            <TableCell>${trim(pair.fee, 3)}</TableCell>
+                                            <TableCell>{pair.apr}%</TableCell>
                                         </StyledTableRow>
                                     )
                             })}

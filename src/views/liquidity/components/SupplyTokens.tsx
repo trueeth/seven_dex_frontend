@@ -1,14 +1,14 @@
-import { Box, Button, CircularProgress, Divider, TextField, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Divider, TextField, Typography } from '@mui/material'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
-import { Currency } from "@/utils/token"
-import { StyledButton } from "./Styled"
+import { Currency } from '@/utils/token'
+import { StyledButton } from './Styled'
 import AddIcon from '@mui/icons-material/Add'
 import { IconInfoCircle } from '@tabler/icons'
-import { useAccount } from "wagmi"
-import { useCurrencyBalance } from "@/state/wallet/hooks"
-import { Field } from "@/state/mint/actions"
-import { ONE_BIPS, ROUTER_ADDRESS } from "@/config/constants/exchange"
-import { ApprovalState, useApproveCallback } from "@/hooks/useApproveCallback"
+import { useAccount } from 'wagmi'
+import { useCurrencyBalance } from '@/state/wallet/hooks'
+import { Field } from '@/state/mint/actions'
+import { ONE_BIPS, ROUTER_ADDRESS } from '@/config/constants/exchange'
+import { ApprovalState, useApproveCallback } from '@/hooks/useApproveCallback'
 import { usePairAdder } from '@/state/user/hooks'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '@/state/mint/hooks'
 import { maxAmountSpend } from '@/utils/maxAmountSpend'
@@ -16,28 +16,26 @@ import { useAllTransactions, useTransactionAdder } from '@/state/transactions/ho
 import { calculateSlippageAmount, useRouterContract } from '@/utils/exchange'
 
 import { CurrencyAmount, Token } from '@/utils/token'
-import { useEffect, useMemo, useState } from "react"
-import { useActiveChainId } from "@/hooks/useActiveChainId"
-import { calculateGasMargin, numberInputOnWheelPreventChange } from "@/utils"
-import { BigNumber } from "ethers"
-import { TransactionResponse } from "@ethersproject/providers"
-import { GAS_PRICE_GWEI } from "@/state/types"
-import { DEFAULT_TRANSACTION_DEADLINE } from "@/config/constants"
-import { useTranslation } from "@/context/Localization"
-import { CustomTooltip } from "@/components/styled_components/Tooltip"
-import useToast from "@/hooks/useToast"
+import { useEffect, useMemo, useState } from 'react'
+import { useActiveChainId } from '@/hooks/useActiveChainId'
+import { calculateGasMargin, numberInputOnWheelPreventChange } from '@/utils'
+import { BigNumber } from 'ethers'
+import { TransactionResponse } from '@ethersproject/providers'
+import { GAS_PRICE_GWEI } from '@/state/types'
+import { DEFAULT_TRANSACTION_DEADLINE } from '@/config/constants'
+import { useTranslation } from '@/context/Localization'
+import { CustomTooltip } from '@/components/styled_components/Tooltip'
+import useToast from '@/hooks/useToast'
 
 function SupplyTokens({
     currencyA,
     currencyB,
     onBack
 }: {
-    currencyA: Currency,
-    currencyB: Currency,
+    currencyA: Currency
+    currencyB: Currency
     onBack: () => void
 }) {
-
-
     const { address: account } = useAccount()
     const { chainId } = useActiveChainId()
     const currencyABalance = useCurrencyBalance(account ?? undefined, currencyA ?? undefined)
@@ -60,13 +58,11 @@ function SupplyTokens({
         noLiquidity,
         liquidityMinted,
         poolTokenPercentage,
-        error,
+        error
         //  addError,
     } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
 
     const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
-
-
 
     const [{ attemptingTxn, liquidityErrorMessage, txHash }, setLiquidityState] = useState<{
         attemptingTxn: boolean
@@ -75,49 +71,35 @@ function SupplyTokens({
     }>({
         attemptingTxn: false,
         liquidityErrorMessage: undefined,
-        txHash: undefined,
+        txHash: undefined
     })
 
     const maxAmounts: { [field in Field]?: CurrencyAmount<Token> } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
         (accumulator, field) => {
             return {
                 ...accumulator,
-                [field]: maxAmountSpend(currencyBalances[field]),
+                [field]: maxAmountSpend(currencyBalances[field])
             }
         },
-        {},
+        {}
     )
     const formattedAmounts = useMemo(
         () => ({
             [independentField]: typedValue,
-            [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+            [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
         }),
-        [
-            dependentField,
-            independentField,
-            noLiquidity,
-            otherTypedValue,
-            parsedAmounts,
-            typedValue
-        ],
+        [dependentField, independentField, noLiquidity, otherTypedValue, parsedAmounts, typedValue]
     )
-
 
     // check whether the user has approved the router on the tokens
-    const [approvalA, approveACallback] = useApproveCallback(
-        parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[chainId],
-    )
+    const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[chainId])
 
-    const [approvalB, approveBCallback] = useApproveCallback(
-        parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[chainId],
-    )
+    const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[chainId])
 
-    const showFieldAApproval =
-        (approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING)
-    const showFieldBApproval =
-        (approvalB === ApprovalState.NOT_APPROVED || approvalB === ApprovalState.PENDING)
+    const showFieldAApproval = approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING
+    const showFieldBApproval = approvalB === ApprovalState.NOT_APPROVED || approvalB === ApprovalState.PENDING
 
-    const shouldShowApprovalGroup = (showFieldAApproval || showFieldBApproval)
+    const shouldShowApprovalGroup = showFieldAApproval || showFieldBApproval
 
     const addTransaction = useTransactionAdder()
 
@@ -133,7 +115,7 @@ function SupplyTokens({
 
         const amountsMin = {
             [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : 100)[0],
-            [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : 100)[0],
+            [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : 100)[0]
         }
 
         let estimate
@@ -150,7 +132,7 @@ function SupplyTokens({
                 amountsMin[tokenBIsNative ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
                 amountsMin[tokenBIsNative ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
                 account,
-                DEFAULT_TRANSACTION_DEADLINE,
+                DEFAULT_TRANSACTION_DEADLINE
             ]
             value = BigNumber.from((tokenBIsNative ? parsedAmountB : parsedAmountA).quotient.toString())
         } else {
@@ -164,7 +146,7 @@ function SupplyTokens({
                 amountsMin[Field.CURRENCY_A].toString(),
                 amountsMin[Field.CURRENCY_B].toString(),
                 account,
-                DEFAULT_TRANSACTION_DEADLINE,
+                DEFAULT_TRANSACTION_DEADLINE
             ]
             value = null
         }
@@ -175,7 +157,7 @@ function SupplyTokens({
                 method(...args, {
                     ...(value ? { value } : {}),
                     gasLimit: calculateGasMargin(estimatedGasLimit),
-                    gasPrice: GAS_PRICE_GWEI.fast,
+                    gasPrice: GAS_PRICE_GWEI.fast
                 }).then((response) => {
                     setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: response.hash })
 
@@ -187,16 +169,15 @@ function SupplyTokens({
                         summary: `Add ${amountA} ${symbolA} and ${amountB} ${symbolB}`,
                         translatableSummary: {
                             text: 'Add %amountA% %symbolA% and %amountB% %symbolB%',
-                            data: { amountA, symbolA, amountB, symbolB },
+                            data: { amountA, symbolA, amountB, symbolB }
                         },
-                        type: 'add-liquidity',
+                        type: 'add-liquidity'
                     })
-
 
                     if (pair) {
                         addPair(pair)
                     }
-                }),
+                })
             )
             .catch((err) => {
                 toastError(t('User rejected transaction'))
@@ -205,11 +186,8 @@ function SupplyTokens({
                 }
                 setLiquidityState({
                     attemptingTxn: false,
-                    liquidityErrorMessage:
-                        err && err.code !== 4001
-                            ? 'Add liquidity failed'
-                            : undefined,
-                    txHash: undefined,
+                    liquidityErrorMessage: err && err.code !== 4001 ? 'Add liquidity failed' : undefined,
+                    txHash: undefined
                 })
             })
     }
@@ -224,17 +202,22 @@ function SupplyTokens({
         }
     }, [txHash, allTransactions])
 
-    const supplyText = Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A]) ||
-        Number(maxAmounts[Field.CURRENCY_B]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_B]) ?
-        'Insufficient Balance' :
-        formattedAmounts[Field.CURRENCY_A] === '' || formattedAmounts[Field.CURRENCY_B] === '' ?
-            'Input Amounts' :
-            attemptingTxn ? 'Suppling Assets' : 'Supply'
+    const supplyText =
+        Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A]) ||
+        Number(maxAmounts[Field.CURRENCY_B]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_B])
+            ? 'Insufficient Balance'
+            : formattedAmounts[Field.CURRENCY_A] === '' || formattedAmounts[Field.CURRENCY_B] === ''
+            ? 'Input Amounts'
+            : attemptingTxn
+            ? 'Suppling Assets'
+            : 'Supply'
 
-
-    const supplyDisable = !chainId || !account || !routerContract ||
-        (Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A])) ||
-        (Number(maxAmounts[Field.CURRENCY_B]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_B])) ||
+    const supplyDisable =
+        !chainId ||
+        !account ||
+        !routerContract ||
+        Number(maxAmounts[Field.CURRENCY_A]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_A]) ||
+        Number(maxAmounts[Field.CURRENCY_B]?.toExact()) < Number(formattedAmounts[Field.CURRENCY_B]) ||
         formattedAmounts[Field.CURRENCY_A] === '' ||
         formattedAmounts[Field.CURRENCY_B] === '' ||
         attemptingTxn
@@ -247,36 +230,37 @@ function SupplyTokens({
                 </Box>
                 <Box ml={3}>
                     <Box sx={{ display: 'flex' }}>
-                        <Typography sx={{
-                            fontSize: '24px',
-                            fontWeight: 'bold',
-                            color: '#444 !important'
-                        }}>
+                        <Typography
+                            sx={{
+                                fontSize: '24px',
+                                fontWeight: 'bold',
+                                color: '#444 !important'
+                            }}
+                        >
                             {t('Add Liquidity')}
                         </Typography>
                         <CustomTooltip
                             arrow
-                            title={t('By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.')}
+                            title={t(
+                                'By adding liquidity you will earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.'
+                            )}
                             disableInteractive
                         >
                             <Button sx={{ display: 'flex', ml: -1.5, mt: -1 }}>
-                                <IconInfoCircle color='#666' />
+                                <IconInfoCircle color="#666" />
                             </Button>
                         </CustomTooltip>
                     </Box>
-                    <Typography mt={1}>
-                        {t('Receive LP tokens and earn 0.17% trading fees')}
-                    </Typography>
+                    <Typography mt={1}>{t('Receive LP tokens and earn 0.17% trading fees')}</Typography>
                 </Box>
             </Box>
             <Divider />
-            {
-                noLiquidity &&
+            {noLiquidity && (
                 <Box sx={{ p: 3, pb: 0 }}>
                     <Typography>{t('You are the first liquidity provider.')}</Typography>
                     <Typography>{t('The ratio of tokens you add will set the price of this pair.')}</Typography>
                 </Box>
-            }
+            )}
             <Box
                 //  supply amount fields
                 sx={{
@@ -290,34 +274,36 @@ function SupplyTokens({
                 <Box sx={{ width: '100%' }}>
                     <Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                p: 1,
-                                borderRadius: '20px',
-                                bgcolor: 'rgb(255, 231, 172,0.3)',
-                                width: 'fit-content'
-                            }}>
-                                <img src={currencyA?.logoURI} alt='tokenA' />
-                                <Typography >{currencyA?.symbol}</Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    p: 1,
+                                    borderRadius: '20px',
+                                    bgcolor: 'rgb(255, 231, 172,0.3)',
+                                    width: 'fit-content'
+                                }}
+                            >
+                                <img src={currencyA?.logoURI} alt="tokenA" />
+                                <Typography>{currencyA?.symbol}</Typography>
                             </Box>
-                            <Typography sx={{ mr: 2, color: '#666 !important' }}>{t('Balance')}: {currencyABalance?.toSignificant(6) ?? 0}</Typography>
+                            <Typography sx={{ mr: 2, color: '#666 !important' }}>
+                                {t('Balance')}: {currencyABalance?.toSignificant(6) ?? 0}
+                            </Typography>
                         </Box>
                         <TextField
                             variant="standard"
-                            autoComplete='off'
+                            autoComplete="off"
                             onChange={(e) => {
-                                if (Number(e.target.value) < 100000000)
-                                    onFieldAInput(e.target.value)
+                                if (Number(e.target.value) < 100000000) onFieldAInput(e.target.value)
                             }}
                             value={formattedAmounts[Field.CURRENCY_A]}
                             InputProps={{
                                 disableUnderline: true,
                                 placeholder: '0.0',
                                 type: 'number',
-                                inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' },
-
+                                inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' }
                             }}
                             sx={{
                                 width: '100%',
@@ -334,34 +320,36 @@ function SupplyTokens({
                 <Box sx={{ width: '100%' }}>
                     <Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                p: 1,
-                                borderRadius: '20px',
-                                bgcolor: 'rgb(255, 231, 172,0.3)',
-                                width: 'fit-content'
-                            }}>
-                                <img src={currencyB?.logoURI} alt='tokenA' />
-                                <Typography >{currencyB?.symbol}</Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    p: 1,
+                                    borderRadius: '20px',
+                                    bgcolor: 'rgb(255, 231, 172,0.3)',
+                                    width: 'fit-content'
+                                }}
+                            >
+                                <img src={currencyB?.logoURI} alt="tokenA" />
+                                <Typography>{currencyB?.symbol}</Typography>
                             </Box>
-                            <Typography sx={{ mr: 2, color: '#666 !important' }}>{t('Balance')}: {currencyBBalance?.toSignificant(6) ?? 0}</Typography>
+                            <Typography sx={{ mr: 2, color: '#666 !important' }}>
+                                {t('Balance')}: {currencyBBalance?.toSignificant(6) ?? 0}
+                            </Typography>
                         </Box>
                         <TextField
                             variant="standard"
-                            autoComplete='off'
+                            autoComplete="off"
                             onChange={(e) => {
-                                if (Number(e.target.value) < 100000000)
-                                    onFieldBInput(e.target.value)
+                                if (Number(e.target.value) < 100000000) onFieldBInput(e.target.value)
                             }}
                             value={formattedAmounts[Field.CURRENCY_B]}
                             InputProps={{
                                 disableUnderline: true,
                                 placeholder: '0.0',
                                 type: 'number',
-                                inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' },
-
+                                inputProps: { min: 0, inputMode: 'numeric', pattern: '[0-9]*' }
                             }}
                             sx={{
                                 width: '100%',
@@ -374,46 +362,58 @@ function SupplyTokens({
                         />
                     </Box>
                 </Box>
-                <Box sx={{
-                    p: 2,
-                    mt: 2,
-                    width: '100%',
-                    border: '1px solid #eee',
-                    borderRadius: '32px'
-                }}>
-                    <Typography ml={2}>{t('Prices and Shares')}</Typography>
-                    <Box sx={{
+                <Box
+                    sx={{
                         p: 2,
                         mt: 2,
-                        display: 'flex',
-                        justifyContent: 'space-around',
-                        gap: 1.5,
                         width: '100%',
                         border: '1px solid #eee',
-                        borderRadius: '32px',
-                        '& .MuiBox-root': {
+                        borderRadius: '32px'
+                    }}
+                >
+                    <Typography ml={2}>{t('Prices and Shares')}</Typography>
+                    <Box
+                        sx={{
+                            p: 2,
+                            mt: 2,
                             display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: 0.5,
-                            '& .MuiTypography-root': {
-                                fontSize: '14px !important',
-                                textAlign: 'center'
+                            justifyContent: 'space-around',
+                            gap: 1.5,
+                            width: '100%',
+                            border: '1px solid #eee',
+                            borderRadius: '32px',
+                            '& .MuiBox-root': {
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                '& .MuiTypography-root': {
+                                    fontSize: '14px !important',
+                                    textAlign: 'center'
+                                }
                             }
-                        },
-                    }}>
+                        }}
+                    >
                         <Box>
                             <Typography>{price?.toSignificant(6) ?? '-'}</Typography>
-                            <Typography>{currencyA?.symbol} per {currencyB?.symbol}</Typography>
+                            <Typography>
+                                {currencyA?.symbol} per {currencyB?.symbol}
+                            </Typography>
                         </Box>
                         <Box>
                             <Typography>{price?.invert()?.toSignificant(6) ?? '-'}</Typography>
-                            <Typography>{currencyB?.symbol} per {currencyA?.symbol}</Typography>
+                            <Typography>
+                                {currencyB?.symbol} per {currencyA?.symbol}
+                            </Typography>
                         </Box>
                         <Box>
-                            <Typography> {noLiquidity && price
-                                ? '100'
-                                : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
+                            <Typography>
+                                {' '}
+                                {noLiquidity && price
+                                    ? '100'
+                                    : (poolTokenPercentage?.lessThan(ONE_BIPS)
+                                          ? '<0.01'
+                                          : poolTokenPercentage?.toFixed(2)) ?? '0'}
                                 %
                             </Typography>
                             <Typography>{t('Share in Trading Pair')}</Typography>
@@ -422,54 +422,54 @@ function SupplyTokens({
                 </Box>
             </Box>
             <Divider />
-            <Box p={3} display='flex' alignItems='center' flexDirection='column'>
-                {
-                    shouldShowApprovalGroup ?
-                        <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
-                            {showFieldAApproval && (
-                                <StyledButton
-                                    onClick={approveACallback}
-                                    disabled={approvalA === ApprovalState.PENDING}
-                                >
-                                    {approvalA === ApprovalState.PENDING ? (
-                                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                                            {t('Approving %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
-                                        </Box>
-                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}
-                                </StyledButton>
-                            )}
-                            {showFieldBApproval && (
-                                <StyledButton
-                                    onClick={approveBCallback}
-                                    disabled={approvalB === ApprovalState.PENDING}
-                                >
-                                    {approvalB === ApprovalState.PENDING ? (
-                                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                                            {t('Approving %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })} <CircularProgress sx={{ color: 'white' }} />
-                                        </Box>
-                                    ) : t('Approve %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })}
-                                </StyledButton>
-                            )}
-                        </Box> :
-                        <StyledButton
-                            disabled={supplyDisable}
-                            onClick={() => {
-                                setLiquidityState({
-                                    attemptingTxn: false,
-                                    liquidityErrorMessage: undefined,
-                                    txHash: undefined,
-                                })
-                                onAdd()
-                            }}
-                        >
-                            <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                                {t(supplyText)}
-                                {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
-                            </Box>
-                        </StyledButton>
-                }
+            <Box p={3} display="flex" alignItems="center" flexDirection="column">
+                {shouldShowApprovalGroup ? (
+                    <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
+                        {showFieldAApproval && (
+                            <StyledButton onClick={approveACallback} disabled={approvalA === ApprovalState.PENDING}>
+                                {approvalA === ApprovalState.PENDING ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                                        {t('Approving %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}{' '}
+                                        <CircularProgress sx={{ color: 'white' }} />
+                                    </Box>
+                                ) : (
+                                    t('Approve %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })
+                                )}
+                            </StyledButton>
+                        )}
+                        {showFieldBApproval && (
+                            <StyledButton onClick={approveBCallback} disabled={approvalB === ApprovalState.PENDING}>
+                                {approvalB === ApprovalState.PENDING ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                                        {t('Approving %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })}{' '}
+                                        <CircularProgress sx={{ color: 'white' }} />
+                                    </Box>
+                                ) : (
+                                    t('Approve %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })
+                                )}
+                            </StyledButton>
+                        )}
+                    </Box>
+                ) : (
+                    <StyledButton
+                        disabled={supplyDisable}
+                        onClick={() => {
+                            setLiquidityState({
+                                attemptingTxn: false,
+                                liquidityErrorMessage: undefined,
+                                txHash: undefined
+                            })
+                            onAdd()
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                            {t(supplyText)}
+                            {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
+                        </Box>
+                    </StyledButton>
+                )}
             </Box>
-        </Box >
+        </Box>
     )
 }
 
