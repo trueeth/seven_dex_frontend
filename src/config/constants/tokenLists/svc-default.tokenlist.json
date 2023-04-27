@@ -7,7 +7,7 @@
         "patch": 0
     },
     "tags": {},
-    "logoURI": "https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png",
+    "logoURI": "./assets/images/svc.png",
     "keywords": [
         "seven dex",
         "default"

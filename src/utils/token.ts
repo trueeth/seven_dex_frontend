@@ -469,5 +469,5 @@ export const SVC_TESTNET = new ERC20Token(
     18,
     'SVC',
     'Seven Chain Token',
-    'https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png'
+    './assets/images/svc.png'
 )

@@ -3,6 +3,7 @@ import {
     Container,
     InputAdornment,
     OutlinedInput,
+    Pagination,
     Tab,
     Table,
     TableBody,
@@ -12,7 +13,7 @@ import {
     TableSortLabel,
     Tabs
 } from '@mui/material'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import useDebounce from '@/hooks/useDebounce'
 import { isAddress } from '@/utils'
@@ -36,6 +37,15 @@ const PoolList = () => {
         setPoolType(newValue)
     }
 
+    const [page, setPage] = React.useState(1)
+    const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value)
+    }
+
+    useEffect(() => {
+        setPage(1)
+    }, [poolType])
+
     // refs for fixed size lists
     const fixedList = useRef<FixedSizeList>()
 
@@ -57,6 +67,26 @@ const PoolList = () => {
     }, [])
 
     const allPairs = useTrackedTokenPairs()
+    const pairs = useMemo(() => (poolType === 'main' ? PINNED_PAIRS[ChainId.MUMBAI] : allPairs), [poolType, allPairs])
+    const filteredPairs = useMemo(
+        () =>
+            pairs.filter(
+                (pair) =>
+                    pair[0].name.indexOf(debouncedQuery) >= 0 ||
+                    pair[0].symbol.indexOf(debouncedQuery) >= 0 ||
+                    pair[0].address.indexOf(debouncedQuery) >= 0 ||
+                    pair[1].name.indexOf(debouncedQuery) >= 0 ||
+                    pair[1].symbol.indexOf(debouncedQuery) >= 0 ||
+                    pair[1].address.indexOf(debouncedQuery) >= 0 ||
+                    pair[0].name.toLowerCase().indexOf(debouncedQuery) >= 0 ||
+                    pair[0].symbol.toLowerCase().indexOf(debouncedQuery) >= 0 ||
+                    pair[0].address.toLowerCase().indexOf(debouncedQuery) >= 0 ||
+                    pair[1].name.toLowerCase().indexOf(debouncedQuery) >= 0 ||
+                    pair[1].symbol.toLowerCase().indexOf(debouncedQuery) >= 0 ||
+                    pair[1].address.toLowerCase().indexOf(debouncedQuery) >= 0
+            ),
+        [debouncedQuery, poolType]
+    )
 
     function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
         if (b[orderBy] < a[orderBy]) {
@@ -97,14 +127,13 @@ const PoolList = () => {
             const toggledOrder = isAsc ? 'desc' : 'asc'
             setOrder(toggledOrder)
             setOrderBy(newOrderBy)
-
-            const data = formatPair(poolType === 'main' ? PINNED_PAIRS[ChainId.MUMBAI] : allPairs)
+            const data = formatPair(filteredPairs)
             if (data) {
                 const sortedRows = stableSort(data, getComparator(toggledOrder, newOrderBy))
                 setTableRow(sortedRows)
             }
         },
-        [order, orderBy]
+        [order, orderBy, poolType]
     )
 
     const createSortHandler = (newOrderBy: any) => (event: React.MouseEvent<unknown>) => {
@@ -130,12 +159,12 @@ const PoolList = () => {
     }
 
     useEffect(() => {
-        const data = formatPair(poolType === 'main' ? PINNED_PAIRS[ChainId.MUMBAI] : allPairs)
+        const data = formatPair(filteredPairs)
         if (data) {
             const sortedRows = stableSort(data, getComparator(DEFAULT_ORDER, DEFAULT_ORDER_BY))
             setTableRow(sortedRows)
         }
-    }, [allPairs, poolType])
+    }, [filteredPairs, poolType])
 
     return (
         <Container sx={{ mt: 3 }}>
@@ -247,44 +276,61 @@ const PoolList = () => {
                             </TableRow>
                         </TableHead>
                         <CustomTableBody>
-                            {tableRow?.map((pair: any, index) => (
-                                <StyledTableRow
-                                    key={index}
-                                    onClick={() => {
-                                        if (pair.currencyIdA === WMATIC[ChainId.MUMBAI].address)
-                                            navigate(`/add?currencyA=MATIC&currencyB=${pair.currencyIdB}`)
-                                        else if (pair.currencyIdB === WMATIC[ChainId.MUMBAI].address)
-                                            navigate(`/add?currencyA=${pair.currencyIdA}&currencyB=MATIC`)
-                                        else
-                                            navigate(`/add?currencyA=${pair.currencyIdA}&currencyB=${pair.currencyIdB}`)
-                                    }}
-                                >
-                                    <TableCell>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                            <span>
-                                                <img
-                                                    src={pair.logoA}
-                                                    style={{ width: '24px', height: '24px' }}
-                                                    alt="logoA"
-                                                />
-                                                <img
-                                                    src={pair.logoB}
-                                                    style={{ width: '24px', height: '24px', marginLeft: '-5px' }}
-                                                    alt="logoA"
-                                                />
-                                            </span>
-                                            {pair.name}
-                                        </Box>
-                                    </TableCell>
-                                    <TableCell>{pair.liquidity}</TableCell>
-                                    <TableCell>{pair.volumn}</TableCell>
-                                    <TableCell>{pair.fee}</TableCell>
-                                    <TableCell>{pair.apr}</TableCell>
-                                </StyledTableRow>
-                            ))}
+                            {tableRow?.map((pair: any, index) => {
+                                if (page * 5 >= index + 1 && index + 1 > (page - 1) * 5)
+                                    return (
+                                        <StyledTableRow
+                                            key={index}
+                                            onClick={() => {
+                                                if (pair.currencyIdA === WMATIC[ChainId.MUMBAI].address)
+                                                    navigate(`/add?currencyA=MATIC&currencyB=${pair.currencyIdB}`)
+                                                else if (pair.currencyIdB === WMATIC[ChainId.MUMBAI].address)
+                                                    navigate(`/add?currencyA=${pair.currencyIdA}&currencyB=MATIC`)
+                                                else
+                                                    navigate(
+                                                        `/add?currencyA=${pair.currencyIdA}&currencyB=${pair.currencyIdB}`
+                                                    )
+                                                window.scrollTo({ top: 0, behavior: 'smooth' })
+                                            }}
+                                        >
+                                            <TableCell>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                                    <span>
+                                                        <img
+                                                            src={pair.logoA}
+                                                            style={{ width: '24px', height: '24px' }}
+                                                            alt="logoA"
+                                                        />
+                                                        <img
+                                                            src={pair.logoB}
+                                                            style={{
+                                                                width: '24px',
+                                                                height: '24px',
+                                                                marginLeft: '-5px'
+                                                            }}
+                                                            alt="logoA"
+                                                        />
+                                                    </span>
+                                                    {pair.name}
+                                                </Box>
+                                            </TableCell>
+                                            <TableCell>{pair.liquidity}</TableCell>
+                                            <TableCell>{pair.volumn}</TableCell>
+                                            <TableCell>{pair.fee}</TableCell>
+                                            <TableCell>{pair.apr}</TableCell>
+                                        </StyledTableRow>
+                                    )
+                            })}
                         </CustomTableBody>
                     </Table>
                 </TableContainer>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+                    <Pagination
+                        count={Math.ceil(tableRow ? tableRow.length / 5 : 1)}
+                        page={page}
+                        onChange={onPageChange}
+                    />
+                </Box>
             </Box>
         </Container>
     )

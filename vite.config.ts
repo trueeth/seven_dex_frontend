@@ -7,22 +7,23 @@ import path from 'path'
 export default defineConfig({
     plugins: [
         react({
-            include: '**/*.tsx',
+            include: '**/*.tsx'
         }),
-        svgr(),
+        svgr()
     ],
     build: {
         target: 'es2020',
+        outDir: './build'
     },
     optimizeDeps: {
         esbuildOptions: {
             target: 'es2020',
             define: {
-                global: 'globalThis',
-            },
-        },
+                global: 'globalThis'
+            }
+        }
     },
     resolve: {
-        alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
-    },
+        alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }]
+    }
 })
