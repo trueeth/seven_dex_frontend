@@ -19,6 +19,7 @@ import useEagerConnect from './hooks/useEagerConnect'
 import { ToastListener, ToastsProvider } from './context/ToastsContext'
 import { DataProvider } from './context/DataContext'
 import { ConnectKitProvider } from 'connectkit'
+import '@rainbow-me/rainbowkit/styles.css'
 
 function GlobalHooks() {
     usePollBlockNumber()
