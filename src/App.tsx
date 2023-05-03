@@ -20,6 +20,9 @@ import { ToastListener, ToastsProvider } from './context/ToastsContext'
 import { DataProvider } from './context/DataContext'
 import { ConnectKitProvider } from 'connectkit'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+window.Buffer = require('buffer').Buffer
+
 function GlobalHooks() {
     usePollBlockNumber()
     useEagerConnect()

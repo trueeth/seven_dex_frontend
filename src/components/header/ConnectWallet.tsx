@@ -37,7 +37,7 @@ function ConnectButton() {
                                 mx: 2,
                                 display: 'flex',
                                 alignContent: 'center',
-                                justifyContent: 'center',
+                                justifyContent: 'center'
                             }}
                         >
                             <Button
@@ -49,8 +49,8 @@ function ConnectButton() {
                                     padding: '5px 10px 10px',
                                     fontSize: '18px',
                                     '&:hover': {
-                                        bgcolor: '#e57a3b',
-                                    },
+                                        bgcolor: '#e57a3b'
+                                    }
                                 }}
                                 onClick={(evt) => {
                                     if (!isConnected) show()
@@ -76,8 +76,8 @@ function ConnectButton() {
                     '& img': {
                         pr: 1,
                         width: '24px',
-                        height: '20px',
-                    },
+                        height: '20px'
+                    }
                 }}
             >
                 <Link to={{ pathname: `//mumbai.polygonscan.com/address/${address}` }} target="_blank">
