@@ -14,14 +14,14 @@ export const { provider, chains } = configureChains(CHAINS, [
     jsonRpcProvider({
         rpc: (chain) => {
             return { http: chain.rpcUrls.default.http[0] }
-        },
-    }),
+        }
+    })
 ])
 
 const client = createClient(
     getDefaultClient({
         appName: 'Your App Name',
-        chains: [polygonMumbai],
+        chains: [polygonMumbai]
     })
 )
 
