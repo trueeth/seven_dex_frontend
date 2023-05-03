@@ -19,9 +19,10 @@ import useEagerConnect from './hooks/useEagerConnect'
 import { ToastListener, ToastsProvider } from './context/ToastsContext'
 import { DataProvider } from './context/DataContext'
 import { Buffer } from 'buffer'
+import '@rainbow-me/rainbowkit/styles.css'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-window.Buffer = Buffer
+window.Buffer = window.Buffer || Buffer
 
 function GlobalHooks() {
     usePollBlockNumber()

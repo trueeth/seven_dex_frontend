@@ -6,62 +6,37 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import { publicProvider } from 'wagmi/providers/public'
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 
 const CHAINS = [polygonMumbai]
 
 export const { provider, chains } = configureChains(CHAINS, [
     jsonRpcProvider({
         rpc: (chain) => {
-            return { http: chain.rpcUrls.default }
+            return { http: chain.rpcUrls.default.http[0] }
         }
-    })
+    }),
+    publicProvider()
 ])
 
-export const injectedConnector = new InjectedConnector({
-    chains,
-    options: {
-        shimDisconnect: false,
-        shimChainChangedDisconnect: true
-    }
+// const client = createClient(
+//     getDefaultClient({
+//         appName: 'Seven Dex',
+//         chains: [polygonMumbai]
+//     })
+// )
+
+const { connectors } = getDefaultWallets({
+    appName: 'Seven Dex',
+    projectId: '0x01',
+    chains
 })
 
-export const coinbaseConnector = new CoinbaseWalletConnector({
-    chains,
-    options: {
-        appName: 'svc-dex'
-    }
-})
-
-export const walletConnectConnector = new WalletConnectConnector({
-    chains,
-    options: {
-        qrcode: true
-    }
-})
-
-export const walletConnectNoQrCodeConnector = new WalletConnectConnector({
-    chains,
-    options: {
-        qrcode: false
-    }
-})
-
-export const metaMaskConnector = new MetaMaskConnector({
-    chains,
-    options: {
-        shimDisconnect: false,
-        shimChainChangedDisconnect: true
-    }
-})
-
-export const client = createClient({
-    autoConnect: false,
-    provider,
-    connectors: [metaMaskConnector, walletConnectConnector, coinbaseConnector]
+const wagmiClient = createClient({
+    autoConnect: true,
+    connectors,
+    provider
 })
 
 export const CHAIN_IDS = chains.map((c) => c.id)
@@ -71,8 +46,10 @@ export const isChainTestnet = memoize((chainId: number) => chains.find((c) => c.
 
 export function WagmiProvider(props: React.PropsWithChildren) {
     return (
-        <WagmiConfig client={client}>
-            <Web3LibraryProvider>{props.children}</Web3LibraryProvider>
+        <WagmiConfig client={wagmiClient}>
+            <RainbowKitProvider chains={chains}>
+                <Web3LibraryProvider>{props.children}</Web3LibraryProvider>
+            </RainbowKitProvider>
         </WagmiConfig>
     )
 }
