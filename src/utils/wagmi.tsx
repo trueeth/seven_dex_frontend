@@ -6,7 +6,6 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
-import { getDefaultClient } from 'connectkit'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
@@ -59,12 +58,11 @@ export const metaMaskConnector = new MetaMaskConnector({
     }
 })
 
-const client = createClient(
-    getDefaultClient({
-        appName: 'Your App Name',
-        chains: [polygonMumbai]
-    })
-)
+export const client = createClient({
+    autoConnect: false,
+    provider,
+    connectors: [metaMaskConnector, walletConnectConnector, coinbaseConnector]
+})
 
 export const CHAIN_IDS = chains.map((c) => c.id)
 
