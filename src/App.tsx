@@ -21,7 +21,7 @@ import { DataProvider } from './context/DataContext'
 import { ConnectKitProvider } from 'connectkit'
 import { Buffer } from 'buffer'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires ( for mobile connnect )
 window.Buffer = window.Buffer || Buffer
 
 function GlobalHooks() {
