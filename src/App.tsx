@@ -22,7 +22,7 @@ import { ConnectKitProvider } from 'connectkit'
 import { Buffer } from 'buffer'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-window.Buffer = window.Buffer || Buffer
+window.Buffer = Buffer
 
 function GlobalHooks() {
     usePollBlockNumber()

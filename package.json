@@ -29,6 +29,7 @@
         "@web3-react/walletlink-connector": "^6.2.14",
         "axios": "^1.2.1",
         "big.js": "^6.2.1",
+        "buffer": "^6.0.3",
         "clsx": "^1.2.1",
         "connectkit": "^1.2.3",
         "date-fns": "^2.29.3",
