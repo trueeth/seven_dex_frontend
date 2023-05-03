@@ -18,7 +18,6 @@ import Swap from './views/swap'
 import useEagerConnect from './hooks/useEagerConnect'
 import { ToastListener, ToastsProvider } from './context/ToastsContext'
 import { DataProvider } from './context/DataContext'
-import { ConnectKitProvider } from 'connectkit'
 import { Buffer } from 'buffer'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -51,41 +50,34 @@ export default function App() {
             <WagmiProvider>
                 <Provider store={store}>
                     <LanguageProvider>
-                        <ConnectKitProvider
-                            mode="light"
-                            options={{
-                                overlayBlur: 9
+                        <SWRConfig
+                            value={{
+                                use: [fetchStatusMiddleware]
                             }}
                         >
-                            <SWRConfig
-                                value={{
-                                    use: [fetchStatusMiddleware]
-                                }}
-                            >
-                                <DataProvider>
-                                    <ToastsProvider>
-                                        <GlobalHooks />
-                                        <Updaters />
-                                        <ThemeProvider theme={theme}>
-                                            <ViewBase>
-                                                <Routes>
-                                                    <Route path="/" element={<Home />} />
-                                                    <Route path="/home" element={<Home />} />
-                                                    <Route path="/swap" element={<Swap />} />
-                                                    <Route path="/docs" element={<Docs />} />
-                                                    <Route path="/farm" element={<Farm />} />
-                                                    <Route path="/liquidity" element={<Liquidity />} />
-                                                    <Route path="/add" element={<Liquidity />} />
-                                                    <Route path="/remove" element={<Liquidity />} />
-                                                    <Route path="/bridge" element={<Bridge />} />
-                                                </Routes>
-                                            </ViewBase>
-                                            <ToastListener />
-                                        </ThemeProvider>
-                                    </ToastsProvider>
-                                </DataProvider>
-                            </SWRConfig>
-                        </ConnectKitProvider>
+                            <DataProvider>
+                                <ToastsProvider>
+                                    <GlobalHooks />
+                                    <Updaters />
+                                    <ThemeProvider theme={theme}>
+                                        <ViewBase>
+                                            <Routes>
+                                                <Route path="/" element={<Home />} />
+                                                <Route path="/home" element={<Home />} />
+                                                <Route path="/swap" element={<Swap />} />
+                                                <Route path="/docs" element={<Docs />} />
+                                                <Route path="/farm" element={<Farm />} />
+                                                <Route path="/liquidity" element={<Liquidity />} />
+                                                <Route path="/add" element={<Liquidity />} />
+                                                <Route path="/remove" element={<Liquidity />} />
+                                                <Route path="/bridge" element={<Bridge />} />
+                                            </Routes>
+                                        </ViewBase>
+                                        <ToastListener />
+                                    </ThemeProvider>
+                                </ToastsProvider>
+                            </DataProvider>
+                        </SWRConfig>
                     </LanguageProvider>
                 </Provider>
             </WagmiProvider>

@@ -7,16 +7,57 @@ import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
 import { getDefaultClient } from 'connectkit'
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 const CHAINS = [polygonMumbai]
 
 export const { provider, chains } = configureChains(CHAINS, [
     jsonRpcProvider({
         rpc: (chain) => {
-            return { http: chain.rpcUrls.default.http[0] }
+            return { http: chain.rpcUrls.default }
         }
     })
 ])
+
+export const injectedConnector = new InjectedConnector({
+    chains,
+    options: {
+        shimDisconnect: false,
+        shimChainChangedDisconnect: true
+    }
+})
+
+export const coinbaseConnector = new CoinbaseWalletConnector({
+    chains,
+    options: {
+        appName: 'svc-dex'
+    }
+})
+
+export const walletConnectConnector = new WalletConnectConnector({
+    chains,
+    options: {
+        qrcode: true
+    }
+})
+
+export const walletConnectNoQrCodeConnector = new WalletConnectConnector({
+    chains,
+    options: {
+        qrcode: false
+    }
+})
+
+export const metaMaskConnector = new MetaMaskConnector({
+    chains,
+    options: {
+        shimDisconnect: false,
+        shimChainChangedDisconnect: true
+    }
+})
 
 const client = createClient(
     getDefaultClient({
