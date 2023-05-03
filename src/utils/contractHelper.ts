@@ -5,11 +5,11 @@ import { Contract } from '@ethersproject/contracts'
 
 import { getMulticallAddress } from './addressHelper'
 
-import erc20Abi from 'src/config/abi/erc20.json'
-import multicallAbi from 'src/config/abi/multicall.json'
-import { ChainId } from 'src/config/constants/chains'
+import erc20Abi from '@/config/abi/erc20.json'
+import multicallAbi from '@/config/abi/multicall.json'
+import { ChainId } from '@/config/constants/chains'
 
-import type { Erc20, Multicall } from 'src/config/abi/types'
+import type { Erc20, Multicall } from '@/config/abi/types'
 
 
 export const getContract = ({

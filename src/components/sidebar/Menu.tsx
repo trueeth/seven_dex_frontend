@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { Link, NavLink } from 'react-router-dom'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 import { IconExternalLink } from '@tabler/icons'
 
 const useStyles = makeStyles(theme => ({

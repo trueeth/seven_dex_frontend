@@ -1,6 +1,6 @@
 import JSBI from 'jsbi'
-import { Percent } from 'src/utils/percent'
-import { Token, WNATIVE } from 'src/utils/token'
+import { Percent } from '@/utils/percent'
+import { Token, WNATIVE } from '@/utils/token'
 import { ChainId } from './chains'
 import { ChainMap, ChainTokenList } from './types'
 import { PINNED_TOKENS_MUMBAI, PINNED_TOKENS_POLYGON } from './tokens'

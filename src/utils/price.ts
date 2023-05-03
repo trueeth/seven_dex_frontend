@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 
-import { BigintIsh, Rounding } from 'src/config/constants'
+import { BigintIsh, Rounding } from '@/config/constants'
 import { Currency } from './token'
 import { Fraction } from './fraction'
 import { CurrencyAmount } from './token'
@@ -32,12 +32,12 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
             ;[baseCurrency, quoteCurrency, denominator, numerator] = args
         } else {
             const result = args[0].quoteAmount.divide(args[0].baseAmount)
-                ;[baseCurrency, quoteCurrency, denominator, numerator] = [
-                    args[0].baseAmount.currency,
-                    args[0].quoteAmount.currency,
-                    result.denominator,
-                    result.numerator,
-                ]
+            ;[baseCurrency, quoteCurrency, denominator, numerator] = [
+                args[0].baseAmount.currency,
+                args[0].quoteAmount.currency,
+                result.denominator,
+                result.numerator,
+            ]
         }
         super(numerator, denominator)
 
@@ -93,7 +93,6 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
     }
 }
 
-
 export const multiplyPriceByAmount = (price: Price<Currency, Currency>, amount: number, significantDigits = 18) => {
     if (!price) {
         return 0
@@ -105,4 +104,3 @@ export const multiplyPriceByAmount = (price: Price<Currency, Currency>, amount: 
         return 0
     }
 }
-

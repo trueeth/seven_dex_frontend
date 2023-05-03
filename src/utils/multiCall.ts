@@ -2,8 +2,8 @@ import { CallOverrides, Contract } from '@ethersproject/contracts'
 import { provider } from './wagmi'
 import { Interface, Fragment } from '@ethersproject/abi'
 import { Provider } from '@ethersproject/providers'
-import { ChainId } from 'src/config/constants/chains'
-import multicallAbi from 'src/config/abi/multicall.json'
+import { ChainId } from '@/config/constants/chains'
+import multicallAbi from '@/config/abi/multicall.json'
 
 export const multicallAddresses = {
     1: '0xcA11bde05977b3631167028862bE2a173976CA11',
@@ -60,7 +60,7 @@ export type MultiCallV2 = <T = any>(params: MulticallV2Params) => Promise<T>
 export type MultiCall = <T = any>(abi: any[], calls: Call[], chainId?: ChainId) => Promise<T>
 
 export function createMulticall<TProvider extends Provider>(
-    provider: ({ chainId }: { chainId?: number | undefined }) => TProvider,
+    provider: ({ chainId }: { chainId?: number | undefined }) => TProvider
 ) {
     const multicall: MultiCall = async (abi: any[], calls: Call[], chainId = ChainId.POLYGON) => {
         const multi = getMulticallContract(chainId, provider({ chainId }))
@@ -136,7 +136,6 @@ export function createMulticall<TProvider extends Provider>(
         multicallv3,
     }
 }
-
 
 export interface MulticallOptions extends CallOverrides {
     requireSuccess?: boolean

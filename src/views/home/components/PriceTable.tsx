@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import { useAllCurrencies } from 'src/hooks/Tokens'
-import { useTranslation } from 'src/context/Localization'
-import { DataContext } from 'src/context/DataContext'
-import { trim } from 'src/utils/trim'
+import { useAllCurrencies } from '@/hooks/Tokens'
+import { useTranslation } from '@/context/Localization'
+import { DataContext } from '@/context/DataContext'
+import { trim } from '@/utils/trim'
 
 const useStyles = makeStyles((theme) => ({
     priceTable: {

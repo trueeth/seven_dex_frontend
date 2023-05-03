@@ -1,11 +1,11 @@
-import { ChainId } from 'src/config/constants/chains'
+import { ChainId } from '@/config/constants/chains'
 import { atom, useAtomValue } from 'jotai'
 // import { useRouter } from 'next/router'
 import { useLocation } from 'react-router-dom'
 import { useDeferredValue, useMemo } from 'react'
-import { isChainSupported } from 'src/utils/wagmi'
+import { isChainSupported } from '@/utils/wagmi'
 import { useNetwork } from 'wagmi'
-import { getChainId } from 'src/config/constants/chains'
+import { getChainId } from '@/config/constants/chains'
 import { useSessionChainId } from './useSessionChainId'
 
 const queryChainIdAtom = atom(-1) // -1 unload, 0 no chainId on query
@@ -55,7 +55,7 @@ export const useActiveChainId = () => {
 
     return {
         chainId,
-        isWrongNetwork: (chain?.unsupported ?? false),
+        isWrongNetwork: chain?.unsupported ?? false,
         isNotMatched,
     }
 }

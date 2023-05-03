@@ -4,9 +4,9 @@ import Box from '@mui/material/Box'
 import { Button, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { IconAdjustmentsHorizontal, IconX, IconInfoCircle } from '@tabler/icons'
 import SwitchLarge from './styled_components/SwitchLarge'
-import { useTranslation } from 'src/context/Localization'
-import { useUserSlippageTolerance, useUserTransactionTTL } from 'src/state/user/hooks'
-import { escapeRegExp } from 'src/utils'
+import { useTranslation } from '@/context/Localization'
+import { useUserSlippageTolerance, useUserTransactionTTL } from '@/state/user/hooks'
+import { escapeRegExp } from '@/utils'
 import { CustomTooltip } from './styled_components/Tooltip'
 
 enum SlippageError {

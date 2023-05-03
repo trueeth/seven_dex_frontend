@@ -1,10 +1,10 @@
 import React, { Fragment, memo } from 'react'
-import { Trade } from 'src/utils/trade'
+import { Trade } from '@/utils/trade'
 
-import { unwrappedToken } from 'src/utils/wrappedCurrency'
-import { TradeType } from 'src/config/constants'
+import { unwrappedToken } from '@/utils/wrappedCurrency'
+import { TradeType } from '@/config/constants'
 import { Box, Typography } from '@mui/material'
-import { Currency } from 'src/utils/token'
+import { Currency } from '@/utils/token'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
 export default memo(function SwapRoute({ trade }: { trade: Trade<Currency, Currency, TradeType> }) {

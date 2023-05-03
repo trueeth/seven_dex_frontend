@@ -6,25 +6,25 @@ import {
     Erc20Bytes32,
     Multicall,
     Weth,
-} from 'src/config/abi/types'
+} from '@/config/abi/types'
 
 import { useProviderOrSigner } from './useProviderOrSigner'
-import { getMulticallAddress } from 'src/utils/addressHelper'
+import { getMulticallAddress } from '@/utils/addressHelper'
 import {
     getErc20Contract,
-} from 'src/utils/contractHelper'
+} from '@/utils/contractHelper'
 
 // Imports below migrated from Exchange useContract.ts
 import { Contract } from '@ethersproject/contracts'
-import { WNATIVE } from "src/utils/token"
-import { ERC20_BYTES32_ABI } from 'src/config/abi/erc20'
-import ERC20_ABI from 'src/config/abi/erc20.json'
-import IPairABI from 'src/config/abi/IPair.json'
-import multiCallAbi from 'src/config/abi/multicall.json'
-import WETH_ABI from 'src/config/abi/weth.json'
-import { getContract } from 'src/utils'
+import { WNATIVE } from "@/utils/token"
+import { ERC20_BYTES32_ABI } from '@/config/abi/erc20'
+import ERC20_ABI from '@/config/abi/erc20.json'
+import IPairABI from '@/config/abi/IPair.json'
+import multiCallAbi from '@/config/abi/multicall.json'
+import WETH_ABI from '@/config/abi/weth.json'
+import { getContract } from '@/utils'
 
-import { IPair } from 'src/config/abi/types'
+import { IPair } from '@/config/abi/types'
 import { useActiveChainId } from './useActiveChainId'
 
 

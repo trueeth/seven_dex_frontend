@@ -1,10 +1,10 @@
 import { Box, Button, Typography } from "@mui/material"
-import { useTranslation } from "src/context/Localization"
-import { useAllTokens } from "src/hooks/Tokens"
-import { useActiveChainId } from "src/hooks/useActiveChainId"
-import useToast from "src/hooks/useToast"
-import { registerToken } from "src/utils/registerToken"
-import { Token } from "src/utils/token"
+import { useTranslation } from "@/context/Localization"
+import { useAllTokens } from "@/hooks/Tokens"
+import { useActiveChainId } from "@/hooks/useActiveChainId"
+import useToast from "@/hooks/useToast"
+import { registerToken } from "@/utils/registerToken"
+import { Token } from "@/utils/token"
 import { useAccount } from "wagmi"
 
 

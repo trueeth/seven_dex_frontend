@@ -1,5 +1,5 @@
-import { ERC20Token, SVC_MAINNET, SVC_TESTNET, WMATIC } from "src/utils/token";
-import { ChainId } from "./chains";
+import { ERC20Token, SVC_MAINNET, SVC_TESTNET, WMATIC } from '@/utils/token'
+import { ChainId } from './chains'
 
 export const PINNED_TOKENS_MUMBAI = {
     wmatic: WMATIC[ChainId.MUMBAI],

@@ -1,7 +1,7 @@
 
 import { styled } from '@mui/material/styles'
 import { Box } from "@mui/material"
-import { Currency } from "src/utils/token"
+import { Currency } from "@/utils/token"
 
 
 const DoubleCurrencyLogo = ({ currency0, currency1 }: {

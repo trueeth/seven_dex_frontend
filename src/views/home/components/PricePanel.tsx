@@ -1,10 +1,10 @@
 import React, { useContext, useMemo } from 'react'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 import { makeStyles } from '@mui/styles'
-import { TokenImage } from 'src/config'
-import { DataContext } from 'src/context/DataContext'
+import { TokenImage } from '@/config'
+import { DataContext } from '@/context/DataContext'
 
 
 const useStyles = makeStyles((theme) => ({

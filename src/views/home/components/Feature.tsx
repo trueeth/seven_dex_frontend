@@ -2,11 +2,11 @@ import React from 'react'
 import { Box } from '@mui/system'
 import { Typography, Grid } from '@mui/material'
 import styled from '@emotion/styled'
-import SwapIcon from 'src/asset/images/swap.png'
-import AnalyticsIcon from 'src/asset/images/analytics.png'
-import LiquidityIcon from 'src/asset/images/liquidity.png'
-import EarningIcon from 'src/asset/images/earning.png'
-import { useTranslation } from 'src/context/Localization'
+import SwapIcon from '@/asset/images/swap.png'
+import AnalyticsIcon from '@/asset/images/analytics.png'
+import LiquidityIcon from '@/asset/images/liquidity.png'
+import EarningIcon from '@/asset/images/earning.png'
+import { useTranslation } from '@/context/Localization'
 
 const ImageWrapper = styled.img` 
     width : 100px;

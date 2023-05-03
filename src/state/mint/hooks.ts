@@ -1,22 +1,22 @@
 
 import { useCallback, useMemo } from 'react'
-import { Currency, CurrencyAmount, Token } from 'src/utils/token'
-import { Pair } from 'src/utils/pair'
-import { Price } from 'src/utils/price'
-import { Percent } from 'src/utils/percent'
+import { Currency, CurrencyAmount, Token } from '@/utils/token'
+import { Pair } from '@/utils/pair'
+import { Price } from '@/utils/price'
+import { Percent } from '@/utils/percent'
 import JSBI from 'jsbi'
 import { useDispatch, useSelector } from 'react-redux'
-import { PairState, usePair } from 'src/hooks/usePairs'
-import useTotalSupply from 'src/hooks/useTotalSupply'
+import { PairState, usePair } from '@/hooks/usePairs'
+import useTotalSupply from '@/hooks/useTotalSupply'
 
-import { wrappedCurrency, wrappedCurrencyAmount } from 'src/utils/wrappedCurrency'
+import { wrappedCurrency, wrappedCurrencyAmount } from '@/utils/wrappedCurrency'
 import { AppDispatch, AppState } from '../index'
 import { tryParseAmount } from '../swap/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
-import { BIG_INT_ZERO } from 'src/config/constants/exchange'
+import { BIG_INT_ZERO } from '@/config/constants/exchange'
 import { useAccount } from 'wagmi'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
+import { useActiveChainId } from '@/hooks/useActiveChainId'
 
 const ZERO = JSBI.BigInt(0)
 

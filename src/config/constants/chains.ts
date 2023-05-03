@@ -35,17 +35,17 @@ export const polygon: Chain = {
     name: 'Polygon Chain',
     network: 'polygon',
     rpcUrls: {
-        public: 'https://polygon-mainnet-public.unifra.io',
-        default: 'https://polygon-rpc.com/',
+        public: { http: ['https://polygon-mainnet-public.unifra.io'] },
+        default: { http: ['https://polygon-rpc.com/'] }
     },
     blockExplorers: {
         default: explorer,
-        etherscan: explorer,
+        etherscan: explorer
     },
     nativeCurrency: {
         name: 'Polygon Chain Native Token',
         symbol: 'MATIC',
-        decimals: 18,
+        decimals: 18
     }
 }
 
@@ -56,15 +56,14 @@ export const mumbai: Chain = {
     nativeCurrency: {
         decimals: 18,
         name: 'Polygon Chain Native Token',
-        symbol: 'MATIC',
+        symbol: 'MATIC'
     },
     rpcUrls: {
-        public: 'https://matic-mumbai.chainstacklabs.com',
-        default: 'https://matic-mumbai.chainstacklabs.com',
+        public: { http: ['https://matic-mumbai.chainstacklabs.com'] },
+        default: { http: ['https://matic-mumbai.chainstacklabs.com'] }
     },
     blockExplorers: {
-        default: { name: 'PolygonScan', url: 'https://mumbai.polygonscan.com/' },
+        default: { name: 'PolygonScan', url: 'https://mumbai.polygonscan.com/' }
     },
-    testnet: true,
+    testnet: true
 }
-

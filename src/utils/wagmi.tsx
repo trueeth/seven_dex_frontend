@@ -2,83 +2,36 @@ import React from 'react'
 import { configureChains, createClient } from 'wagmi'
 import memoize from 'lodash/memoize'
 import { polygon } from 'wagmi/chains'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
-import { useAccount, WagmiConfig, WagmiConfigProps, useNetwork } from 'wagmi'
-import { Provider, WebSocketProvider } from '@wagmi/core'
+import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
+import { getDefaultClient } from 'connectkit'
 
-const CHAINS = [polygon];
+const CHAINS = [polygon]
 
 export const { provider, chains } = configureChains(CHAINS, [
     jsonRpcProvider({
         rpc: (chain) => {
-            return { http: chain.rpcUrls.default }
+            return { http: chain.rpcUrls.default.http[0] }
         }
     })
 ])
 
-export const injectedConnector = new InjectedConnector({
-    chains,
-    options: {
-        shimDisconnect: false,
-        shimChainChangedDisconnect: true,
-    },
-})
-
-export const coinbaseConnector = new CoinbaseWalletConnector({
-    chains,
-    options: {
-        appName: 'svc-dex'
-    },
-})
-
-export const walletConnectConnector = new WalletConnectConnector({
-    chains,
-    options: {
-        qrcode: true,
-    },
-})
-
-export const walletConnectNoQrCodeConnector = new WalletConnectConnector({
-    chains,
-    options: {
-        qrcode: false,
-    },
-})
-
-export const metaMaskConnector = new MetaMaskConnector({
-    chains,
-    options: {
-        shimDisconnect: false,
-        shimChainChangedDisconnect: true,
-    },
-})
-
-export const client = createClient({
-    autoConnect: false,
-    provider,
-    connectors: [
-        metaMaskConnector,
-        walletConnectConnector,
-        coinbaseConnector
-    ],
-})
+const client = createClient(
+    getDefaultClient({
+        appName: 'Your App Name',
+        chains: [polygon]
+    })
+)
 
 export const CHAIN_IDS = chains.map((c) => c.id)
 
-export const isChainSupported = memoize((chainId: number) => CHAIN_IDS.includes(chainId))
-export const isChainTestnet = memoize((chainId: number) => chains.find((c) => c.id === chainId)?.testnet)
+export const isChainSupported = memoize((chainId) => CHAIN_IDS.includes(chainId))
 
-export function WagmiProvider<TProvider extends Provider, TWebSocketProvider extends WebSocketProvider>(
-    props: React.PropsWithChildren<WagmiConfigProps<TProvider, TWebSocketProvider>>,
-) {
+export function WagmiProvider(props: React.PropsWithChildren) {
     return (
-        <WagmiConfig client={props.client}>
+        <WagmiConfig client={client}>
             <Web3LibraryProvider>{props.children}</Web3LibraryProvider>
         </WagmiConfig>
     )

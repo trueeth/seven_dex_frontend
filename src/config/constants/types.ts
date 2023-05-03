@@ -1,4 +1,4 @@
-import { Token } from "src/utils/token"
+import { Token } from "@/utils/token"
 import { ChainId } from "./chains"
 
 export enum FetchStatus {

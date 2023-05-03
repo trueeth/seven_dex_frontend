@@ -3,9 +3,9 @@ import JSBI from 'jsbi'
 import { Trade } from './trade'
 import { Percent } from './percent'
 import { Fraction } from './fraction'
-import { TradeType } from 'src/config/constants'
-import IRouterABI from 'src/config/abi/IRouter.json'
-import { IRouter } from 'src/config/abi/types/IRouter'
+import { TradeType } from '@/config/constants'
+import IRouterABI from '@/config/abi/IRouter.json'
+import { IRouter } from '@/config/abi/types/IRouter'
 import {
   ALLOWED_PRICE_IMPACT_HIGH,
   ALLOWED_PRICE_IMPACT_LOW,
@@ -16,10 +16,10 @@ import {
   INPUT_FRACTION_AFTER_FEE,
   ONE_HUNDRED_PERCENT,
   ROUTER_ADDRESS,
-} from 'src/config/constants/exchange'
+} from '@/config/constants/exchange'
 
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
-import { useContract } from 'src/hooks/useContract'
+import { useActiveChainId } from '@/hooks/useActiveChainId'
+import { useContract } from '@/hooks/useContract'
 
 import { Field } from '../state/swap/actions'
 

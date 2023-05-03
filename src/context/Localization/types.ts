@@ -1,10 +1,10 @@
 import { ReactText } from 'react'
-import translations from 'src/config/localization/translations.json'
+import translations from '@/config/localization/translations.json'
 
 export interface Language {
-    locale: string;
-    language: string;
-    code: string;
+    locale: string
+    language: string
+    code: string
 }
 export type ContextData = {
     [key: string]: ReactText

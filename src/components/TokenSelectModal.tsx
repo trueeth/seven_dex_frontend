@@ -3,18 +3,17 @@ import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Box, Modal, Tabs, Tab, Typography, OutlinedInput, InputAdornment } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
-import { useTranslation } from 'src/context/Localization'
-import { useAllTokens } from 'src/hooks/Tokens'
+import { useTranslation } from '@/context/Localization'
+import { useAllTokens } from '@/hooks/Tokens'
 import { isAddress } from '@ethersproject/address'
 import { FixedSizeList } from 'react-window'
-import useDebounce from 'src/hooks/useDebounce'
-import { createFilterToken } from 'src/utils/filtering'
-import { Currency, NATIVE, Token } from 'src/utils/token'
-import { DEFAULT_CHAIN_ID } from 'src/config/constants/chains'
-import useNativeCurrency from 'src/hooks/useNativeCurrency'
-import { useAllTokenBalances, useCurrencyBalance, useNativeBalances } from 'src/state/wallet/hooks'
+import useDebounce from '@/hooks/useDebounce'
+import { createFilterToken } from '@/utils/filtering'
+import { Currency, NATIVE, Token } from '@/utils/token'
+import { DEFAULT_CHAIN_ID } from '@/config/constants/chains'
+import useNativeCurrency from '@/hooks/useNativeCurrency'
+import { useAllTokenBalances, useCurrencyBalance, useNativeBalances } from '@/state/wallet/hooks'
 import { useAccount } from 'wagmi'
-
 
 const modalStyle = {
     position: 'absolute',
@@ -39,11 +38,8 @@ const modalStyle = {
     }
 }
 
-
 function CurrencyRow({ token, onSelect, balance }) {
-
     return (
-
         <Box
             onClick={onSelect}
             sx={{
@@ -72,7 +68,6 @@ function CurrencyRow({ token, onSelect, balance }) {
 }
 
 function TokenSelectModal({ open, onClose, onCurrencySelect }) {
-
     const [value, setValue] = React.useState('one')
 
     const { address } = useAccount()
@@ -82,7 +77,7 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
     const nativeBalance = useCurrencyBalance(address ?? undefined, nativeCurrency)
 
     const handleChange = (event: any, newValue: string) => {
-        setValue(newValue);
+        setValue(newValue)
     }
 
     const { t } = useTranslation()
@@ -108,33 +103,32 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
     const handleCurrencySelect = useCallback(
         (currency: Currency) => {
             onCurrencySelect(currency)
-        }, [onCurrencySelect])
+        },
+        [onCurrencySelect]
+    )
 
     return (
         <Modal
             open={open}
             sx={{
-                "& > .MuiBackdrop-root": {
-                    backdropFilter: "blur(10px)"
+                '& > .MuiBackdrop-root': {
+                    backdropFilter: 'blur(10px)'
                 }
             }}
         >
             <Box sx={{ ...modalStyle }}>
-                <Box
-                    display='flex'
-                    justifyContent='space-between'
-                    alignItems='center'
-                    sx={{ mt: 4, mb: 1, px: 4 }}
-                >
+                <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4, mb: 1, px: 4 }}>
                     <Typography sx={{ fontSize: '20px' }}>{t('Select a token')}</Typography>
-                    <Box sx={{
-                        display: 'flex',
-                        alignItem: 'center',
-                        justifyContent: 'center',
-                        bgcolor: '#fff',
-                        borderRadius: '9999px',
-                        p: 1
-                    }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItem: 'center',
+                            justifyContent: 'center',
+                            bgcolor: '#fff',
+                            borderRadius: '9999px',
+                            p: 1
+                        }}
+                    >
                         <CloseIcon
                             sx={{ width: '20px', height: '20px', color: '#333', cursor: 'pointer' }}
                             onClick={onClose}
@@ -144,10 +138,12 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <OutlinedInput
                         onChange={(e) => handleInput(e)}
-                        placeholder='Search by a name, symbol or address'
-                        startAdornment={<InputAdornment position='start'>
-                            <SearchIcon />
-                        </InputAdornment>}
+                        placeholder={t('Search by a name, symbol or address')}
+                        startAdornment={
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        }
                         sx={{
                             width: '90%',
                             color: '#333',
@@ -184,12 +180,14 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
                         <Tab value="four" label="Stable Coins" disableRipple />
                     </Tabs>
                 </Box>
-                <Box sx={{
-                    bgcolor: '#fff',
-                    height: '400px',
-                    borderBottomLeftRadius: '20px',
-                    borderBottomRightRadius: '20px'
-                }}>
+                <Box
+                    sx={{
+                        bgcolor: '#fff',
+                        height: '400px',
+                        borderBottomLeftRadius: '20px',
+                        borderBottomRightRadius: '20px'
+                    }}
+                >
                     <CurrencyRow
                         token={NATIVE[DEFAULT_CHAIN_ID]}
                         onSelect={() => {
@@ -198,19 +196,17 @@ function TokenSelectModal({ open, onClose, onCurrencySelect }) {
                         }}
                         balance={nativeBalance?.toSignificant() ?? 0}
                     />
-                    {
-                        filteredTokens.map((token, index) => (
-                            <CurrencyRow
-                                key={index}
-                                token={token}
-                                onSelect={() => {
-                                    handleCurrencySelect(token)
-                                    onClose()
-                                }}
-                                balance={allTokenBalances?.[token.address]?.toSignificant() ?? 0}
-                            />
-                        ))
-                    }
+                    {filteredTokens.map((token, index) => (
+                        <CurrencyRow
+                            key={index}
+                            token={token}
+                            onSelect={() => {
+                                handleCurrencySelect(token)
+                                onClose()
+                            }}
+                            balance={allTokenBalances?.[token.address]?.toSignificant() ?? 0}
+                        />
+                    ))}
                 </Box>
             </Box>
         </Modal>

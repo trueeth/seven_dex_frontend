@@ -1,9 +1,9 @@
 import React from 'react'
-import { Price } from 'src/utils/price'
+import { Price } from '@/utils/price'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
-import { Currency } from 'src/utils/token'
+import { Currency } from '@/utils/token'
 import { Box, Typography } from '@mui/material'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 
 interface TradePriceProps {
     price?: Price<Currency, Currency>

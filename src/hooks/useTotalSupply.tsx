@@ -1,7 +1,7 @@
 
 import { useTokenContract } from './useContract'
 import { useSingleCallResult } from '../state/multicall/hooks'
-import { Currency, CurrencyAmount, Token } from 'src/utils/token'
+import { Currency, CurrencyAmount, Token } from '@/utils/token'
 import { useMemo } from 'react'
 
 // returns undefined if input token is undefined, or fails to get token contract,

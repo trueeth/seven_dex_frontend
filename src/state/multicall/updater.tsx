@@ -1,11 +1,11 @@
-import useDebounce from 'src/hooks/useDebounce'
-import { Multicall } from 'src/config/abi/types'
-import { ResultStructOutput } from 'src/config/abi/types/Multicall'
+import useDebounce from '@/hooks/useDebounce'
+import { Multicall } from '@/config/abi/types'
+import { ResultStructOutput } from '@/config/abi/types/Multicall'
 import { useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useCurrentBlock } from '../block/hooks'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
-import { useMulticallContract } from 'src/hooks/useContract'
+import { useActiveChainId } from '@/hooks/useActiveChainId'
+import { useMulticallContract } from '@/hooks/useContract'
 import { AppState, useAppDispatch } from '../index'
 import {
     Call,

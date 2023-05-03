@@ -7,7 +7,7 @@ import ConnectButton from './ConnectWallet'
 import SelectNetwork from './SelectNetwork'
 
 import LanguageSelector from './LanguageSelector'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 import { Link } from 'react-router-dom'
 
 

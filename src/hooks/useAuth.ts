@@ -1,19 +1,18 @@
 import { useCallback } from 'react'
-import { ConnectorNames } from 'src/config'
-import { DEFAULT_CHAIN_ID } from 'src/config/constants/chains'
-import { useTranslation } from 'src/context/Localization'
+import { ConnectorNames } from '@/config'
+import { DEFAULT_CHAIN_ID } from '@/config/constants/chains'
+import { useTranslation } from '@/context/Localization'
 import {
     ConnectorNotFoundError,
     SwitchChainError,
     SwitchChainNotSupportedError,
     useConnect,
     useDisconnect,
-    useNetwork,
+    useNetwork
 } from 'wagmi'
 import useToast from './useToast'
 
 const useAuth = () => {
-
     const { connectAsync, connectors, isLoading } = useConnect()
     const { chain } = useNetwork()
     const { disconnectAsync } = useDisconnect()
@@ -43,15 +42,13 @@ const useAuth = () => {
         [connectors, connectAsync, chainId]
     )
 
-    const logout = useCallback(
-        async () => {
-            try {
-                await disconnectAsync()
-            } catch (error) {
-                console.log(error)
-            }
-        }, [disconnectAsync, chain?.id]
-    )
+    const logout = useCallback(async () => {
+        try {
+            await disconnectAsync()
+        } catch (error) {
+            console.log(error)
+        }
+    }, [disconnectAsync, chain?.id])
     return { login, logout, loading: isLoading }
 }
 

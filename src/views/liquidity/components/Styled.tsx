@@ -1,5 +1,5 @@
-import { Button } from "@mui/material"
-import { styled } from "@mui/system"
+import { Button } from '@mui/material'
+import { styled } from '@mui/system'
 
 export const StyledButton = styled(Button)<{ outlined?: boolean }>(({ outlined }) => ({
     padding: '10px 0',
@@ -17,9 +17,10 @@ export const StyledButton = styled(Button)<{ outlined?: boolean }>(({ outlined }
     },
     '&:disabled': {
         color: 'white',
-        cursor: 'not-allowed'
-    },
-}));
+        cursor: 'not-allowed',
+        backgroundColor: 'wheat'
+    }
+}))
 
 export const OutlinedButton = styled(Button)({
     padding: 0,

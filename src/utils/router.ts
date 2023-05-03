@@ -1,4 +1,4 @@
-import { TradeType } from "src/config/constants"
+import { TradeType } from "@/config/constants"
 import { Percent } from "./percent"
 import { Currency } from "./token"
 import { Trade } from "./trade"

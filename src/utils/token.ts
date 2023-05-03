@@ -1,12 +1,12 @@
-import { ChainId } from "../config/constants/chains"
+import { ChainId } from '../config/constants/chains'
 import invariant from 'tiny-invariant'
-import { validateAndParseAddress } from "./index"
-import { TokenAddressMap } from "./wrappedTokenInfo"
+import { validateAndParseAddress } from './index'
+import { TokenAddressMap } from './wrappedTokenInfo'
 import JSBI from 'jsbi'
 import _Big from 'big.js'
 import toFormat from 'toformat'
-import { Fraction } from "./fraction"
-import { BigintIsh, Rounding } from "src/config/constants"
+import { Fraction } from './fraction'
+import { BigintIsh, Rounding } from '@/config/constants'
 
 type ExtensionValue = string | number | boolean | null | undefined
 
@@ -23,14 +23,14 @@ export interface TokenInfo {
     readonly tags?: string[]
     readonly extensions?: {
         readonly [key: string]:
-        | {
-            [key: string]:
             | {
-                [key: string]: ExtensionValue
-            }
+                  [key: string]:
+                      | {
+                            [key: string]: ExtensionValue
+                        }
+                      | ExtensionValue
+              }
             | ExtensionValue
-        }
-        | ExtensionValue
     }
 }
 
@@ -44,7 +44,7 @@ export enum VersionUpgrade {
     NONE,
     PATCH,
     MINOR,
-    MAJOR,
+    MAJOR
 }
 
 export interface Tags {
@@ -64,7 +64,6 @@ export interface TokenList {
     readonly logoURI?: string
 }
 
-
 export interface SerializedToken {
     chainId: number
     address: string
@@ -73,7 +72,6 @@ export interface SerializedToken {
     name?: string
     projectLink?: string
 }
-
 
 export abstract class BaseCurrency {
     /**
@@ -184,7 +182,6 @@ export class Native extends NativeCurrency {
     }
 }
 
-
 export class Token extends BaseCurrency {
     public readonly isNative: false = false
 
@@ -248,14 +245,12 @@ export class Token extends BaseCurrency {
             decimals: this.decimals,
             symbol: this.symbol,
             name: this.name,
-            projectLink: this.projectLink,
+            projectLink: this.projectLink
         }
     }
 }
 
-
 export type Currency = NativeCurrency | Token
-
 
 // /**
 //  * Represents an ERC20 token with a unique address and some metadata.
@@ -393,33 +388,25 @@ export const WETH = {
         'WETH',
         'Wrapped Ether',
         'https://weth.io'
-    ),
+    )
 }
 
 export const WMATIC = {
-    [ChainId.ETHEREUM]: new ERC20Token(
-        ChainId.ETHEREUM,
-        '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
-        18,
-        'WMATIC',
-        'Wrapped Matic',
-        'https://polygon.technology/'
-    ),
     [ChainId.POLYGON]: new ERC20Token(
         ChainId.POLYGON,
         '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
         18,
         'WMATIC',
         'Wrapped MATIC',
-        'https://polygon.technology/'
+        'https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png'
     ),
     [ChainId.MUMBAI]: new ERC20Token(
         ChainId.MUMBAI,
         '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
         18,
-        'WMATIC',
+        'MATIC',
         'Wrapped MATIC',
-        'https://polygon.technology/'
+        'https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png'
     )
 }
 
@@ -427,16 +414,15 @@ export const WNATIVE: Record<number, ERC20Token> = {
     [ChainId.ETHEREUM]: WETH[ChainId.ETHEREUM],
     [ChainId.GOERLI]: WETH[ChainId.GOERLI],
     [ChainId.POLYGON]: WMATIC[ChainId.POLYGON],
-    [ChainId.MUMBAI]: WMATIC[ChainId.MUMBAI],
+    [ChainId.MUMBAI]: WMATIC[ChainId.MUMBAI]
 }
-
 
 export const NATIVE: Record<
     number,
     {
         name: string
         symbol: string
-        decimals: number,
+        decimals: number
         logoURI?: string
     }
 > = {
@@ -465,10 +451,9 @@ export const NATIVE: Record<
     [ChainId.SVC]: {
         name: 'SVC Token',
         symbol: 'SVC',
-        decimals: 18,
+        decimals: 18
     }
 }
-
 
 export const EMPTY_LIST: TokenAddressMap<ChainId> = {
     [ChainId.ETHEREUM]: {},
@@ -484,7 +469,7 @@ export const SVC_TESTNET = new ERC20Token(
     18,
     'SVC',
     'Seven Chain Token',
-    'https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png'
+    './assets/images/svc.png'
 )
 
 export const SVC_MAINNET = new ERC20Token(
@@ -495,5 +480,3 @@ export const SVC_MAINNET = new ERC20Token(
     'Seven Chain Token',
     'https://dex-svc.ceewen.xyz/static/media/seven_chain_logo.5ec2cfe0.png'
 )
-
-

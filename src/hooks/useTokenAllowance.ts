@@ -1,4 +1,4 @@
-import { Token, CurrencyAmount } from 'src/utils/token'
+import { Token, CurrencyAmount } from '@/utils/token'
 import { useMemo } from 'react'
 
 import { useTokenContract } from './useContract'

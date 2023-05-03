@@ -8,11 +8,11 @@ import invariant from 'tiny-invariant'
 import warning from 'tiny-warning'
 import { Currency, CurrencyAmount, Token } from './token'
 import { Percent } from './percent'
-import { ONE, THREE, TWO, VMType, VM_TYPE_MAXIMA, ZERO } from 'src/config/constants'
+import { ONE, THREE, TWO, VMType, VM_TYPE_MAXIMA, ZERO } from '@/config/constants'
 import JSBI from 'jsbi'
 import { Price } from './price'
 import { BigNumber } from 'ethers'
-import { ChainId, polygon } from 'src/config/constants/chains'
+import { ChainId, polygon } from '@/config/constants/chains'
 import { chains } from './wagmi'
 
 // warns if addresses are not checksummed
@@ -51,7 +51,6 @@ export function getContract(address: string, ABI: any, signer?: Signer | Provide
 
     return new Contract(address, ABI, signer)
 }
-
 
 export function validateVMTypeInstance(value: JSBI, vmType: VMType): void {
     invariant(JSBI.greaterThanOrEqual(value, ZERO), `${value} is not a ${vmType}.`)
@@ -177,7 +176,7 @@ export function escapeRegExp(string: string): string {
 export function getBlockExploreLink(
     data: string | number,
     type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',
-    chainIdOverride?: number,
+    chainIdOverride?: number
 ): string {
     const chainId = chainIdOverride || ChainId.POLYGON
     const chain = chains.find((c) => c.id === chainId)
@@ -219,11 +218,3 @@ export const numberInputOnWheelPreventChange = (e) => {
         e.target.focus()
     }, 0)
 }
-
-
-
-
-
-
-
-
