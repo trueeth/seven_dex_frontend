@@ -1,20 +1,19 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import LanguageIcon from '@mui/icons-material/Language'
 import { useTranslation } from '@/context/Localization'
 import { StyledMenu } from './Styled'
-
-
-
-
+import { Box } from '@mui/material'
+import { useLocation } from 'react-router-dom'
 
 const LangMenu = [
     {
         locale: 'en-US',
         language: 'English',
         code: 'en'
-    }, {
+    },
+    {
         locale: 'ja-JP',
         language: '日本語',
         code: 'ja'
@@ -22,7 +21,6 @@ const LangMenu = [
 ]
 
 function LanguageSelector() {
-
     const { setLanguage } = useTranslation()
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -39,8 +37,14 @@ function LanguageSelector() {
         setLanguage(LangMenu[index])
     }
 
+    const location = useLocation()
+
+    const hidden = useMemo(() => {
+        return location.pathname === '/bridge/axelar'
+    }, [location])
+
     return (
-        <div>
+        <Box display={hidden ? 'none' : 'block'}>
             <Button
                 sx={{
                     bgcolor: '#e57a3b',
@@ -73,18 +77,13 @@ function LanguageSelector() {
                     }
                 }}
             >
-                {
-                    LangMenu.map((lang, index) => (
-                        <MenuItem
-                            key={index}
-                            onClick={() => selectLang(index)}
-                        >
-                            {lang.language}
-                        </MenuItem>
-                    ))
-                }
+                {LangMenu.map((lang, index) => (
+                    <MenuItem key={index} onClick={() => selectLang(index)}>
+                        {lang.language}
+                    </MenuItem>
+                ))}
             </StyledMenu>
-        </div>
+        </Box>
     )
 }
 

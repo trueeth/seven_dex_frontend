@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 // import { makeStyles } from '@mui/styles';
 import { Button, Box, useMediaQuery } from '@mui/material'
 import { formart } from '../../utils/formatAddress'
@@ -6,7 +6,13 @@ import { formart } from '../../utils/formatAddress'
 import { useAccount } from 'wagmi'
 import useAuth from '@/hooks/useAuth'
 import { useTranslation } from '@/context/Localization'
+<<<<<<< HEAD
 import { ConnectButton as RainbowButton } from '@rainbow-me/rainbowkit'
+=======
+import { StyledMenu } from './Styled'
+import { Link, useLocation } from 'react-router-dom'
+import { ConnectKitButton } from 'connectkit'
+>>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
 
 function ConnectButton() {
     const isXs = useMediaQuery('(max-width:400px)')
@@ -14,6 +20,7 @@ function ConnectButton() {
     const { isConnected, address } = useAccount()
     const { t } = useTranslation()
 
+<<<<<<< HEAD
     return (
         <div>
             <RainbowButton.Custom>
@@ -32,6 +39,28 @@ function ConnectButton() {
                     const connected =
                         ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated')
 
+=======
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const isDrop = Boolean(anchorEl)
+
+    const openDrop = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const closeDrop = () => {
+        setAnchorEl(null)
+    }
+
+    const location = useLocation()
+
+    const hidden = useMemo(() => {
+        return location.pathname === '/bridge/axelar'
+    }, [location])
+
+    return (
+        <Box display={hidden ? 'none' : 'block'}>
+            <ConnectKitButton.Custom>
+                {({ show }) => {
+>>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
                     return (
                         <Box
                             sx={{
@@ -68,8 +97,33 @@ function ConnectButton() {
                         </Box>
                     )
                 }}
+<<<<<<< HEAD
             </RainbowButton.Custom>
         </div>
+=======
+            </ConnectKitButton.Custom>
+            <StyledMenu
+                id="customized-menu"
+                anchorEl={anchorEl}
+                open={isDrop}
+                onClick={closeDrop}
+                sx={{
+                    '& img': {
+                        pr: 1,
+                        width: '24px',
+                        height: '20px'
+                    }
+                }}
+            >
+                <Link to={{ pathname: `//polygonscan.com/address/${address}` }} target="_blank">
+                    <MenuItem>
+                        <Typography color="#333">{t('View on Scan')}</Typography>
+                    </MenuItem>
+                </Link>
+                <MenuItem onClick={logout}>{t('Disconnect Wallet')}</MenuItem>
+            </StyledMenu>
+        </Box>
+>>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
     )
 }
 

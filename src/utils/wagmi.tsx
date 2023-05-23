@@ -7,7 +7,11 @@ import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
+<<<<<<< HEAD
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+=======
+import { getDefaultClient } from 'connectkit'
+>>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
 
 const CHAINS = [polygonMumbai]
 
@@ -20,6 +24,7 @@ export const { provider, chains } = configureChains(CHAINS, [
     publicProvider()
 ])
 
+<<<<<<< HEAD
 // const client = createClient(
 //     getDefaultClient({
 //         appName: 'Seven Dex',
@@ -38,6 +43,14 @@ const wagmiClient = createClient({
     connectors,
     provider
 })
+=======
+const client = createClient(
+    getDefaultClient({
+        appName: 'Seven Dex',
+        chains: [polygonMumbai]
+    })
+)
+>>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
 
 export const CHAIN_IDS = chains.map((c) => c.id)
 
