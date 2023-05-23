@@ -7,7 +7,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { getDefaultClient } from 'connectkit'
 
 const CHAINS = [polygonMumbai]
 
@@ -20,24 +20,12 @@ export const { provider, chains } = configureChains(CHAINS, [
     publicProvider()
 ])
 
-// const client = createClient(
-//     getDefaultClient({
-//         appName: 'Seven Dex',
-//         chains: [polygonMumbai]
-//     })
-// )
-
-const { connectors } = getDefaultWallets({
-    appName: 'Seven Dex',
-    projectId: '0x01',
-    chains
-})
-
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors,
-    provider
-})
+const client = createClient(
+    getDefaultClient({
+        appName: 'Seven Dex',
+        chains: [polygonMumbai]
+    })
+)
 
 export const CHAIN_IDS = chains.map((c) => c.id)
 
@@ -46,10 +34,8 @@ export const isChainTestnet = memoize((chainId: number) => chains.find((c) => c.
 
 export function WagmiProvider(props: React.PropsWithChildren) {
     return (
-        <WagmiConfig client={wagmiClient}>
-            <RainbowKitProvider chains={chains}>
-                <Web3LibraryProvider>{props.children}</Web3LibraryProvider>
-            </RainbowKitProvider>
+        <WagmiConfig client={client}>
+            <Web3LibraryProvider>{props.children}</Web3LibraryProvider>
         </WagmiConfig>
     )
 }

@@ -1,36 +1,24 @@
-import React from 'react'
-import { Typography } from '@mui/material'
-import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
-import { useTranslation } from '@/context/Localization'
-
+import { useLocation } from 'react-router-dom'
+import Axelar from './Axelar'
+import StargateWidget from './Stargate'
+import SvcBridge from './svcbridge'
 
 const useStyles = makeStyles(() => ({
-    farmView: {
-        width: '100vw',
-        height: '50vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
+    bridgeView: {
+        width: '100vw'
     }
 }))
 
 function Bridge() {
-
     const classes = useStyles()
-    const { t } = useTranslation()
+    const location = useLocation()
 
     return (
-        <div className={classes.farmView}>
-            <Box>
-                <Typography sx={{
-                    fontSize: '32px',
-                    fontWeight: 'bold',
-                    color: '#666'
-                }}>
-                    {t('We are Coming Soon!')}
-                </Typography>
-            </Box>
+        <div className={classes.bridgeView}>
+            {location.pathname === '/bridge/svc' && <SvcBridge />}
+            {location.pathname === '/bridge/axelar' && <Axelar />}
+            {location.pathname === '/bridge/stargate' && <StargateWidget />}
         </div>
     )
 }
