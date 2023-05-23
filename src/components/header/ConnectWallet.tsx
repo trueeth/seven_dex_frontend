@@ -1,45 +1,22 @@
 import React, { useMemo } from 'react'
 // import { makeStyles } from '@mui/styles';
-import { Button, Box, useMediaQuery } from '@mui/material'
+import { Button, Box, Typography, useMediaQuery, MenuItem } from '@mui/material'
 import { formart } from '../../utils/formatAddress'
 
 import { useAccount } from 'wagmi'
 import useAuth from '@/hooks/useAuth'
 import { useTranslation } from '@/context/Localization'
-<<<<<<< HEAD
-import { ConnectButton as RainbowButton } from '@rainbow-me/rainbowkit'
-=======
 import { StyledMenu } from './Styled'
 import { Link, useLocation } from 'react-router-dom'
 import { ConnectKitButton } from 'connectkit'
->>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
 
 function ConnectButton() {
     const isXs = useMediaQuery('(max-width:400px)')
 
     const { isConnected, address } = useAccount()
+    const { logout } = useAuth()
     const { t } = useTranslation()
 
-<<<<<<< HEAD
-    return (
-        <div>
-            <RainbowButton.Custom>
-                {({
-                    account,
-                    chain,
-                    openAccountModal,
-                    openChainModal,
-                    openConnectModal,
-                    authenticationStatus,
-                    mounted
-                }) => {
-                    // Note: If your app doesn't use authentication, you
-                    // can remove all 'authenticationStatus' checks
-                    const ready = mounted && authenticationStatus !== 'loading'
-                    const connected =
-                        ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated')
-
-=======
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const isDrop = Boolean(anchorEl)
 
@@ -60,7 +37,6 @@ function ConnectButton() {
         <Box display={hidden ? 'none' : 'block'}>
             <ConnectKitButton.Custom>
                 {({ show }) => {
->>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
                     return (
                         <Box
                             sx={{
@@ -83,24 +59,19 @@ function ConnectButton() {
                                     }
                                 }}
                                 onClick={(evt) => {
-                                    if (!connected) openConnectModal()
-                                    else if (chain?.unsupported) openChainModal()
-                                    else openAccountModal()
+                                    if (!isConnected) show()
+                                    else openDrop(evt)
                                 }}
+                                aria-controls={isDrop ? 'customized-menu' : undefined}
                             >
                                 {(() => {
-                                    if (connected) return formart(address as string)
-                                    else if (chain?.unsupported) return t('Switch Network')
+                                    if (isConnected) return formart(address as string)
                                     else return isXs ? t('Connect') : t('Connect Wallet')
                                 })()}
                             </Button>
                         </Box>
                     )
                 }}
-<<<<<<< HEAD
-            </RainbowButton.Custom>
-        </div>
-=======
             </ConnectKitButton.Custom>
             <StyledMenu
                 id="customized-menu"
@@ -123,7 +94,6 @@ function ConnectButton() {
                 <MenuItem onClick={logout}>{t('Disconnect Wallet')}</MenuItem>
             </StyledMenu>
         </Box>
->>>>>>> 28596e34ffb6aae55cabf51c68eec61d7cbd77bc
     )
 }
 
