@@ -10,6 +10,8 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
+// bridge page
+
 function Bridge() {
     const classes = useStyles()
     const location = useLocation()
