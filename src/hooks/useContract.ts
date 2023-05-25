@@ -1,38 +1,31 @@
-import useActiveWeb3React from "./useActiveWeb3React"
+import useActiveWeb3React from './useActiveWeb3React'
 import { useMemo } from 'react'
 
-import {
-    Erc20,
-    Erc20Bytes32,
-    Multicall,
-    Weth,
-} from '@/config/abi/types'
+import { Erc20, Erc20Bytes32, Multicall, Weth } from '@/config/abi/types'
 
 import { useProviderOrSigner } from './useProviderOrSigner'
 import { getMulticallAddress } from '@/utils/addressHelper'
-import {
-    getErc20Contract,
-} from '@/utils/contractHelper'
+import { getErc20Contract } from '@/utils/contractHelper'
 
 // Imports below migrated from Exchange useContract.ts
 import { Contract } from '@ethersproject/contracts'
-import { WNATIVE } from "@/utils/token"
+import { WNATIVE } from '@/utils/token'
 import { ERC20_BYTES32_ABI } from '@/config/abi/erc20'
 import ERC20_ABI from '@/config/abi/erc20.json'
 import IPairABI from '@/config/abi/IPair.json'
 import multiCallAbi from '@/config/abi/multicall.json'
 import WETH_ABI from '@/config/abi/weth.json'
 import { getContract } from '@/utils'
+import BridgeABI from '@/config/abi/bridge.json'
 
 import { IPair } from '@/config/abi/types'
 import { useActiveChainId } from './useActiveChainId'
-
+import { BridgeAddress } from '@/config/constants/bridge'
 
 export const useERC20 = (address: string, withSignerIfPossible = true) => {
     const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
     return useMemo(() => getErc20Contract(address, providerOrSigner), [address, providerOrSigner])
 }
-
 
 // Code below migrated from Exchange useContract.ts
 
@@ -40,7 +33,7 @@ export const useERC20 = (address: string, withSignerIfPossible = true) => {
 export function useContract<T extends Contract = Contract>(
     address: string | undefined,
     ABI: any,
-    withSignerIfPossible = true,
+    withSignerIfPossible = true
 ): T | null {
     const { provider } = useActiveWeb3React()
 
@@ -81,4 +74,7 @@ export function useMulticallContract() {
     return useContract<Multicall>(getMulticallAddress(chainId), multiCallAbi, false)
 }
 
-
+export function useBridgeContract() {
+    const { chainId } = useActiveChainId()
+    return useContract(BridgeAddress[chainId], BridgeABI, true)
+}

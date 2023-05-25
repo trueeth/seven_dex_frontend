@@ -15,10 +15,10 @@ export interface BridgeState {
 const initialState: BridgeState = {
     typedValue: '0.0',
     [Field.FROM]: {
-        networkName: 'ethereum'
+        networkName: 'polygon'
     },
     [Field.TO]: {
-        networkName: 'polygon'
+        networkName: 'ethereum'
     }
 }
 
