@@ -256,7 +256,7 @@ const BridgeContainer = () => {
             >
                 <Box>
                     <Typography>Gas on destination</Typography>
-                    <Typography>-</Typography>
+                    <Typography>{0.01} ETH</Typography>
                 </Box>
                 <Box>
                     <Typography>You will receive</Typography>
