@@ -70,12 +70,12 @@ const BridgeContainer = () => {
         ethereum: {
             logo: EthereumLogo,
             name: 'Ethereum Mainnet',
-            chainId: 1
+            chainId: 5
         },
         polygon: {
             logo: PolygonLogo,
             name: 'Polygon Network',
-            chainId: 137
+            chainId: 80001
         }
     }
 
