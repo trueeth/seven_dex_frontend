@@ -29,6 +29,11 @@ async function main() {
     // let pair = await pairContract.deploy()
     // await pair.deployed()
     // console.log(pair.address)
+
+    const bridgeContract = await ethers.getContractFactory('Bridge')
+    let bridge = await bridgeContract.deploy()
+    await bridge.deployed()
+    console.log(bridge.address)
 }
 
 main()
