@@ -6,6 +6,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
 import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
 import { getDefaultClient } from 'connectkit'
 
 const CHAINS = [polygon]

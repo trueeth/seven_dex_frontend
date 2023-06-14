@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 // import { makeStyles } from '@mui/styles';
 import { Button, Box, Typography, useMediaQuery, MenuItem } from '@mui/material'
 import { formart } from '../../utils/formatAddress'
@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi'
 import useAuth from '@/hooks/useAuth'
 import { useTranslation } from '@/context/Localization'
 import { StyledMenu } from './Styled'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ConnectKitButton } from 'connectkit'
 
 function ConnectButton() {
@@ -27,8 +27,14 @@ function ConnectButton() {
         setAnchorEl(null)
     }
 
+    const location = useLocation()
+
+    const hidden = useMemo(() => {
+        return location.pathname === '/bridge/axelar'
+    }, [location])
+
     return (
-        <div>
+        <Box display={hidden ? 'none' : 'block'}>
             <ConnectKitButton.Custom>
                 {({ show }) => {
                     return (
@@ -87,7 +93,7 @@ function ConnectButton() {
                 </Link>
                 <MenuItem onClick={logout}>{t('Disconnect Wallet')}</MenuItem>
             </StyledMenu>
-        </div>
+        </Box>
     )
 }
 

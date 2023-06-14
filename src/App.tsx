@@ -18,8 +18,10 @@ import Swap from './views/swap'
 import useEagerConnect from './hooks/useEagerConnect'
 import { ToastListener, ToastsProvider } from './context/ToastsContext'
 import { DataProvider } from './context/DataContext'
-import { ConnectKitProvider } from 'connectkit'
 import { Buffer } from 'buffer'
+import '@rainbow-me/rainbowkit/styles.css'
+import { ConnectKitProvider } from 'connectkit'
+import '@rainbow-me/rainbowkit/styles.css'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires ( for mobile connnect )
 window.Buffer = window.Buffer || Buffer
@@ -77,7 +79,7 @@ export default function App() {
                                                     <Route path="/liquidity" element={<Liquidity />} />
                                                     <Route path="/add" element={<Liquidity />} />
                                                     <Route path="/remove" element={<Liquidity />} />
-                                                    <Route path="/bridge" element={<Bridge />} />
+                                                    <Route path="/bridge/*" element={<Bridge />} />
                                                 </Routes>
                                             </ViewBase>
                                             <ToastListener />

@@ -10,6 +10,7 @@ import global from './global/reducer'
 import mint from './mint/reducer'
 import burn from './burn/reducer'
 import multicall from './multicall/reducer'
+import bridge from './bridge/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions']
 
@@ -18,7 +19,7 @@ const persistConfig = {
     whitelist: PERSISTED_KEYS,
     blacklist: ['profile'],
     storage,
-    version: 1,
+    version: 1
 }
 
 const persistedReducer = persistReducer(
@@ -30,8 +31,9 @@ const persistedReducer = persistReducer(
         global,
         mint,
         burn,
-        multicall
-    }),
+        multicall,
+        bridge
+    })
 )
 
 let store: ReturnType<typeof makeStore>
@@ -43,15 +45,13 @@ export function makeStore(preloadedState = undefined) {
             getDefaultMiddleware({
                 thunk: true,
                 serializableCheck: {
-                    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-                },
+                    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+                }
             }),
         devTools: process.env.NODE_ENV === 'development',
-        preloadedState,
+        preloadedState
     })
 }
-
-
 
 export const initializeStore = (preloadedState = undefined) => {
     let _store = store ?? makeStore(preloadedState)
@@ -61,7 +61,7 @@ export const initializeStore = (preloadedState = undefined) => {
     if (preloadedState && store) {
         _store = makeStore({
             ...store.getState(),
-            ...preloadedState,
+            ...preloadedState
         })
         // Reset the current store
         store = undefined
@@ -86,9 +86,6 @@ export const useAppDispatch = () => useDispatch<AppDispatch>()
 
 export default store
 
-
-
 export function useStore(initialState) {
     return useMemo(() => initializeStore(initialState), [initialState])
 }
-

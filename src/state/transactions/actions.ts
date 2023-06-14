@@ -11,7 +11,7 @@ export type TransactionType =
     | 'limit-order-submission'
     | 'limit-order-cancellation'
     | 'limit-order-approval'
-
+    | 'bridge-svc'
 
 export interface SerializableTransactionReceipt {
     to: string
@@ -30,10 +30,8 @@ export enum MsgStatus {
     MS_WAITING_FOR_DESTINATION_EXECUTION = 2,
     MS_COMPLETED = 3,
     MS_FAIL = 4,
-    MS_FALLBACK = 5,
+    MS_FALLBACK = 5
 }
-
-
 
 export const addTransaction = createAction<{
     chainId: ChainId
