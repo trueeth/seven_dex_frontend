@@ -30,7 +30,7 @@ async function main() {
     // await pair.deployed()
     // console.log(pair.address)
 
-    const bridgeContract = await ethers.getContractFactory('Bridge')
+    const bridgeContract = await ethers.getContractFactory('SvcBridge')
     let bridge = await bridgeContract.deploy()
     await bridge.deployed()
     console.log(bridge.address)
