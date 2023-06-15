@@ -158,11 +158,11 @@ const BridgeContainer = () => {
 
     return (
         <div className={classes.cardView}>
-            <Typography sx={{ mb: 2, textAlign: 'center' }}> Transfer SVC between Networks</Typography>
+            <Typography sx={{ mb: 2, textAlign: 'center' }}> {t('Transfer SVC between Networks')}</Typography>
             <NetworkCard>
                 <img src={networks[fromNet].logo} alt="network-logo" />
                 <Box>
-                    <Typography sx={{ fontSize: '12px', color: '#666 !important' }}>From</Typography>
+                    <Typography sx={{ fontSize: '12px', color: '#666 !important' }}>{t('From')}</Typography>
                     <Typography>{networks[fromNet].name}</Typography>
                 </Box>
             </NetworkCard>
@@ -189,7 +189,7 @@ const BridgeContainer = () => {
             <NetworkCard>
                 <img src={networks[toNet].logo} alt="network-logo" />
                 <Box>
-                    <Typography sx={{ fontSize: '12px', color: '#666 !important' }}>To</Typography>
+                    <Typography sx={{ fontSize: '12px', color: '#666 !important' }}>{t('To')}</Typography>
                     <Typography>{networks[toNet].name}</Typography>
                 </Box>
             </NetworkCard>
@@ -218,7 +218,9 @@ const BridgeContainer = () => {
                 endAdornment={
                     <InputAdornment position="end">
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography fontSize="12px">Balance : {trim(svcBalance?.toFixed() ?? 0, 3)}</Typography>
+                            <Typography fontSize="12px">
+                                {t('Balance')} : {trim(svcBalance?.toFixed() ?? 0, 3)}
+                            </Typography>
                             <Button
                                 sx={{
                                     p: 1,
@@ -231,7 +233,7 @@ const BridgeContainer = () => {
                                     onUserInput(trim(svcBalance?.toFixed() ?? 0, 3))
                                 }}
                             >
-                                Max
+                                {t('Max')}
                             </Button>
                         </Box>
                     </InputAdornment>
@@ -255,11 +257,11 @@ const BridgeContainer = () => {
                 }}
             >
                 <Box>
-                    <Typography>Gas on destination</Typography>
+                    <Typography>{t('Gas on destination')}</Typography>
                     <Typography>{0.01} ETH</Typography>
                 </Box>
                 <Box>
-                    <Typography>You will receive</Typography>
+                    <Typography>{t('You will receive')}</Typography>
                     <Typography>{typedValue || 0} SVC</Typography>
                 </Box>
             </Box>
@@ -274,7 +276,7 @@ const BridgeContainer = () => {
                 )}
                 <StyledButton disabled={supplyBtnDisable} onClick={onSupply}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                        {t('Supply')}
+                        {t('Convert')}
                         {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
                     </Box>
                 </StyledButton>

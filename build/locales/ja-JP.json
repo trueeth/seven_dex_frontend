@@ -1610,5 +1610,7 @@
     "FEES":"手数料",
     "POOL NAME":"プール名",
     "Search by a name, symbol or address":"名前、記号、アドレスで検索",
-    "Switch Network" :"スイッチ ネットワーク"
+    "Switch Network" :"スイッチ ネットワーク",
+    "Gas on destination":"目的地でガソリンを入れる",
+    "Transfer SVC between Networks":"ネットワーク間で SVC を転送する"
 }
