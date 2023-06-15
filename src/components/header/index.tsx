@@ -5,7 +5,6 @@ import { makeStyles } from '@mui/styles'
 import { IconMenu2, IconExternalLink } from '@tabler/icons'
 import ConnectButton from './ConnectWallet'
 
-
 import LanguageSelector from './LanguageSelector'
 import { useTranslation } from '@/context/Localization'
 import { Link } from 'react-router-dom'
@@ -98,8 +97,8 @@ function Header({ handleDrawerToggle }: IHeader) {
                             }}
                         >
                             <Typography>{t('Bridge')}</Typography>
-                        </Link>
-                        <Link to={{ pathname: "//staking.seven-project.com/" }} target="_blank">
+                        </Box>
+                        <Link to={{ pathname: '//staking.seven-project.com/' }} target="_blank">
                             <Typography>{t('Stake')}</Typography>
                         </Link>
                         <Link to="/farm">

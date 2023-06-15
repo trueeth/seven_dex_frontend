@@ -12,7 +12,7 @@ import { Field } from '@/state/bridge/actions'
 import { useBridgeActionHandlers } from '@/state/bridge/useBridgeAction'
 import { useCurrencyBalance } from '@/state/wallet/hooks'
 import { useAccount } from 'wagmi'
-import { SVC_TESTNET } from '@/utils/token'
+import { SVC_MAINNET } from '@/utils/token'
 import { trim } from '@/utils/trim'
 import { useBridgeContract } from '@/hooks/useContract'
 import { useActiveChainId } from '@/hooks/useActiveChainId'
@@ -70,17 +70,17 @@ const BridgeContainer = () => {
         ethereum: {
             logo: EthereumLogo,
             name: 'Ethereum Mainnet',
-            chainId: 5
+            chainId: 1
         },
         polygon: {
             logo: PolygonLogo,
             name: 'Polygon Network',
-            chainId: 80001
+            chainId: 137
         }
     }
 
-    const svcBalance = useCurrencyBalance(account, SVC_TESTNET)
-    const parsedAmount = tryParseAmount(typedValue, SVC_TESTNET)
+    const svcBalance = useCurrencyBalance(account, SVC_MAINNET)
+    const parsedAmount = tryParseAmount(typedValue, SVC_MAINNET)
     const [approval, approveCallback] = useApproveCallback(parsedAmount, BridgeAddress[chainId])
 
     const [{ attemptingTxn, bridgeErrorMessage, txHash }, setBridgeState] = useState<{
@@ -104,7 +104,7 @@ const BridgeContainer = () => {
         let args: Array<string | string[] | number | boolean>
         if (approval === ApprovalState.APPROVED) {
             methodName = 'deposit'
-            args = [account, SVC_TESTNET.address, parsedAmount.quotient.toString(), networks[toNet]?.chainId]
+            args = [account, SVC_MAINNET.address, parsedAmount.quotient.toString(), networks[toNet]?.chainId]
         }
 
         setBridgeState({ attemptingTxn: true, bridgeErrorMessage: undefined, txHash: undefined })
