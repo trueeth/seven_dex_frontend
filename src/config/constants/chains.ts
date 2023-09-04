@@ -25,8 +25,8 @@ export const getChainId = memoize((chainName: string) => {
     return CHAIN_QUERY_NAME_TO_ID[chainName] ? +CHAIN_QUERY_NAME_TO_ID[chainName] : undefined
 })
 
-export const DEFAULT_CHAIN_ID = 80001
-export const DEFAULT_PROVIDER = 'https://matic-mumbai.chainstacklabs.com'
+export const DEFAULT_CHAIN_ID = 137
+export const DEFAULT_PROVIDER = 'https://polygon-rpc.com/'
 
 const explorer = { name: 'PolygonScan', url: 'https://polygonscan.com/' }
 
@@ -35,17 +35,17 @@ export const polygon: Chain = {
     name: 'Polygon Chain',
     network: 'polygon',
     rpcUrls: {
-        public: 'https://matic-mumbai.chainstacklabs.com',
-        default: 'https://matic-mumbai.chainstacklabs.com',
+        public: { http: ['https://polygon-mainnet-public.unifra.io'] },
+        default: { http: ['https://polygon-rpc.com/'] }
     },
     blockExplorers: {
         default: explorer,
-        etherscan: explorer,
+        etherscan: explorer
     },
     nativeCurrency: {
         name: 'Polygon Chain Native Token',
         symbol: 'MATIC',
-        decimals: 18,
+        decimals: 18
     }
 }
 
@@ -56,15 +56,14 @@ export const mumbai: Chain = {
     nativeCurrency: {
         decimals: 18,
         name: 'Polygon Chain Native Token',
-        symbol: 'MATIC',
+        symbol: 'MATIC'
     },
     rpcUrls: {
-        public: 'https://matic-mumbai.chainstacklabs.com',
-        default: 'https://matic-mumbai.chainstacklabs.com',
+        public: { http: ['https://matic-mumbai.chainstacklabs.com'] },
+        default: { http: ['https://matic-mumbai.chainstacklabs.com'] }
     },
     blockExplorers: {
-        default: { name: 'PolygonScan', url: 'https://mumbai.polygonscan.com/' },
+        default: { name: 'PolygonScan', url: 'https://mumbai.polygonscan.com/' }
     },
-    testnet: true,
+    testnet: true
 }
-

@@ -1,7 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit'
 import { useCallback } from 'react'
 import { fetchTokenList } from './actions'
-import { TokenList } from 'src/utils/token'
+import { TokenList } from '@/utils/token'
 
 function useFetchListCallback(
     dispatch: (action?: unknown) => void,

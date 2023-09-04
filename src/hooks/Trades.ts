@@ -1,26 +1,26 @@
 /* eslint-disable no-param-reassign */
-import { Currency, CurrencyAmount, Token } from 'src/utils/token'
-import { Pair } from 'src/utils/pair'
-import { Trade } from 'src/utils/trade'
+import { Currency, CurrencyAmount, Token } from '@/utils/token'
+import { Pair } from '@/utils/pair'
+import { Trade } from '@/utils/trade'
 
-import { TradeType } from 'src/config/constants'
+import { TradeType } from '@/config/constants'
 import flatMap from 'lodash/flatMap'
 import { useMemo } from 'react'
 
-import { useUserSingleHopOnly } from 'src/state/user/hooks'
+import { useUserSingleHopOnly } from '@/state/user/hooks'
 import {
   BASES_TO_TRACK_LIQUIDITY_FOR,
   CUSTOM_BASES,
   BETTER_TRADE_LESS_HOPS_THRESHOLD,
   ZERO_PERCENT,
   ONE_HUNDRED_PERCENT,
-} from 'src/config/constants/exchange'
+} from '@/config/constants/exchange'
 import { PairState, usePairs } from './usePairs'
 import { wrappedCurrency } from '../utils/wrappedCurrency'
 
 import { useUnsupportedTokens, useWarningTokens } from './Tokens'
 import { useActiveChainId } from './useActiveChainId'
-import { Percent } from 'src/utils/percent'
+import { Percent } from '@/utils/percent'
 
 
 export function isTradeBetter(

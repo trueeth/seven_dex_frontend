@@ -1,6 +1,3 @@
-
-export const CHAIN_IDS = [56, 97];
-
 export enum ConnectorNames {
     MetaMask = 'metaMask',
     Injected = 'injected',
@@ -8,8 +5,12 @@ export enum ConnectorNames {
     WalletLink = 'coinbaseWallet'
 }
 
-export const Strategies = [
-    'furfiStrategy', 'stableStrategy', 'standardStrategy'
-]
+export const CELER_API = 'https://api.celerscan.com/scan'
 
-export const DATABASE_URL = 'http://localhost:5000/api/computed-apys'
+export const TokenImage: Record<string, string> = {
+    weth: 'https://tokens.pancakeswap.finance/images/symbol/weth.png',
+    wbtc: 'https://tokens.pancakeswap.finance/images/symbol/wbtc.png',
+    matic: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png',
+    svc: './assets/images/svc.png',
+    b2z: './assets/images/b2z.png'
+}

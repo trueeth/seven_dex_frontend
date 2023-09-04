@@ -1,14 +1,14 @@
 import React from 'react'
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import { NavLink } from 'react-router-dom'
-
-import Logo from '../../asset/images/furio-icon.svg'
+import { Link, NavLink } from 'react-router-dom'
+import { useTranslation } from '@/context/Localization'
+import { IconExternalLink } from '@tabler/icons'
 
 const useStyles = makeStyles(theme => ({
     menuList: {
         '& .MuiTypography-root': {
-            color: '#FFF',
+            color: '#333',
             fontSize: '20px',
             fontFamily: 'Square',
             fontWeight: 500,
@@ -21,45 +21,64 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const menuList = [
-    {
-        title: 'Dashboard'
-    }, {
-        title: 'Swap'
-    }, {
-        title: 'Referral'
-    }
-]
 
-function MenuList() {
+
+function MenuList({ toggle }) {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.menuList}>
-            <Box sx={{ display: 'flex' }}>
-                <img src={Logo} alt='logo' style={{ width: '50px', height: '50px' }} />
-                <Typography className='title'>Furfi</Typography>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                '& .MuiTypography-root': {
+                    px: 2
+                },
+                '& .active': {
+                    width: '80%',
+                    borderRadius: '20px',
+                    backgroundColor: '#e57a3b',
+                    '& .MuiTypography-root': {
+                        textAlign: 'center',
+                        color: '#fff'
+                    }
+                },
+
+            }}
+                onClick={toggle}
+            >
+                <NavLink to='/home'>
+                    <Typography >{t('Home')}</Typography>
+                </NavLink>
+                <NavLink to='/swap'>
+                    <Typography>{t('Swap')}</Typography>
+                </NavLink>
+                <NavLink to='/liquidity'>
+                    <Typography>{t('Liquidity')}</Typography>
+                </NavLink>
+                <NavLink to='/bridge'>
+                    <Typography>{t('Bridge')}</Typography>
+                </NavLink>
+                <Link to={{ pathname: "//staking.seven-project.com/" }} target="_blank">
+                    <Typography>{t('Stake')}</Typography>
+                </Link>
+                <NavLink to='/farm'>
+                    <Typography>{t('Farm')}</Typography>
+                </NavLink>
+                <NavLink to='/docs'>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Typography>{t('Docs')}</Typography>
+                        <IconExternalLink
+                            color='#fff'
+                            style={{ marginTop: '10px', marginLeft: '-10px' }}
+                        />
+                    </Box>
+                </NavLink>
             </Box>
-            <Box sx={{ mt: 5 }}>
-                {
-                    menuList?.map((item, index) => (
-                        <Link
-                            key={index}
-                            component={NavLink}
-                            to={`${item.title.toLocaleLowerCase()}`}
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                mt: 1,
-                                borderRadius: '15px',
-                                textDecoration: 'none'
-                            }}
-                        >
-                            <Typography>{item.title}</Typography>
-                        </Link>
-                    ))
-                }
-            </Box >
         </div >
     )
 }

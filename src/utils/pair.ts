@@ -1,10 +1,10 @@
 import { CurrencyAmount, ERC20Token } from "./token"
 import invariant from 'tiny-invariant'
 import JSBI from 'jsbi'
-import { BigintIsh, FIVE, MINIMUM_LIQUIDITY, ONE, ZERO, _10000, _9975 } from "src/config/constants"
+import { BigintIsh, FIVE, MINIMUM_LIQUIDITY, ONE, ZERO, _10000, _9975 } from "@/config/constants"
 import { getCreate2Address } from '@ethersproject/address'
 import { keccak256, pack } from '@ethersproject/solidity'
-import { FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from "src/config/constants/exchange"
+import { FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from "@/config/constants/exchange"
 import { sqrt } from "."
 import { InsufficientInputAmountError, InsufficientReservesError } from "./errors"
 import { Price } from "./price"

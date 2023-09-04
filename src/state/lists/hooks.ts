@@ -1,6 +1,6 @@
-import { ChainId } from 'src/config/constants/chains'
-import { TokenList, TokenInfo } from 'src/utils/token'
-import { WrappedTokenInfo, TokenAddressMap as TTokenAddressMap } from 'src/utils/wrappedTokenInfo'
+import { ChainId } from '@/config/constants/chains'
+import { TokenList, TokenInfo } from '@/utils/token'
+import { WrappedTokenInfo, TokenAddressMap as TTokenAddressMap } from '@/utils/wrappedTokenInfo'
 import { ListsState } from './reducer'
 import {
     DEFAULT_LIST_OF_LISTS,
@@ -8,19 +8,19 @@ import {
     UNSUPPORTED_LIST_URLS,
     WARNING_LIST_URLS,
     ETH_URLS
-} from 'src/config/constants/lists'
+} from '@/config/constants/lists'
 import { atom, useAtomValue } from 'jotai'
 import mapValues from 'lodash/mapValues'
 import groupBy from 'lodash/groupBy'
 import keyBy from 'lodash/keyBy'
 import _pickBy from 'lodash/pickBy'
-import { EMPTY_LIST } from 'src/utils/token'
+import { EMPTY_LIST } from '@/utils/token'
 import uniqBy from 'lodash/uniqBy'
 import { useMemo } from 'react'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
-import DEFAULT_TOKEN_LIST from 'src/config/constants/tokenLists/svc-default.tokenlist.json'
-import UNSUPPORTED_TOKEN_LIST from 'src/config/constants/tokenLists/svc-unsupported.tokenlist.json'
-import WARNING_TOKEN_LIST from 'src/config/constants/tokenLists/svc-warning.tokenlist.json'
+import { useActiveChainId } from '@/hooks/useActiveChainId'
+import DEFAULT_TOKEN_LIST from '@/config/constants/tokenLists/svc-default.tokenlist.json'
+import UNSUPPORTED_TOKEN_LIST from '@/config/constants/tokenLists/svc-unsupported.tokenlist.json'
+import WARNING_TOKEN_LIST from '@/config/constants/tokenLists/svc-warning.tokenlist.json'
 import { listsAtom } from './lists'
 
 

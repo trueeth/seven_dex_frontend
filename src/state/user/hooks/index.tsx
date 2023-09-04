@@ -1,22 +1,22 @@
-import { ChainId } from "src/config/constants/chains"
-import { ERC20Token } from "src/utils/token"
+import { ChainId } from "@/config/constants/chains"
+import { ERC20Token } from "@/utils/token"
 
 import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { AppState, useAppDispatch } from "src/state"
+import { AppState, useAppDispatch } from "@/state"
 import { addSerializedPair, addSerializedToken, removeSerializedToken, SerializedPair, updateGasPrice, updateUserDeadline, updateUserSlippageTolerance, addWatchlistToken, updateUserSingleHopOnly } from "../actions"
-import useActiveWeb3React from "src/hooks/useActiveWeb3React"
-import { useWeb3LibraryContext } from "src/utils/wagmi"
-import { GAS_PRICE_GWEI } from "src/state/types"
+import useActiveWeb3React from "@/hooks/useActiveWeb3React"
+import { useWeb3LibraryContext } from "@/utils/wagmi"
+import { GAS_PRICE_GWEI } from "@/state/types"
 import useSWR from 'swr'
 import { useFeeData } from "wagmi"
-import { Pair } from "src/utils/pair"
-import { useActiveChainId } from "src/hooks/useActiveChainId"
-import { deserializeToken } from "src/utils/wrappedTokenInfo"
-import { isAddress } from "src/utils"
-import { useOfficialsAndUserAddedTokens } from "src/hooks/Tokens"
+import { Pair } from "@/utils/pair"
+import { useActiveChainId } from "@/hooks/useActiveChainId"
+import { deserializeToken } from "@/utils/wrappedTokenInfo"
+import { isAddress } from "@/utils"
+import { useOfficialsAndUserAddedTokens } from "@/hooks/Tokens"
 import flatMap from 'lodash/flatMap'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from "src/config/constants/exchange"
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from "@/config/constants/exchange"
 
 
 export function useUserTransactionTTL(): [number, (slippage: number) => void] {
@@ -63,7 +63,7 @@ export function useGasPrice(chainIdOverride?: number): string {
     const { data: bscProviderGasPrice = GAS_PRICE_GWEI.default } = useSWR(
         library &&
         library.provider &&
-        chainId === ChainId.MUMBAI &&
+        chainId === ChainId.POLYGON &&
         userGas === GAS_PRICE_GWEI.rpcDefault && ['bscProviderGasPrice', library.provider],
         async () => {
             const gasPrice = await library.getGasPrice()

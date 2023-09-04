@@ -1,14 +1,16 @@
-import { Box, Button, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import { StyledButton } from "./Styled"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useAccount } from "wagmi"
-import { toLiquidityToken, useTrackedTokenPairs } from "src/state/user/hooks"
+import { toLiquidityToken, useTrackedTokenPairs } from "@/state/user/hooks"
 import { useMemo } from "react"
-import { useTokenBalancesWithLoadingIndicator } from "src/state/wallet/hooks"
-import { PairState, usePairs } from "src/hooks/usePairs"
+import { useTokenBalancesWithLoadingIndicator } from "@/state/wallet/hooks"
+import { PairState, usePairs } from "@/hooks/usePairs"
 import FullPositionCard from './PositionCard'
 import { IconInfoCircle } from "@tabler/icons"
-import { useTranslation } from "src/context/Localization"
+import { useTranslation } from "@/context/Localization"
+import { CustomTooltip } from "@/components/styled_components/Tooltip"
+import { useActiveChainId } from "@/hooks/useActiveChainId"
 
 
 export function UserPosition({ setStep }) {
@@ -16,6 +18,9 @@ export function UserPosition({ setStep }) {
     const { address: account } = useAccount()
 
     const { t } = useTranslation()
+    const { isWrongNetwork } = useActiveChainId()
+    const navigate = useNavigate()
+
 
     const trackedTokenPairs = useTrackedTokenPairs()
 
@@ -55,7 +60,7 @@ export function UserPosition({ setStep }) {
 
 
     const renderBody = () => {
-        if (!account) {
+        if (!account || isWrongNetwork) {
             return (
                 <Typography color="textSubtle" textAlign="center">
                     {t('Connect to a wallet to view your liquidity.')}
@@ -109,14 +114,15 @@ export function UserPosition({ setStep }) {
                     }}>
                         {t('Your Liquidity')}
                     </Typography>
-                    <Tooltip
-                        title='Your positions(assets) which was depostied in the seven dex trading pairs.'
+                    <CustomTooltip
+                        arrow
+                        title={t('Your positions(assets) which was depostied in the seven dex trading pairs.')}
                         disableInteractive
                     >
                         <Button sx={{ display: 'flex', ml: -1.5, mt: -1 }}>
                             <IconInfoCircle color='#666' />
                         </Button>
-                    </Tooltip>
+                    </CustomTooltip>
                 </Box>
                 <Typography mt={1}>{t('Remove liquidity to receive tokens back')}</Typography>
             </Box>
@@ -131,11 +137,14 @@ export function UserPosition({ setStep }) {
             }}>
                 {renderBody()}
             </Box>
-            <Link to='/add'>
-                <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }} >
-                    <StyledButton onClick={() => setStep('select_token')}>+ {t('Add Liquidity')}</StyledButton>
-                </Box>
-            </Link>
+            <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }} >
+                <StyledButton onClick={() => {
+                    if (account && !isWrongNetwork) {
+                        navigate('/add')
+                        setStep('select_token')
+                    }
+                }}>+ {t('Add Liquidity')}</StyledButton>
+            </Box>
         </Box>
     )
 }

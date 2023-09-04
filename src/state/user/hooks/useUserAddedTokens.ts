@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { Token } from 'src/utils/token'
+import { Token } from '@/utils/token'
 import { createSelector } from '@reduxjs/toolkit'
-import { deserializeToken } from 'src/utils/wrappedTokenInfo'
+import { deserializeToken } from '@/utils/wrappedTokenInfo'
 import { useSelector } from 'react-redux'
-import { useActiveChainId } from 'src/hooks/useActiveChainId'
+import { useActiveChainId } from '@/hooks/useActiveChainId'
 import { AppState } from '../../index'
 
 const selectUserTokens = ({ user: { tokens } }: AppState) => tokens

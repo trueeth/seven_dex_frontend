@@ -1,66 +1,64 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getDefaultProvider } from 'src/helper/provider'
-import { useNetwork, useProvider } from 'wagmi'
-import { useAddPopup, useBlockNumber } from '../application/hooks'
-import { AppDispatch, AppState } from '../index'
-import { checkedTransaction, finalizeTransaction } from './actions'
+import React, { useEffect, useRef } from 'react'
+import merge from 'lodash/merge'
+import pickBy from 'lodash/pickBy'
+import forEach from 'lodash/forEach'
+import { useTranslation } from '@/context/Localization'
+import { useProvider } from 'wagmi'
+import { poll } from '@ethersproject/web'
+
+import { useAppDispatch } from '../index'
+import {
+    finalizeTransaction,
+} from './actions'
+import { useAllChainTransactions } from './hooks'
+import { TransactionDetails } from './reducer'
+import useToast from '@/hooks/useToast'
+import { ToastDescriptionWithTx } from '@/components/toast'
 
 export function shouldCheck(
-    lastBlockNumber: number,
-    tx: { addedTime: number; receipt?: {}; lastCheckedBlockNumber?: number },
+    fetchedTransactions: { [txHash: string]: TransactionDetails },
+    tx: TransactionDetails,
 ): boolean {
-
-    if (tx.receipt) return false;
-    if (!tx.lastCheckedBlockNumber) return true;
-    const blocksSinceCheck = lastBlockNumber - tx.lastCheckedBlockNumber;
-    if (blocksSinceCheck < 1) return false;
-    const minutesPending = (new Date().getTime() - tx.addedTime) / 1000 / 60;
-    if (minutesPending > 60) {
-        // every 10 blocks if pending for longer than an hour
-        return blocksSinceCheck > 9;
-    } else if (minutesPending > 5) {
-        // every 3 blocks if pending more than 5 minutes
-        return blocksSinceCheck > 2;
-    } else {
-        // otherwise every block
-        return true;
-    }
+    if (tx.receipt) return false
+    return !fetchedTransactions[tx.hash]
 }
 
-export default function Updater(): null {
+export const Updater: React.FC<{ chainId: number }> = ({ chainId }) => {
+    const provider = useProvider({ chainId })
+    const { t } = useTranslation()
 
-    const { chain } = useNetwork();
+    const dispatch = useAppDispatch()
+    const transactions = useAllChainTransactions(chainId)
 
-    const lastBlockNumber = useBlockNumber();
+    const { toastError, toastSuccess } = useToast()
 
-    const dispatch = useDispatch<AppDispatch>();
-    const state = useSelector<AppState, AppState['transactions']>((state) => state.transactions);
-
-    const transactions = chain ? state[chain.id] ?? {} : {};
-
-    // show popup on confirm
-    const addPopup = useAddPopup();
+    const fetchedTransactions = useRef<{ [txHash: string]: TransactionDetails }>({})
 
     useEffect(() => {
-        if (!chain || !lastBlockNumber) {
-            return;
-        }
+        if (!chainId || !provider) return
 
-        // const provider = useProvider({ chainId: chain.id });
-        const provider = getDefaultProvider()
+        forEach(
+            pickBy(transactions, (transaction) => shouldCheck(fetchedTransactions.current, transaction)),
+            (transaction) => {
+                const getTransaction = async () => {
+                    await provider.getNetwork()
 
-        Object.keys(transactions)
-            .filter((hash) => shouldCheck(lastBlockNumber, transactions[hash]))
-            .forEach((hash) => {
-                provider
-                    .getTransactionReceipt(hash)
-                    .then((receipt) => {
-                        if (receipt) {
+                    const params = { transactionHash: provider.formatter.hash(transaction.hash, true) }
+
+                    poll(
+                        async () => {
+                            const result = await provider.perform('getTransactionReceipt', params)
+
+                            if (result == null || result.blockHash == null) {
+                                return undefined
+                            }
+
+                            const receipt = provider.formatter.receipt(result)
+
                             dispatch(
                                 finalizeTransaction({
-                                    chainId: chain.id,
-                                    hash,
+                                    chainId,
+                                    hash: transaction.hash,
                                     receipt: {
                                         blockHash: receipt.blockHash,
                                         blockNumber: receipt.blockNumber,
@@ -72,27 +70,26 @@ export default function Updater(): null {
                                         transactionIndex: receipt.transactionIndex,
                                     },
                                 }),
-                            );
+                            )
 
-                            addPopup(
-                                {
-                                    txn: {
-                                        hash,
-                                        success: receipt.status === 1,
-                                        summary: transactions[hash]?.summary,
-                                    },
-                                },
-                                hash,
-                            );
-                        } else {
-                            dispatch(checkedTransaction({ chainId: chain.id, hash, blockNumber: lastBlockNumber }));
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(`failed to check transaction hash: ${hash}`, error);
-                    });
-            });
-    }, [chain, transactions, lastBlockNumber, dispatch, addPopup]);
+                            const toast = receipt.status === 1 ? toastSuccess : toastError
+                            toast(
+                                t('Transaction receipt'),
+                                <ToastDescriptionWithTx txHash={receipt.transactionHash} txChainId={chainId} />,
+                            )
+                            return true
+                        },
+                        { onceBlock: provider },
+                    )
+                    merge(fetchedTransactions.current, { [transaction.hash]: transactions[transaction.hash] })
+                }
 
-    return null;
+                getTransaction()
+            },
+        )
+    }, [chainId, provider, transactions, dispatch, toastSuccess, toastError, t])
+
+    return null
 }
+
+export default Updater

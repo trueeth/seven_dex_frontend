@@ -1,84 +1,82 @@
 import React from 'react'
-import { configureChains, createClient } from 'wagmi'
+import { configureChains, createClient, Chain } from 'wagmi'
 import memoize from 'lodash/memoize'
-import { polygon, polygonMumbai, mainnet, goerli } from 'wagmi/chains'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import { polygon, polygonMumbai } from 'wagmi/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { Web3Provider } from '@ethersproject/providers'
 import useSWRImmutable from 'swr/immutable'
-import { useAccount, WagmiConfig, WagmiConfigProps, useNetwork } from 'wagmi'
-import { Provider, WebSocketProvider } from '@wagmi/core'
+import { useAccount, WagmiConfig, useNetwork } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import { getDefaultClient } from 'connectkit'
 
-const CHAINS = [polygon, polygonMumbai, mainnet, goerli];
+const mumbai = {
+    id: 80001,
+    name: 'Polygon Mumbai',
+    network: 'maticmum',
+    nativeCurrency: {
+        name: 'MATIC',
+        symbol: 'MATIC',
+        decimals: 18
+    },
+    rpcUrls: {
+        alchemy: {
+            http: ['https://polygon-mumbai.g.alchemy.com/v2'],
+            webSocket: ['wss://polygon-mumbai.g.alchemy.com/v2']
+        },
+        infura: {
+            http: ['https://polygon-mumbai.infura.io/v3'],
+            webSocket: ['wss://polygon-mumbai.infura.io/ws/v3']
+        },
+        default: {
+            http: ['https://rpc-mumbai.maticvigil.com']
+        },
+        public: {
+            http: ['https://rpc-mumbai.maticvigil.com']
+        }
+    },
+    blockExplorers: {
+        etherscan: {
+            name: 'PolygonScan',
+            url: 'https://mumbai.polygonscan.com'
+        },
+        default: {
+            name: 'PolygonScan',
+            url: 'https://mumbai.polygonscan.com'
+        }
+    },
+    contracts: {
+        multicall3: {
+            address: '0xca11bde05977b3631167028862be2a173976ca11',
+            blockCreated: 25770160
+        }
+    },
+    testnet: true
+} as const satisfies Chain
+
+const CHAINS = [mumbai]
 
 export const { provider, chains } = configureChains(CHAINS, [
     jsonRpcProvider({
         rpc: (chain) => {
-            return { http: chain.rpcUrls.default }
+            return { http: chain.rpcUrls.default.http[0] }
         }
     })
 ])
 
-export const injectedConnector = new InjectedConnector({
-    chains,
-    options: {
-        shimDisconnect: false,
-        shimChainChangedDisconnect: true,
-    },
-})
-
-export const coinbaseConnector = new CoinbaseWalletConnector({
-    chains,
-    options: {
-        appName: 'svc-dex'
-    },
-})
-
-export const walletConnectConnector = new WalletConnectConnector({
-    chains,
-    options: {
-        qrcode: true,
-    },
-})
-
-export const walletConnectNoQrCodeConnector = new WalletConnectConnector({
-    chains,
-    options: {
-        qrcode: false,
-    },
-})
-
-export const metaMaskConnector = new MetaMaskConnector({
-    chains,
-    options: {
-        shimDisconnect: false,
-        shimChainChangedDisconnect: true,
-    },
-})
-
-export const client = createClient({
-    autoConnect: false,
-    provider,
-    connectors: [
-        metaMaskConnector,
-        walletConnectConnector,
-        coinbaseConnector
-    ],
-})
+const client = createClient(
+    getDefaultClient({
+        appName: 'Your App Name',
+        chains: [mumbai]
+    })
+)
 
 export const CHAIN_IDS = chains.map((c) => c.id)
 
-export const isChainSupported = memoize((chainId: number) => CHAIN_IDS.includes(chainId))
-export const isChainTestnet = memoize((chainId: number) => chains.find((c) => c.id === chainId)?.testnet)
+export const isChainSupported = memoize((chainId) => CHAIN_IDS.includes(chainId))
 
-export function WagmiProvider<TProvider extends Provider, TWebSocketProvider extends WebSocketProvider>(
-    props: React.PropsWithChildren<WagmiConfigProps<TProvider, TWebSocketProvider>>,
-) {
+export function WagmiProvider(props: React.PropsWithChildren) {
     return (
-        <WagmiConfig client={props.client}>
+        <WagmiConfig client={client}>
             <Web3LibraryProvider>{props.children}</Web3LibraryProvider>
         </WagmiConfig>
     )

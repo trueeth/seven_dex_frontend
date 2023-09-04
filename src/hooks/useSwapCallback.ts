@@ -1,22 +1,24 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { Router, SwapParameters } from 'src/utils/router'
+import { Router, SwapParameters } from '@/utils/router'
 import JSBI from 'jsbi'
-import { Percent } from 'src/utils/percent'
-import { Trade } from 'src/utils/trade'
+import { Percent } from '@/utils/percent'
+import { Trade } from '@/utils/trade'
 import { TradeType } from '../config/constants'
 import { useMemo } from 'react'
 import useActiveWeb3React from './useActiveWeb3React'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../config/constants'
-import { BIPS_BASE } from 'src/config/constants/exchange'
+import { BIPS_BASE } from '@/config/constants/exchange'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, isAddress, shortenAddress } from '../utils'
 
 import isZero from '../utils/isZero'
 import useTransactionDeadline from './useTransactionDeadline'
-import { Currency } from 'src/utils/token'
-import { useRouterContract } from 'src/utils/exchange'
-import { useWeb3LibraryContext } from 'src/utils/wagmi'
+import { Currency } from '@/utils/token'
+import { useRouterContract } from '@/utils/exchange'
+import { useWeb3LibraryContext } from '@/utils/wagmi'
+import useToast from './useToast'
+import { useTranslation } from '@/context/Localization'
 
 
 export enum SwapCallbackState {
@@ -108,6 +110,8 @@ export function useSwapCallback(
     const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddress)
 
     const addTransaction = useTransactionAdder()
+    const { toastError } = useToast()
+    const { t } = useTranslation()
 
     const recipient = recipientAddress === null ? account : recipientAddress
 
@@ -207,6 +211,7 @@ export function useSwapCallback(
                     })
                     .catch((error: any) => {
                         // if the user rejected the tx, pass this along
+                        toastError(t('User rejected transaction.'))
                         if (error?.code === 4001) {
                             throw new Error('Transaction rejected.')
                         } else {

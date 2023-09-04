@@ -1,10 +1,10 @@
-import { TradeType } from "src/config/constants"
-import { Percent } from "./percent"
-import { Currency } from "./token"
-import { Trade } from "./trade"
-import { Token, CurrencyAmount } from "./token"
+import { TradeType } from '@/config/constants'
+import { Percent } from './percent'
+import { Currency } from './token'
+import { Trade } from './trade'
+import { Token, CurrencyAmount } from './token'
 import invariant from 'tiny-invariant'
-import { validateAndParseAddress } from "."
+import { validateAndParseAddress } from '.'
 
 /**
  * Options for producing the arguments to send call to the router.
@@ -70,7 +70,7 @@ export abstract class Router {
     /**
      * Cannot be constructed.
      */
-    private constructor() { }
+    private constructor() {}
     /**
      * Produces the on-chain method name to call and the hex encoded parameters to pass as arguments for a given trade.
      * @param trade to produce call parameters for
@@ -105,22 +105,28 @@ export abstract class Router {
                 if (etherIn) {
                     // methodName = useFeeOnTransfer ? 'swapExactETHForTokensSupportingFeeOnTransferTokens' : 'swapExactETHForTokens'
                     methodName = 'swapExactETHForTokens'
+                    //consider 30% fee in dex.
+                    let realAmountOut = String(Math.floor(Number(amountOut) - Number(amountOut) * 0.3))
                     // (uint amountOutMin, address[] calldata path, address to, uint deadline)
-                    args = [amountOut, path, to, deadline]
+                    args = [realAmountOut, path, to, deadline]
                     value = amountIn
                 } else if (etherOut) {
                     // methodName = useFeeOnTransfer ? 'swapExactTokensForETHSupportingFeeOnTransferTokens' : 'swapExactTokensForETH'
                     methodName = 'swapExactTokensForETH'
+                    //consider 30% fee in dex.
+                    let realAmountOut = String(Math.floor(Number(amountOut) - Number(amountOut) * 0.3))
                     // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
-                    args = [amountIn, amountOut, path, to, deadline]
+                    args = [amountIn, realAmountOut, path, to, deadline]
                     value = ZERO_HEX
                 } else {
                     // methodName = useFeeOnTransfer
                     //     ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
                     //     : 'swapExactTokensForTokens'
                     methodName = 'swapExactTokensForTokens'
+                    //consider 30% fee in dex.
+                    let realAmountOut = String(Math.floor(Number(amountOut) - Number(amountOut) * 0.3))
                     // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
-                    args = [amountIn, amountOut, path, to, deadline]
+                    args = [amountIn, realAmountOut, path, to, deadline]
                     value = ZERO_HEX
                 }
                 break
@@ -128,18 +134,24 @@ export abstract class Router {
                 invariant(!useFeeOnTransfer, 'EXACT_OUT_FOT')
                 if (etherIn) {
                     methodName = 'swapETHForExactTokens'
+                    //consider 30% fee in dex.
+                    let realAmountOut = String(Math.floor(Number(amountOut) - Number(amountOut) * 0.3))
                     // (uint amountOut, address[] calldata path, address to, uint deadline)
-                    args = [amountOut, path, to, deadline]
+                    args = [realAmountOut, path, to, deadline]
                     value = amountIn
                 } else if (etherOut) {
                     methodName = 'swapTokensForExactETH'
+                    //consider 30% fee in dex.
+                    let realAmountOut = String(Math.floor(Number(amountOut) - Number(amountOut) * 0.3))
                     // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
-                    args = [amountOut, amountIn, path, to, deadline]
+                    args = [realAmountOut, amountIn, path, to, deadline]
                     value = ZERO_HEX
                 } else {
                     methodName = 'swapTokensForExactTokens'
+                    //consider 30% fee in dex.
+                    let realAmountOut = String(Math.floor(Number(amountOut) - Number(amountOut) * 0.3))
                     // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
-                    args = [amountOut, amountIn, path, to, deadline]
+                    args = [realAmountOut, amountIn, path, to, deadline]
                     value = ZERO_HEX
                 }
                 break
@@ -147,7 +159,7 @@ export abstract class Router {
         return {
             methodName,
             args,
-            value,
+            value
         }
     }
 }

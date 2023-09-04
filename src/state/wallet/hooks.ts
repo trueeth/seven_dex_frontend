@@ -1,14 +1,14 @@
 import JSBI from 'jsbi'
-import { Currency, Native, Token, CurrencyAmount } from 'src/utils/token'
+import { Currency, Native, Token, CurrencyAmount } from '@/utils/token'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
-import ERC20_INTERFACE from 'src/config/abi/erc20'
+import ERC20_INTERFACE from '@/config/abi/erc20'
 
-import { useAllTokens } from 'src/hooks/Tokens'
-import { useMulticallContract } from 'src/hooks/useContract'
-import { isAddress } from 'src/utils'
+import { useAllTokens } from '@/hooks/Tokens'
+import { useMulticallContract } from '@/hooks/useContract'
+import { isAddress } from '@/utils'
 import orderBy from 'lodash/orderBy'
-import useNativeCurrency from 'src/hooks/useNativeCurrency'
+import useNativeCurrency from '@/hooks/useNativeCurrency'
 import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
 
 /**

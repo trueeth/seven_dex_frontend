@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Button, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { useTranslation } from 'src/context/Localization'
-import TokenSelectModal from 'src/components/TokenSelectModal'
+import { useTranslation } from '@/context/Localization'
+import TokenSelectModal from '@/components/TokenSelectModal'
 import { useAccount } from 'wagmi'
-import { useCurrencyBalance } from 'src/state/wallet/hooks'
-import { numberInputOnWheelPreventChange } from 'src/utils'
+import { useCurrencyBalance } from '@/state/wallet/hooks'
+import { numberInputOnWheelPreventChange } from '@/utils'
 
 
 function CurrencyOutputPanel({ currency, value, onCurrencySelect, onUserInput }) {
@@ -41,7 +41,10 @@ function CurrencyOutputPanel({ currency, value, onCurrencySelect, onUserInput })
                         variant="standard"
                         autoComplete='off'
                         value={value}
-                        onChange={(e) => onUserInput(e.target.value)}
+                        onChange={(e) => {
+                            if (Number(e.target.value) < 100000000)
+                                onUserInput(e.target.value)
+                        }}
                         InputProps={{
                             disableUnderline: true,
                             placeholder: '0.0',

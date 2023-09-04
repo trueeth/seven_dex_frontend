@@ -1,10 +1,9 @@
 import JSBI from 'jsbi'
-import { Percent } from 'src/utils/percent'
-import { Token, WNATIVE } from 'src/utils/token'
+import { Percent } from '@/utils/percent'
+import { Token, WNATIVE } from '@/utils/token'
 import { ChainId } from './chains'
 import { ChainMap, ChainTokenList } from './types'
-import { PINNED_TOKENS_MUMBAI } from './tokens'
-
+import { PINNED_TOKENS_MUMBAI, PINNED_TOKENS_POLYGON } from './tokens'
 
 export const EXCHANGE_PAGE_PATHS = ['/swap', '/limit-orders', 'liquidity', '/add', '/find', '/remove']
 
@@ -24,6 +23,8 @@ export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN: Percent = new Percent(JSBI.Bi
 // for non expert mode disable swaps above this
 export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(1500), BIPS_BASE) // 15%
 
+export const BLOCKED_PRICE_IMPACT: Percent = new Percent(JSBI.BigInt(5000), BIPS_BASE)
+
 // used to ensure the user doesn't send so much BNB so they end up with <.01
 
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), BIPS_BASE)
@@ -34,21 +35,31 @@ export const ONE_HUNDRED_PERCENT = new Percent('1')
 export const BASE_FEE = new Percent(JSBI.BigInt(25), BIPS_BASE)
 export const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
-
 export const ROUTER_ADDRESS: ChainMap<string> = {
     [ChainId.ETHEREUM]: '',
     [ChainId.GOERLI]: '',
-    [ChainId.POLYGON]: '',
-    [ChainId.MUMBAI]: '0xd85224F57D97C222782D0a86D9EFd2bb3D4d8740',
-    [ChainId.SVC]: '',
+    [ChainId.POLYGON]: '0x695d0998992e31A7718Af844f4d8E8ecfd389712',
+    [ChainId.MUMBAI]: '0x94D2B24daEf35b6Bc04B15fEdeA1F60CBb94E26f',
+    [ChainId.SVC]: ''
 }
 
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     [ChainId.ETHEREUM]: [],
     [ChainId.GOERLI]: [],
-    [ChainId.POLYGON]: [],
-    [ChainId.MUMBAI]: [PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc, PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.weth],
-    [ChainId.SVC]: [],
+    [ChainId.POLYGON]: [
+        PINNED_TOKENS_POLYGON.wmatic,
+        PINNED_TOKENS_POLYGON.svc,
+        PINNED_TOKENS_POLYGON.wbtc,
+        PINNED_TOKENS_POLYGON.weth,
+        PINNED_TOKENS_POLYGON.b2z
+    ],
+    [ChainId.MUMBAI]: [
+        PINNED_TOKENS_MUMBAI.wmatic,
+        PINNED_TOKENS_MUMBAI.svc,
+        PINNED_TOKENS_MUMBAI.wbtc,
+        PINNED_TOKENS_MUMBAI.weth
+    ],
+    [ChainId.SVC]: []
 }
 
 /**
@@ -61,7 +72,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [ChainId.GOERLI]: {},
     [ChainId.POLYGON]: {},
     [ChainId.MUMBAI]: {},
-    [ChainId.SVC]: {},
+    [ChainId.SVC]: {}
 }
 
 export const INIT_CODE_HASH = '0x779199715a163c6128f5f983f1cf0968e90196e270a1a858669fd96994117c39'
@@ -70,27 +81,32 @@ export const INIT_CODE_HASH_MAP: Record<number, string> = {
     [ChainId.GOERLI]: INIT_CODE_HASH,
     [ChainId.POLYGON]: INIT_CODE_HASH,
     [ChainId.MUMBAI]: INIT_CODE_HASH,
-    [ChainId.SVC]: INIT_CODE_HASH,
+    [ChainId.SVC]: INIT_CODE_HASH
 }
-
 
 export const FACTORY_ADDRESS_MAP: Record<number, string> = {
     [ChainId.ETHEREUM]: '',
     [ChainId.GOERLI]: '',
-    [ChainId.POLYGON]: '',
+    [ChainId.POLYGON]: '0x0b261fD0d8747Aba2C169897A246B4fEE2FA55bE',
     [ChainId.MUMBAI]: '0xE857086AF5889e9A59d7Bed75A3082548386a842',
     [ChainId.SVC]: ''
 }
 
-
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
     [ChainId.ETHEREUM]: [],
-    [ChainId.POLYGON]: [],
+    [ChainId.POLYGON]: [
+        [PINNED_TOKENS_POLYGON.wmatic, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.wbtc, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.weth, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.wmatic],
+        [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.weth]
+    ],
     [ChainId.GOERLI]: [],
-    [ChainId.MUMBAI]: [[PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc], [PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.svc], [PINNED_TOKENS_MUMBAI.weth, PINNED_TOKENS_MUMBAI.svc]],
+    [ChainId.MUMBAI]: [
+        [PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc],
+        [PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.svc],
+        [PINNED_TOKENS_MUMBAI.weth, PINNED_TOKENS_MUMBAI.svc]
+    ],
     [ChainId.SVC]: []
 }
-
-
-
-

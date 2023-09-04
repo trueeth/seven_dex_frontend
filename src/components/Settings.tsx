@@ -1,10 +1,28 @@
 import React, { useState } from 'react'
 import Menu from '@mui/material/Menu'
 import Box from '@mui/material/Box'
-import Tooltip from '@mui/material/Tooltip'
-import { Button, Divider, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import { Button, InputAdornment, OutlinedInput, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { IconAdjustmentsHorizontal, IconX, IconInfoCircle } from '@tabler/icons'
 import SwitchLarge from './styled_components/SwitchLarge'
+import { useTranslation } from '@/context/Localization'
+import { useUserSlippageTolerance, useUserTransactionTTL } from '@/state/user/hooks'
+import { escapeRegExp } from '@/utils'
+import { CustomTooltip } from './styled_components/Tooltip'
+
+enum SlippageError {
+    InvalidInput = 'InvalidInput',
+    RiskyLow = 'RiskyLow',
+    RiskyHigh = 'RiskyHigh',
+}
+
+enum DeadlineError {
+    InvalidInput = 'InvalidInput',
+}
+
+
+const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
+const THREE_DAYS_IN_SECONDS = 60 * 60 * 24 * 3
+
 
 function Settings() {
 
@@ -12,19 +30,88 @@ function Settings() {
     const open = Boolean(anchorEl);
     const openModal = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-    };
+    }
     const closeModal = () => {
         setAnchorEl(null);
-    };
+    }
 
-    const [slippage, setSlippage] = useState(0.5)
+    const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippageTolerance()
+    const [ttl, setTtl] = useUserTransactionTTL()
+
+    const [slippageInput, setSlippageInput] = useState('')
+    const [deadlineInput, setDeadlineInput] = useState('')
+
+    const slippageInputIsValid =
+        slippageInput === '' || (userSlippageTolerance / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
+    const deadlineInputIsValid = deadlineInput === '' || (ttl / 60).toString() === deadlineInput
+
+    let slippageError: SlippageError | undefined
+    if (slippageInput !== '' && !slippageInputIsValid) {
+        slippageError = SlippageError.InvalidInput
+    } else if (slippageInputIsValid && userSlippageTolerance < 50) {
+        slippageError = SlippageError.RiskyLow
+    } else if (slippageInputIsValid && userSlippageTolerance > 500) {
+        slippageError = SlippageError.RiskyHigh
+    } else {
+        slippageError = undefined
+    }
+
+    let deadlineError: DeadlineError | undefined
+    if (deadlineInput !== '' && !deadlineInputIsValid) {
+        deadlineError = DeadlineError.InvalidInput
+    } else {
+        deadlineError = undefined
+    }
+
+    const parseCustomSlippage = (value: string) => {
+        if (value === '' || inputRegex.test(escapeRegExp(value))) {
+            try {
+                const valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(value) * 100).toString())
+                if (Number.isNaN(valueAsIntFromRoundedFloat)) {
+                    setSlippageInput('')
+                    setUserSlippageTolerance(50)
+                }
+                if (valueAsIntFromRoundedFloat < 5000) {
+                    setSlippageInput(value)
+                    setUserSlippageTolerance(valueAsIntFromRoundedFloat)
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    }
+
+    const parseCustomDeadline = (value: string) => {
+
+        try {
+            const valueAsInt: number = Number.parseInt(value) * 60
+            if (Number.isNaN(valueAsInt)) {
+                setDeadlineInput('')
+                setTtl(1200)
+            }
+            if (valueAsInt > 60 && valueAsInt < THREE_DAYS_IN_SECONDS) {
+                setDeadlineInput(value)
+                setTtl(valueAsInt)
+            } else {
+                deadlineError = DeadlineError.InvalidInput
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
     const onSlippageChange = (
         event: any,
         newSlip: number,
     ) => {
-        if (newSlip)
-            setSlippage(newSlip)
+        if (newSlip) {
+            setSlippageInput('')
+            setUserSlippageTolerance(newSlip)
+        }
     }
+
+    const { t } = useTranslation()
 
     return (
         <div>
@@ -47,7 +134,7 @@ function Settings() {
                     aria-expanded={open ? 'true' : undefined}
                 >
                     <IconAdjustmentsHorizontal size={18} style={{ marginRight: '5px', color: '#666' }} />
-                    Settings
+                    {t('Settings')}
                 </Button>
             </Box>
             <Menu
@@ -94,20 +181,20 @@ function Settings() {
                         display: 'flex',
                         justifyContent: 'space-between'
                     }}>
-                        <Typography>Settings</Typography>
+                        <Typography>{t('Settings')}</Typography>
                         <IconX onClick={closeModal} cursor='pointer' />
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography color='#666' fontSize={14}>Slippage tolerance</Typography>
-                        <Tooltip title='Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%' disableInteractive>
+                        <Typography color='#666' fontSize={14}>{t('Slippage Tolerance')}</Typography>
+                        <CustomTooltip arrow title={t('Your transaction will be revert if the price changes unfavorably by more than this percentage, Default is 0.5%')} disableInteractive>
                             <Button sx={{ display: 'flex' }}>
                                 <IconInfoCircle color='#666' />
                             </Button>
-                        </Tooltip>
+                        </CustomTooltip>
                     </Box>
                     <Box sx={{ display: 'flex' }}>
                         <ToggleButtonGroup
-                            value={slippage}
+                            value={userSlippageTolerance}
                             exclusive
                             onChange={onSlippageChange}
                             sx={{
@@ -119,9 +206,9 @@ function Settings() {
                                 }
                             }}
                         >
-                            <ToggleButton value={0.1}>0.1%</ToggleButton>
-                            <ToggleButton value={0.5}>0.5%</ToggleButton>
-                            <ToggleButton value={1}>1%</ToggleButton>
+                            <ToggleButton value={10}>0.1%</ToggleButton>
+                            <ToggleButton value={50}>0.5%</ToggleButton>
+                            <ToggleButton value={100}>1%</ToggleButton>
                         </ToggleButtonGroup>
                         <OutlinedInput
                             sx={{
@@ -136,21 +223,24 @@ function Settings() {
                                 }
                             }}
                             type='number'
-                            endAdornment={<InputAdornment position="end">%</InputAdornment>}
-                            inputProps={{
-
-                                'aria-label': 'percentage',
+                            placeholder={(userSlippageTolerance / 100).toFixed(2)}
+                            value={slippageInput}
+                            onChange={(event) => {
+                                if (event.currentTarget.validity.valid) {
+                                    parseCustomSlippage(event.target.value.replace(/,/g, '.'))
+                                }
                             }}
+                            endAdornment={<InputAdornment position="end">%</InputAdornment>}
                         />
                     </Box>
                     <Box mt={1}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography color='#666' fontSize={14}>Transaction Deadline</Typography>
-                            <Tooltip title='Your transaction will be revert if it is pending for more than this long' disableInteractive>
+                            <Typography color='#666' fontSize={14}>{t('Transaction Deadline')}</Typography>
+                            <CustomTooltip arrow title={t('Your transaction will revert if it is left confirming for longer than this time.')} disableInteractive>
                                 <Button sx={{ display: 'flex', ml: -1.5 }}>
                                     <IconInfoCircle color='#666' />
                                 </Button>
-                            </Tooltip>
+                            </CustomTooltip>
                         </Box>
                         <OutlinedInput
                             sx={{
@@ -165,8 +255,17 @@ function Settings() {
                                 }
                             }}
                             type='number'
-                            value={30}
-                            endAdornment={<InputAdornment position="end">minutes</InputAdornment>}
+                            value={deadlineInput}
+                            placeholder={(ttl / 60).toString()}
+                            onBlur={() => {
+                                parseCustomDeadline((ttl / 60).toString())
+                            }}
+                            onChange={(event) => {
+                                if (event.currentTarget.validity.valid) {
+                                    parseCustomDeadline(event.target.value)
+                                }
+                            }}
+                            endAdornment={<InputAdornment position="end">{t('minutes')}</InputAdornment>}
                             inputProps={{
 
                                 'aria-label': 'percentage',
@@ -174,11 +273,14 @@ function Settings() {
                         />
                     </Box>
                     <Box mt={1}>
-                        <Typography color='#666' fontSize={14}>Safe Mode</Typography>
+                        <Typography color='#666' fontSize={14}>{t('Safe Mode')}</Typography>
                         <Box sx={{ display: 'flex' }}>
-                            <SwitchLarge sx={{ mt: 1 }} />
+                            <SwitchLarge
+                                sx={{ mt: 1 }}
+                                checked={true}
+                            />
                             <Typography color='#666' fontSize={14} px={2}>
-                                Prevent high price impact trades. Disable at your own risk.
+                                {t('Prevent high price impact trades. Disable at your own risk.')}
                             </Typography>
                         </Box>
                     </Box>
@@ -189,3 +291,5 @@ function Settings() {
 }
 
 export default Settings
+
+

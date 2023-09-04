@@ -1,25 +1,41 @@
-
 import { Route, BrowserRouter, Routes } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import ViewBase from './components/viewbase'
-import Dashboard from './views/dashboard'
-import Swap from './views/swap'
-import Referral from './views/referral'
-import Freezer from './views/freezer'
-import { WagmiProvider, client } from './config/wagmi'
+import { WagmiProvider } from './utils/wagmi'
 import { Provider } from 'react-redux'
 import store from './state'
-import Updaters from './state/Updaters'
-import { RefreshContextProvider } from './context'
-import { ToastContainer } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css'
-
 import { SWRConfig } from 'swr'
+import { LanguageProvider } from './context/Localization'
+import { fetchStatusMiddleware } from './hooks/useSWRContract'
+import { Updaters } from './Updater'
+import { usePollBlockNumber } from './state/block/hooks'
+import Home from '@/views/home'
+import Bridge from '@/views/bridge'
+import Docs from '@/views/docs'
+import Farm from '@/views/farm'
+import Liquidity from './views/liquidity'
+import Swap from './views/swap'
+import useEagerConnect from './hooks/useEagerConnect'
+import { ToastListener, ToastsProvider } from './context/ToastsContext'
+import { DataProvider } from './context/DataContext'
+import { Buffer } from 'buffer'
+import '@rainbow-me/rainbowkit/styles.css'
+import { ConnectKitProvider } from 'connectkit'
+import '@rainbow-me/rainbowkit/styles.css'
 
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import axios from 'axios'
+// eslint-disable-next-line @typescript-eslint/no-var-requires ( for mobile connnect )
+declare global {
+    interface Window {
+        Buffer: typeof Buffer
+    }
+}
+window.Buffer = window.Buffer || Buffer
 
+function GlobalHooks() {
+    usePollBlockNumber()
+    useEagerConnect()
+    return null
+}
 
 export default function App() {
     const theme = createTheme({
@@ -37,36 +53,49 @@ export default function App() {
         }
     })
 
-    const fetcher = url => axios.get(url).then(res => res.data)
-
     return (
         <BrowserRouter>
-            <SWRConfig
-                value={{
-                    refreshInterval: 10000,
-                    fetcher
-                }}
-            >
-                <WagmiProvider client={client}>
-                    <Provider store={store}>
-                        <ToastContainer autoClose={3000} limit={3} pauseOnFocusLoss={false} />
-                        <Updaters />
-                        <RefreshContextProvider>
-                            <ThemeProvider theme={theme}>
-                                <ViewBase>
-                                    <Routes>
-                                        <Route path={'/'} element={<Dashboard />} />
-                                        <Route path={'/app'} element={<Dashboard />} />
-                                        <Route path={'/freezer'} element={<Freezer />} />
-                                        <Route path={'/swap'} element={<Swap />} />
-                                        <Route path={'/referral'} element={<Referral />} />
-                                    </Routes>
-                                </ViewBase>
-                            </ThemeProvider>
-                        </RefreshContextProvider>
-                    </Provider>
-                </WagmiProvider>
-            </SWRConfig>
+            <WagmiProvider>
+                <Provider store={store}>
+                    <LanguageProvider>
+                        <ConnectKitProvider
+                            mode="light"
+                            options={{
+                                overlayBlur: 9
+                            }}
+                        >
+                            <SWRConfig
+                                value={{
+                                    use: [fetchStatusMiddleware]
+                                }}
+                            >
+                                <DataProvider>
+                                    <ToastsProvider>
+                                        <GlobalHooks />
+                                        <Updaters />
+                                        <ThemeProvider theme={theme}>
+                                            <ViewBase>
+                                                <Routes>
+                                                    <Route path="/" element={<Home />} />
+                                                    <Route path="/home" element={<Home />} />
+                                                    <Route path="/swap" element={<Swap />} />
+                                                    <Route path="/docs" element={<Docs />} />
+                                                    <Route path="/farm" element={<Farm />} />
+                                                    <Route path="/liquidity" element={<Liquidity />} />
+                                                    <Route path="/add" element={<Liquidity />} />
+                                                    <Route path="/remove" element={<Liquidity />} />
+                                                    <Route path="/bridge/*" element={<Bridge />} />
+                                                </Routes>
+                                            </ViewBase>
+                                            <ToastListener />
+                                        </ThemeProvider>
+                                    </ToastsProvider>
+                                </DataProvider>
+                            </SWRConfig>
+                        </ConnectKitProvider>
+                    </LanguageProvider>
+                </Provider>
+            </WagmiProvider>
         </BrowserRouter>
     )
 }

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Price } from 'src/utils/price'
+import { Price } from '@/utils/price'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
-import { Currency } from 'src/utils/token'
+import { Currency } from '@/utils/token'
 import { Box, Typography } from '@mui/material'
-import { useTranslation } from 'src/context/Localization'
+import { useTranslation } from '@/context/Localization'
 
 interface TradePriceProps {
     price?: Price<Currency, Currency>
@@ -26,7 +26,7 @@ export default function TradePrice({ price, showInverted, setShowInverted, slipp
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-                <Typography>Price:</Typography>
+                <Typography>{t('Price')}</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     {show ? (
                         <>

@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import TokenSelectModal from 'src/components/TokenSelectModal'
+import TokenSelectModal from '@/components/TokenSelectModal'
 
 function CurrencyInputPanel({ currency, onCurrencySelect }) {
-
 
     const [open, setOpen] = useState(false)
 

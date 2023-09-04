@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { FetchStatus } from 'src/config/constants/types'
+import { FetchStatus } from '@/config/constants/types'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Contract } from '@ethersproject/contracts'
 import { FormatTypes } from '@ethersproject/abi'
@@ -10,8 +10,8 @@ import useSWR, {
     // eslint-disable-next-line camelcase
     unstable_serialize,
 } from 'swr'
-import { multicallv2, MulticallOptions, Call } from 'src/utils/multiCall'
-import { MaybeContract, ContractMethodName, ContractMethodParams } from 'src/utils/types'
+import { multicallv2, MulticallOptions, Call } from '@/utils/multiCall'
+import { MaybeContract, ContractMethodName, ContractMethodParams } from '@/utils/types'
 
 
 export const fetchStatusMiddleware: Middleware = (useSWRNext) => {

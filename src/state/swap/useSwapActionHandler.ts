@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Currency } from 'src/utils/token'
+import { Currency } from '@/utils/token'
 import { Field, selectCurrency, switchCurrencies, typeInput, setRecipient } from './actions'
 import { useAppDispatch } from '../index'
 

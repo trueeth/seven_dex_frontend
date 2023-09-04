@@ -1,25 +1,25 @@
 import { Box, Paper, Typography } from "@mui/material"
 import JSBI from "jsbi"
 import { useMemo, useState } from "react"
-import { BIG_INT_ZERO } from "src/config/constants/exchange"
-import { useTranslation } from "src/context/Localization"
-import useTotalSupply from "src/hooks/useTotalSupply"
-import { useTokenBalance } from "src/state/wallet/hooks"
+import { BIG_INT_ZERO } from "@/config/constants/exchange"
+import { useTranslation } from "@/context/Localization"
+import useTotalSupply from "@/hooks/useTotalSupply"
+import { useTokenBalance } from "@/state/wallet/hooks"
 
-import { Pair } from "src/utils/pair"
-import { Percent } from "src/utils/percent"
-import { multiplyPriceByAmount } from "src/utils/price"
-import { Currency, CurrencyAmount } from "src/utils/token"
-import { unwrappedToken } from "src/utils/wrappedCurrency"
+import { Pair } from "@/utils/pair"
+import { Percent } from "@/utils/percent"
+import { multiplyPriceByAmount } from "@/utils/price"
+import { Currency, CurrencyAmount } from "@/utils/token"
+import { unwrappedToken } from "@/utils/wrappedCurrency"
 import { useAccount } from "wagmi"
 import { OutlinedButton, StyledButton } from "./Styled"
-import { CurrencyLogo } from "src/components/styled_components/CurrencyLogo"
-import { formatAmount } from "src/utils/formatInfoNumbers"
+import { CurrencyLogo } from "@/components/styled_components/CurrencyLogo"
+import { formatAmount } from "@/utils/formatInfoNumbers"
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import DoubleCurrencyLogo from "src/components/styled_components/DoubleCurrencyLogo"
+import DoubleCurrencyLogo from "@/components/styled_components/DoubleCurrencyLogo"
 import { useNavigate } from "react-router-dom"
-import currencyId from 'src/utils/currencyId'
+import currencyId from '@/utils/currencyId'
 
 interface PositionCardProps {
     pair: Pair
@@ -256,7 +256,7 @@ function FullPositionCard({
                                     navigate(`/add?currencyA=${currencyIdA}&currencyB=${currencyIdB}`)
                                 }}>
 
-                                    {t('+ Add liquidity instead')}
+                                    + {t('Add liquidity instead')}
                                 </OutlinedButton>
                             </Box>
                         )}
