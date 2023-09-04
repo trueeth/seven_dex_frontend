@@ -49,13 +49,13 @@ export const useActiveChainId = () => {
     const localChainId = useLocalNetworkChain()
 
     const { chain } = useNetwork()
-    const chainId = ChainId.POLYGON
+    const chainId = ChainId.MUMBAI
 
     const isNotMatched = useDeferredValue(chain && localChainId && chain.id !== localChainId)
 
     return {
         chainId,
         isWrongNetwork: chain?.unsupported ?? false,
-        isNotMatched,
+        isNotMatched
     }
 }

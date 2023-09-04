@@ -31,7 +31,6 @@ import { useAllTransactions } from '@/state/transactions/hooks'
 import { useActiveChainId } from '@/hooks/useActiveChainId'
 import { Percent } from '@/utils/percent'
 
-
 const useStyles = makeStyles((theme) => ({
     cardView: {
         width: '500px',
@@ -45,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
         background: '#fff',
         '& .MuiTypography-root': {
             color: '#333'
-
         },
         [theme.breakpoints.down('sm')]: {
             width: '95%',
@@ -53,12 +51,10 @@ const useStyles = makeStyles((theme) => ({
             marginRight: 'auto',
             padding: '20px 15px'
         }
-
     }
 }))
 
 function SwapContainer() {
-
     const classes = useStyles()
     const { address: account } = useAccount()
     const { t } = useTranslation()
@@ -70,7 +66,7 @@ function SwapContainer() {
         typedValue,
         recipient,
         [Field.INPUT]: { currencyId: inputCurrencyId },
-        [Field.OUTPUT]: { currencyId: outputCurrencyId },
+        [Field.OUTPUT]: { currencyId: outputCurrencyId }
     } = useSwapState()
 
     const inputCurrency = useCurrency(inputCurrencyId)
@@ -87,14 +83,16 @@ function SwapContainer() {
         typedValue,
         inputCurrency,
         outputCurrency,
-        recipient,
+        recipient
     )
 
-    const {
-        wrapType,
-        execute: onWrap,
-        inputError: wrapInputError,
-    } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
+    console.log('Currecies Object: ', currencies)
+
+    const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
+        currencies[Field.INPUT],
+        currencies[Field.OUTPUT],
+        typedValue
+    )
     const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
 
     const trade = showWrap ? undefined : v2Trade
@@ -103,13 +101,13 @@ function SwapContainer() {
 
     const parsedAmounts = showWrap
         ? {
-            [Field.INPUT]: parsedAmount,
-            [Field.OUTPUT]: parsedAmount,
-        }
+              [Field.INPUT]: parsedAmount,
+              [Field.OUTPUT]: parsedAmount
+          }
         : {
-            [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-            [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
-        }
+              [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
+              [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
+          }
 
     const isValid = !swapInputError
 
@@ -123,20 +121,22 @@ function SwapContainer() {
         tradeToConfirm: undefined,
         attemptingTxn: false,
         swapErrorMessage: undefined,
-        txHash: undefined,
+        txHash: undefined
     })
 
     const formattedAmounts = {
         [independentField]: typedValue,
         [dependentField]: showWrap
             ? parsedAmounts[independentField]?.toExact() ?? ''
-            : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+            : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
     }
 
     const route = trade?.route
 
     const userHasSpecifiedInputOutput = Boolean(
-        currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0)),
+        currencies[Field.INPUT] &&
+            currencies[Field.OUTPUT] &&
+            parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
     )
 
     const noRoute = !route
@@ -160,16 +160,15 @@ function SwapContainer() {
         (value: string) => {
             onUserInput(Field.INPUT, value)
         },
-        [onUserInput],
+        [onUserInput]
     )
 
     const handleTypeOutput = useCallback(
         (value: string) => {
             onUserInput(Field.OUTPUT, value)
         },
-        [onUserInput],
+        [onUserInput]
     )
-
 
     const handleInputSelect = useCallback(
         (newCurrencyInput) => {
@@ -182,9 +181,8 @@ function SwapContainer() {
             }
             replaceBrowserHistory('inputCurrency', newCurrencyInputId)
         },
-        [inputCurrencyId, outputCurrencyId, onCurrencySelection],
+        [inputCurrencyId, outputCurrencyId, onCurrencySelection]
     )
-
 
     const handleOutputSelect = useCallback(
         (newCurrencyOutput) => {
@@ -197,7 +195,7 @@ function SwapContainer() {
             replaceBrowserHistory('outputCurrency', newCurrencyOutputId)
         },
 
-        [inputCurrencyId, outputCurrencyId, onCurrencySelection],
+        [inputCurrencyId, outputCurrencyId, onCurrencySelection]
     )
 
     const maxAmountInput: CurrencyAmount<Currency> | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
@@ -215,9 +213,7 @@ function SwapContainer() {
         replaceBrowserHistory('outputCurrency', inputCurrencyId)
     }
 
-
     // the callback to execute the swap
-
 
     const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage, recipient)
 
@@ -240,7 +236,7 @@ function SwapContainer() {
                     attemptingTxn: false,
                     tradeToConfirm,
                     swapErrorMessage: error.message,
-                    txHash: undefined,
+                    txHash: undefined
                 })
             })
     }, [priceImpactWithoutFee, swapCallback, tradeToConfirm])
@@ -262,13 +258,14 @@ function SwapContainer() {
     // never show if price impact is above threshold in non expert mode
     const showApproveFlow =
         !swapInputError &&
-        (approval === ApprovalState.NOT_APPROVED ||
-            approval === ApprovalState.PENDING) &&
-        !(priceImpactSeverity > 3 && !priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000))))
+        (approval === ApprovalState.NOT_APPROVED || approval === ApprovalState.PENDING) &&
+        !(
+            priceImpactSeverity > 3 &&
+            !priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))
+        )
 
     // errors
     const [showInverted, setShowInverted] = useState<boolean>(false)
-
 
     return (
         <div className={classes.cardView}>
@@ -286,40 +283,43 @@ function SwapContainer() {
                 onCurrencySelect={handleOutputSelect}
                 onUserInput={handleTypeOutput}
             />
-            {
-                showWrap ? null :
-                    Boolean(trade) && (
-                        isLoading ?
-                            <Skeleton width='30px' /> :
-                            <TradePrice
-                                price={trade?.executionPrice}
-                                showInverted={showInverted}
-                                setShowInverted={setShowInverted}
-                                slippage={allowedSlippage}
-                            />
-                    )
-            }
+            {showWrap
+                ? null
+                : Boolean(trade) &&
+                  (isLoading ? (
+                      <Skeleton width="30px" />
+                  ) : (
+                      <TradePrice
+                          price={trade?.executionPrice}
+                          showInverted={showInverted}
+                          setShowInverted={setShowInverted}
+                          slippage={allowedSlippage}
+                      />
+                  ))}
 
-            <Box mt={4} sx={{
-                '& .MuiButton-root': {
-                    padding: '10px 0',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    borderRadius: '20px',
-                    border: 'none',
-                    fontSize: '1.2rem',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    backgroundColor: '#ffae5a',
-                    '&:hover': {
-                        backgroundColor: '#ffae5a'
-                    },
-                    '&:disabled': {
-                        color: 'white',
-                        cursor: 'not-allowed'
-                    },
-                }
-            }}>
+            <Box
+                mt={4}
+                sx={{
+                    '& .MuiButton-root': {
+                        padding: '10px 0',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        borderRadius: '20px',
+                        border: 'none',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        color: '#fff',
+                        backgroundColor: '#ffae5a',
+                        '&:hover': {
+                            backgroundColor: '#ffae5a'
+                        },
+                        '&:disabled': {
+                            color: 'white',
+                            cursor: 'not-allowed'
+                        }
+                    }
+                }}
+            >
                 {!account || isWrongNetwork ? (
                     <Button sx={{ width: '100%' }}>{t('Connect Wallet')}</Button>
                 ) : showWrap ? (
@@ -340,7 +340,8 @@ function SwapContainer() {
                         >
                             {approval === ApprovalState.PENDING ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                                    {t('Approving %asset%', { asset: currencies[Field.INPUT]?.symbol ?? '' })} <CircularProgress sx={{ color: 'white' }} />
+                                    {t('Approving %asset%', { asset: currencies[Field.INPUT]?.symbol ?? '' })}{' '}
+                                    <CircularProgress sx={{ color: 'white' }} />
                                 </Box>
                             ) : (
                                 t('Approve %asset%', { asset: currencies[Field.INPUT]?.symbol ?? '' })
@@ -353,21 +354,31 @@ function SwapContainer() {
                                     tradeToConfirm: trade,
                                     attemptingTxn: false,
                                     swapErrorMessage: undefined,
-                                    txHash: undefined,
+                                    txHash: undefined
                                 })
                                 handleSwap()
                             }}
                             id="swap-button"
                             disabled={
-                                !isValid || (priceImpactSeverity > 3 && !priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) || !!swapCallbackError || attemptingTxn
+                                !isValid ||
+                                (priceImpactSeverity > 3 &&
+                                    !priceImpactWithoutFee.lessThan(
+                                        new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000))
+                                    )) ||
+                                !!swapCallbackError ||
+                                attemptingTxn
                             }
                         >
-                            {priceImpactSeverity > 3 && (priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) ? t('Swap Anyway') :
-                                priceImpactSeverity > 3
-                                    ? t('Price Impact Too High')
-                                    : priceImpactSeverity > 2
-                                        ? t('Swap Anyway')
-                                        : t('Swap')}
+                            {priceImpactSeverity > 3 &&
+                            priceImpactWithoutFee.lessThan(
+                                new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000))
+                            )
+                                ? t('Swap Anyway')
+                                : priceImpactSeverity > 3
+                                ? t('Price Impact Too High')
+                                : priceImpactSeverity > 2
+                                ? t('Swap Anyway')
+                                : t('Swap')}
                             {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
                         </Button>
                     </Box>
@@ -379,32 +390,40 @@ function SwapContainer() {
                                 tradeToConfirm: trade,
                                 attemptingTxn: false,
                                 swapErrorMessage: undefined,
-                                txHash: undefined,
+                                txHash: undefined
                             })
                             handleSwap()
                         }}
                         id="swap-button"
-                        disabled={!isValid || (priceImpactSeverity > 3 && !priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) || !!swapCallbackError || attemptingTxn}
+                        disabled={
+                            !isValid ||
+                            (priceImpactSeverity > 3 &&
+                                !priceImpactWithoutFee.lessThan(
+                                    new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000))
+                                )) ||
+                            !!swapCallbackError ||
+                            attemptingTxn
+                        }
                     >
                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                             {swapInputError ||
-                                (
-                                    priceImpactSeverity > 3 && (priceImpactWithoutFee.lessThan(new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000)))) ? t('Swap Anyway') :
-                                        priceImpactSeverity > 3
-                                            ? t('Price Impact Too High')
-                                            : priceImpactSeverity > 2
-                                                ? t('Swap Anyway')
-                                                : t('Swap'))}
+                                (priceImpactSeverity > 3 &&
+                                priceImpactWithoutFee.lessThan(
+                                    new Percent(JSBI.BigInt(allowedSlippage), JSBI.BigInt(10000))
+                                )
+                                    ? t('Swap Anyway')
+                                    : priceImpactSeverity > 3
+                                    ? t('Price Impact Too High')
+                                    : priceImpactSeverity > 2
+                                    ? t('Swap Anyway')
+                                    : t('Swap'))}
                             {attemptingTxn && <CircularProgress sx={{ color: 'white' }} />}
                         </Box>
                     </Button>
                 )}
             </Box>
-            {
-                trade && allowedSlippage &&
-                <SwapDetail trade={trade} allowedSlippage={allowedSlippage} />
-            }
-        </div >
+            {trade && allowedSlippage && <SwapDetail trade={trade} allowedSlippage={allowedSlippage} />}
+        </div>
     )
 }
 

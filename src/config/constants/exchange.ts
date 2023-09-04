@@ -5,7 +5,6 @@ import { ChainId } from './chains'
 import { ChainMap, ChainTokenList } from './types'
 import { PINNED_TOKENS_MUMBAI, PINNED_TOKENS_POLYGON } from './tokens'
 
-
 export const EXCHANGE_PAGE_PATHS = ['/swap', '/limit-orders', 'liquidity', '/add', '/find', '/remove']
 
 export const BIG_INT_ZERO = JSBI.BigInt(0)
@@ -36,21 +35,31 @@ export const ONE_HUNDRED_PERCENT = new Percent('1')
 export const BASE_FEE = new Percent(JSBI.BigInt(25), BIPS_BASE)
 export const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
-
 export const ROUTER_ADDRESS: ChainMap<string> = {
     [ChainId.ETHEREUM]: '',
     [ChainId.GOERLI]: '',
     [ChainId.POLYGON]: '0x695d0998992e31A7718Af844f4d8E8ecfd389712',
-    [ChainId.MUMBAI]: '0xd85224F57D97C222782D0a86D9EFd2bb3D4d8740',
-    [ChainId.SVC]: '',
+    [ChainId.MUMBAI]: '0x94D2B24daEf35b6Bc04B15fEdeA1F60CBb94E26f',
+    [ChainId.SVC]: ''
 }
 
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     [ChainId.ETHEREUM]: [],
     [ChainId.GOERLI]: [],
-    [ChainId.POLYGON]: [PINNED_TOKENS_POLYGON.wmatic, PINNED_TOKENS_POLYGON.svc, PINNED_TOKENS_POLYGON.wbtc, PINNED_TOKENS_POLYGON.weth, PINNED_TOKENS_POLYGON.b2z],
-    [ChainId.MUMBAI]: [PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc, PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.weth],
-    [ChainId.SVC]: [],
+    [ChainId.POLYGON]: [
+        PINNED_TOKENS_POLYGON.wmatic,
+        PINNED_TOKENS_POLYGON.svc,
+        PINNED_TOKENS_POLYGON.wbtc,
+        PINNED_TOKENS_POLYGON.weth,
+        PINNED_TOKENS_POLYGON.b2z
+    ],
+    [ChainId.MUMBAI]: [
+        PINNED_TOKENS_MUMBAI.wmatic,
+        PINNED_TOKENS_MUMBAI.svc,
+        PINNED_TOKENS_MUMBAI.wbtc,
+        PINNED_TOKENS_MUMBAI.weth
+    ],
+    [ChainId.SVC]: []
 }
 
 /**
@@ -63,7 +72,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [ChainId.GOERLI]: {},
     [ChainId.POLYGON]: {},
     [ChainId.MUMBAI]: {},
-    [ChainId.SVC]: {},
+    [ChainId.SVC]: {}
 }
 
 export const INIT_CODE_HASH = '0x779199715a163c6128f5f983f1cf0968e90196e270a1a858669fd96994117c39'
@@ -72,9 +81,8 @@ export const INIT_CODE_HASH_MAP: Record<number, string> = {
     [ChainId.GOERLI]: INIT_CODE_HASH,
     [ChainId.POLYGON]: INIT_CODE_HASH,
     [ChainId.MUMBAI]: INIT_CODE_HASH,
-    [ChainId.SVC]: INIT_CODE_HASH,
+    [ChainId.SVC]: INIT_CODE_HASH
 }
-
 
 export const FACTORY_ADDRESS_MAP: Record<number, string> = {
     [ChainId.ETHEREUM]: '',
@@ -84,16 +92,21 @@ export const FACTORY_ADDRESS_MAP: Record<number, string> = {
     [ChainId.SVC]: ''
 }
 
-
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
     [ChainId.ETHEREUM]: [],
-    [ChainId.POLYGON]: [[PINNED_TOKENS_POLYGON.wmatic, PINNED_TOKENS_POLYGON.svc], [PINNED_TOKENS_POLYGON.wbtc, PINNED_TOKENS_POLYGON.svc], [PINNED_TOKENS_POLYGON.weth, PINNED_TOKENS_POLYGON.svc],
-    [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.svc], [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.wmatic], [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.weth]],
+    [ChainId.POLYGON]: [
+        [PINNED_TOKENS_POLYGON.wmatic, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.wbtc, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.weth, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.svc],
+        [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.wmatic],
+        [PINNED_TOKENS_POLYGON.b2z, PINNED_TOKENS_POLYGON.weth]
+    ],
     [ChainId.GOERLI]: [],
-    [ChainId.MUMBAI]: [[PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc], [PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.svc], [PINNED_TOKENS_MUMBAI.weth, PINNED_TOKENS_MUMBAI.svc]],
+    [ChainId.MUMBAI]: [
+        [PINNED_TOKENS_MUMBAI.wmatic, PINNED_TOKENS_MUMBAI.svc],
+        [PINNED_TOKENS_MUMBAI.wbtc, PINNED_TOKENS_MUMBAI.svc],
+        [PINNED_TOKENS_MUMBAI.weth, PINNED_TOKENS_MUMBAI.svc]
+    ],
     [ChainId.SVC]: []
 }
-
-
-
-

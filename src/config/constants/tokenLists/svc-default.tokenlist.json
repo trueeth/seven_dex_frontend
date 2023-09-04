@@ -8,10 +8,7 @@
     },
     "tags": {},
     "logoURI": "./assets/images/svc.png",
-    "keywords": [
-        "seven dex",
-        "default"
-    ],
+    "keywords": ["seven dex", "default"],
     "tokens": [
         {
             "name": "Seven Chain Token",
@@ -24,7 +21,7 @@
         {
             "name": "Seven Chain Token",
             "symbol": "SVC",
-            "address": "0x40ae465CC90c636Ea0Ff123f91924d222F513a6E",
+            "address": "0x6beE03fD851D3d4370D1aE5C7171B26d8Ef93cC3",
             "decimals": 18,
             "chainId": 80001,
             "logoURI": "./assets/images/svc.png"

@@ -71,6 +71,7 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 
 export function useMulticallContract() {
     const { chainId } = useActiveChainId()
+    console.log('ChainID: ', chainId)
     return useContract<Multicall>(getMulticallAddress(chainId), multiCallAbi, false)
 }
 

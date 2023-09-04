@@ -24,6 +24,11 @@ import { ConnectKitProvider } from 'connectkit'
 import '@rainbow-me/rainbowkit/styles.css'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires ( for mobile connnect )
+declare global {
+    interface Window {
+        Buffer: typeof Buffer
+    }
+}
 window.Buffer = window.Buffer || Buffer
 
 function GlobalHooks() {
